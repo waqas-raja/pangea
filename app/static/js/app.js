@@ -38,8 +38,9 @@ function setMenuActive() {
     switch (currentPage) {
         //sidebar
         case 'dashboard': activeMenuId = 'Dashboard'; break;
+        case 'customers': activeMenuId = 'Customers'; break;
         case 'properties': activeMenuId = 'Properties'; break;
-        case 'agents': activeMenuId = 'Agents'; break;
+        case 'opportunities': activeMenuId = 'Opportunities'; break;
         //header
         case 'settings': activeMenuId = 'Settings'; break;
         case 'users': activeMenuId = 'Users'; break;

@@ -71,9 +71,9 @@ class AppRoutes {
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
 
-        $app->get('/quotations', function ($request, $response) {
+        $app->get('/opportunities', function ($request, $response) {
             ob_start();
-            require_once __DIR__ . '/../../views/pages/quotations.php';
+            require_once __DIR__ . '/../../views/pages/opportunities.php';
             $response->getBody()->write(ob_get_clean());
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
