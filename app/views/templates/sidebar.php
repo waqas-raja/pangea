@@ -1,17 +1,19 @@
 <div id="main-sidebar-alt" class="visually-hidden">
     <img id="logoAGAlt" src="/static/imgs/logo-symbol.png" alt="Logo">
     <ul class="nav flex-column">
-        <li class="nav-item" title="Panoramica"><a id="menuDashboardAlt" href="/dashboard" class="nav-link"><i class="bi bi-speedometer2 fs-4"></i></a></li>
-        <li class="nav-item" title="Page 1"><a id="menuPage1Alt" href="/page1" class="nav-link"><i class="bi bi-buildings fs-4"></i></a></li>
-        <li class="nav-item" title="Page 2"><a id="menuPage2Alt" href="/page2" class="nav-link"><i class="bi bi-person-lines-fill fs-4"></i></a></li>
+        <li class="nav-item" title="Dashboard"><a id="menuDashboardAlt" href="/dashboard" class="nav-link"><i class="bi bi-speedometer2 fs-4"></i></a></li>
+        <li class="nav-item" title="Customers"><a id="menuCustomersAlt" href="/customers" class="nav-link"><i class="bi bi-person-vcard fs-4"></i></a></li>
+        <li class="nav-item" title="Properties"><a id="menuPropertiesAlt" href="/properties" class="nav-link"><i class="bi bi-house-door fs-4"></i></a></li>
+        <li class="nav-item" title="Quotations"><a id="menuQuotationsAlt" href="/quotations" class="nav-link"><i class="bi bi-file-earmark-text fs-4"></i></a></li>
     </ul>
 </div>
 <div id="main-sidebar">
     <img id="logoAG" src="/static/imgs/logo.png" alt="Logo">
     <ul class="nav flex-column">
-        <li class="nav-item"><a id="menuDashboard" href="/dashboard" class="nav-link"><i class="bi bi-speedometer2 fs-4 me-3"></i>Panoramica</a></li>
-        <li class="nav-item"><a id="menuPage1" href="/page1" class="nav-link"><i class="bi bi-buildings fs-4 me-3"></i>Pagina 1</a></li>
-        <li class="nav-item"><a id="menuPage2" href="/page2" class="nav-link"><i class="bi bi-person-lines-fill fs-4 me-3"></i>Pagina 2</a></li>
+        <li class="nav-item"><a id="menuDashboard" href="/dashboard" class="nav-link"><i class="bi bi-speedometer2 fs-4 me-3"></i>Dashboard</a></li>
+        <li class="nav-item"><a id="menuCustomers" href="/customers" class="nav-link"><i class="bi bi-person-vcard fs-4 me-3"></i>Customers</a></li>
+        <li class="nav-item"><a id="menuProperties" href="/properties" class="nav-link"><i class="bi bi-house-door fs-4 me-3"></i>Properties</a></li>
+        <li class="nav-item"><a id="menuQuotations" href="/quotations" class="nav-link"><i class="bi bi-file-earmark-text fs-4 me-3"></i>Quotations</a></li>
     </ul>
     <p>Made with ♥ by Prodigio AI<br><span id="copyright"></span></p>
 </div>

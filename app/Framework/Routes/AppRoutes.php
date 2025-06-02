@@ -56,5 +56,26 @@ class AppRoutes {
             $response->getBody()->write(ob_get_clean());
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
+
+        $app->get('/customers', function ($request, $response) {
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/customers.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+
+        $app->get('/properties', function ($request, $response) {
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/properties.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+
+        $app->get('/quotations', function ($request, $response) {
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/quotations.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
     }
 }
