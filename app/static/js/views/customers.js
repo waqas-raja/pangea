@@ -113,6 +113,7 @@ async function loadCustomers() {
                 "searchPanel",
             ]
         },
+        onRowClick: function (e) { if (e.rowType === "data") { window.location = `/customer/${e.data.id}`; } },
         // onRowInserting: onAddQuestion,
         // onRowUpdating: onUpdateQuestion,
         // onRowRemoving: onDeleteQuestion,

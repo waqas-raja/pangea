@@ -14,7 +14,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
             <i class="bi bi-trash3 me-2"></i> Elimina Cliente
         </button>
     </div>
-    <!-- <?php //require_once __DIR__ . "/../partials/agent-overview.php"; ?> -->
+    <?php require_once __DIR__ . "/../partials/customer-overview.php"; ?>
 </div>
 <script>
     const customerId = '<?= $cid?>';
