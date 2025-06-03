@@ -142,7 +142,6 @@ async function saveOpportunity() {
     }
     btn.disabled = true;
     spinner.classList.remove("d-none");
-    debugger;
     try {
         const response = await fetch("/api/opportunity", {
             method: "POST",
@@ -150,7 +149,6 @@ async function saveOpportunity() {
             body: JSON.stringify({ "alias": alias, "source": source, "nation": nation, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note })
         });
         const res = await response.json();
-        debugger;
         if (res.result) {
             btn.disabled = false;
             spinner.classList.add("d-none");
