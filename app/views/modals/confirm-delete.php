@@ -8,6 +8,7 @@
             <div class="modal-body">
                 <input id="recordId" type="hidden">
                 <p>Sei sicuro di voler eliminare l'elemento selezionato?</p>
+                <p id="deleteErrorMessage" class="text-danger mb-0"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> No, annulla</button>

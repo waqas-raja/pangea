@@ -1,7 +1,3 @@
-let data = [
-    { id: 1, type: "", name: "hello", surname: "wordl", bizname: "", email: "hello@gmail.com", phone: "+923455252525", number_of_properties: 3 },
-    { id: 1, type: "", name: "team", surname: "icon", bizname: "TeamIcon", email: "teamicon@gmail.com", phone: "+92340011223", number_of_properties: 5 },
-];
 document.addEventListener("DOMContentLoaded", async () => {
     await loadCustomers();
 });
@@ -9,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadCustomers() {
     const response = await fetch('/api/customers');
     const r = await response.json();
-    debugger;
     const hasData = r.payload.length > 0;
     $("#customerGrid").dxDataGrid({
         dataSource: r.payload,
