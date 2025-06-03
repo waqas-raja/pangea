@@ -20,9 +20,9 @@ class CustomerRoutes {
             return Customer::Add($request, $response);
         })->add($this->authMiddleware);
 
-        // $group->get('/{id}', function (Request $request, Response $response) {
-        //     return Customer::GetItem($request, $response);
-        // })->add($this->authMiddleware);
+        $group->get('/{id}', function (Request $request, Response $response) {
+            return Customer::GetCustomer($request, $response);
+        })->add($this->authMiddleware);
 
         // $group->patch('/{id}', function (Request $request, Response $response) {
         //     return Customer::Update($request, $response);

@@ -16,7 +16,6 @@ final class Customer {
      * @throws Exception
      */
     public static function GetAll($request, $response) {
-        error_log("GetAll Customers");
         $q = <<<query
             select 
                 c.*
@@ -53,5 +52,22 @@ final class Customer {
         } catch (Exception $e) {
             throw new Exception('Failed to add customer: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function GetCustomer($request, $response) {
+        $agent_id = (int)$request->getAttribute('id');
+        $q = <<<query
+            select 
+                c.*
+            from customer as c
+            where c.id = ?
+        query;
+        $rows = DB::Query($q, [$agent_id]);
+        if(count($rows) == 0) throw new Exception("Customer not found", 400);
+        $response->getBody()->write(json_encode(["payload" => $rows[0]]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 }
