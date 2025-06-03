@@ -5,6 +5,7 @@ namespace App\Framework\Routes;
 use App\Framework\Middlewares\AuthMiddleware;
 use App\Framework\Models\User;
 use App\Framework\Models\Customer;
+use App\Framework\Models\Property;
 use Slim\App;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Routing\RouteCollectorProxy;
@@ -47,6 +48,10 @@ class ApiRoutes {
             
             $group->get('/customers', function ($request, $response) {
                 return Customer::GetAll($request, $response);
+            })->add($this->authMiddleware);
+            
+            $group->get('/properties', function ($request, $response) {
+                return Property::GetAll($request, $response);
             })->add($this->authMiddleware);
 
             // Entity's routes

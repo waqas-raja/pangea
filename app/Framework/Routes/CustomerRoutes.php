@@ -24,13 +24,13 @@ class CustomerRoutes {
             return Customer::GetCustomer($request, $response);
         })->add($this->authMiddleware);
 
-        // $group->patch('/{id}', function (Request $request, Response $response) {
-        //     return Customer::Update($request, $response);
-        // })->add($this->authMiddleware);
+        $group->patch('/{id}', function (Request $request, Response $response) {
+            return Customer::Update($request, $response);
+        })->add($this->authMiddleware);
 
-        // $group->delete('/{id}', function (Request $request, Response $response) {
-        //     return Customer::Delete($request, $response);
-        // })->add($this->authMiddleware);
+        $group->delete('/{id}', function (Request $request, Response $response) {
+            return Customer::Delete($request, $response);
+        })->add($this->authMiddleware);
     }
 }
 
