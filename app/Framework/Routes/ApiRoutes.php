@@ -6,6 +6,7 @@ use App\Framework\Middlewares\AuthMiddleware;
 use App\Framework\Models\User;
 use App\Framework\Models\Customer;
 use App\Framework\Models\Property;
+use App\Framework\Models\Opportunity;
 use Slim\App;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Routing\RouteCollectorProxy;
@@ -53,6 +54,26 @@ class ApiRoutes {
             $group->get('/properties', function ($request, $response) {
                 return Property::GetAll($request, $response);
             })->add($this->authMiddleware);
+            
+            $group->get('/property-types', function ($request, $response) {
+                return Property::GetPropertyTypes($request, $response);
+            })->add($this->authMiddleware);
+            
+            $group->get('/opportunities', function ($request, $response) {
+                return Opportunity::GetAll($request, $response);
+            })->add($this->authMiddleware);
+            
+            $group->get('/sources', function ($request, $response) {
+                return Opportunity::GetSources($request, $response);
+            })->add($this->authMiddleware);
+            
+            $group->get('/nations', function ($request, $response) {
+                return Opportunity::GetNations($request, $response);
+            })->add($this->authMiddleware);
+
+            $group->get('/opportunity-status', function ($request, $response) {
+                return Opportunity::GetOpportunityStatus($request, $response);
+            })->add($this->authMiddleware);
 
             // Entity's routes
 
@@ -64,6 +85,11 @@ class ApiRoutes {
             $customerRoutes = new CustomerRoutes($this->authMiddleware);
             $group->group('/customer', function (RouteCollectorProxy $customerGroup) use ($customerRoutes) {
                 $customerRoutes->register($customerGroup);
+            });
+            
+            $opportunityRoutes = new OpportunityRoutes($this->authMiddleware);
+            $group->group('/opportunity', function (RouteCollectorProxy $opportunityGroup) use ($opportunityRoutes) {
+                $opportunityRoutes->register($opportunityGroup);
             });
 
         });

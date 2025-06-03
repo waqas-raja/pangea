@@ -85,14 +85,17 @@ async function updateGenericInfo() {
     err.innerText = '';
     if (name === "" || surname === "" || email === "" || phone === "" || address === "" || city === "" || zip === "" || state === "") {
         err.textContent = "Si prega di compilare tutti i campi obbligatori";
+        btn.disabled = false;
         return;
     }
     if (email !== "" && !isValidEmail(email)) {
         err.textContent = "L'email fornita non risulta valida";
+        btn.disabled = false;
         return;
     }
     if (isCompany && (bizname === "" || vat === "")) {
         err.textContent = "Si prega di compilare tutti i campi obbligatori per le aziende";
+        btn.disabled = false;
         return;
     }
     try {

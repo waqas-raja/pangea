@@ -115,4 +115,18 @@ final class Property {
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
+    /**
+     * @throws Exception
+     */
+    public static function GetPropertyTypes($request, $response) {
+        $q = <<<query
+            select * from td_property_type
+        query;
+        $types = DB::Query($q);
+        $response->getBody()->write(json_encode(["payload" => $types]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
+    
+    
+
 }
