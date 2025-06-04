@@ -80,6 +80,15 @@ class AppRoutes {
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
 
+        $app->get('/property/{id}', function ($request, $response) {
+            $id = $request->getAttribute('id');
+            extract(['id' => $id]);
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/property-detail.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+
         $app->get('/opportunities', function ($request, $response) {
             ob_start();
             require_once __DIR__ . '/../../views/pages/opportunities.php';
