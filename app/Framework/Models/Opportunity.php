@@ -28,6 +28,7 @@ final class Opportunity {
             left join td_source as s on o.source = s.id
             left join td_nation as n on o.nation = n.code
             left join td_opportunity_status as os on o.opportunity_status = os.id
+            where del_dt is NULL
             order by o.id
         query;
         $opportunities = DB::Query($q);
@@ -81,7 +82,7 @@ final class Opportunity {
             $user_role = $token_info['role'];
             $data = json_decode($request->getBody()->getContents(), true);
             $alias = $data['alias'] ?? "";
-            $source = (int)$data['source'] ?? 0;
+            $source = (int)$data['source'] ?? 1;
             $nation = $data['nation'] ?? "IT";
             $city = $data['city'] ?? "";
             $address = $data['address'] ?? "";
@@ -93,7 +94,6 @@ final class Opportunity {
             $note = $data['note'] ?? "";
             $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, note) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $note];
-            error_log("Adding new opportunity with data: " . json_encode($params));
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert Opportunity", 500);
             $last_inserted_id = DB::$LastId;
@@ -107,16 +107,24 @@ final class Opportunity {
     /**
      * @throws Exception
      */
-    public static function GetCustomer($request, $response) {
-        $agent_id = (int)$request->getAttribute('id');
+    public static function GetOpportunity($request, $response) {
+        $id = (int)$request->getAttribute('id');
         $q = <<<query
             select 
-                c.*
-            from customer as c
-            where c.id = ?
+                o.*,
+                s.name as source_name,
+                pt.name as property_type_name,
+                n.name as nation_name,
+                os.name as opportunity_status_name
+            from opportunity as o
+            left join td_source as s on o.source = s.id
+            left join td_property_type as pt on o.property_type = pt.id
+            left join td_nation as n on o.nation = n.code
+            left join td_opportunity_status as os on o.opportunity_status = os. id
+            where o.id = ?
         query;
-        $rows = DB::Query($q, [$agent_id]);
-        if(count($rows) == 0) throw new Exception("Customer not found", 400);
+        $rows = DB::Query($q, [$id]);
+        if(count($rows) == 0) throw new Exception("Opportunity record not found", 400);
         $response->getBody()->write(json_encode(["payload" => $rows[0]]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
@@ -125,33 +133,56 @@ final class Opportunity {
      * @throws Exception
      */
     public static function Update($request, $response) {
-        $aid = (int)$request->getAttribute('id');
+        try {
+            $token_info = User::GetTokenInfo($request);
+            $user_id = $token_info['id'];
+            $user_role = $token_info['role'];
+            $id = (int)$request->getAttribute('id');
+            $data = json_decode($request->getBody()->getContents(), true);
+            $alias = $data['alias'] ?? "";
+            $source = (int)$data['source'] ?? 1;
+            $nation = $data['nation'] ?? "IT";
+            $city = $data['city'] ?? "";
+            $address = $data['address'] ?? "";
+            $type = (int)$data['propertyType'] ?? 0;
+            $size = (float)$data['size'] ?? 0;
+            $price = (int)$data['price'] ?? 0;
+            $taxes = (int)$data['taxes'] ?? 0;
+            $status = (int)$data['opportunityStatus'] ?? 0;
+            $note = $data['note'] ?? "";
+            $url = $data['url'] ?? "";
+            $referenceName = $data['referenceName'] ?? "";
+            $referenceSurname = $data['referenceSurname'] ?? "";
+            $referenceEmail  = $data['referenceEmail'] ?? "";
+            $referencePhone  = $data['referencePhone'] ?? "";
+            $acqPrice  = $data['acqPrice'] ?? 0;
+            $professionalService  = $data['professionalService'] ?? 0;
+            $q = "UPDATE opportunity SET alias = ?, url = ?, source = ?, nation = ?, city = ?, address = ?, property_type = ?, size = ?, reference_name = ?, reference_surname = ?, reference_email = ?, reference_phone = ?, opportunity_status = ?, price = ?, acquisition_price = ?, professional_services = ?, taxes = ?, note = ? WHERE id = ?";
+            $params = [$alias, $url, $source, $nation, $city, $address, $type, $size, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $status, $price, $acqPrice, $professionalService, $taxes, $note, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Error while updating Opportunity", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            throw new Exception('Failed to update opportunity: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function MarkOpportunityDelete($request, $response) {
+        $id = (int)$request->getAttribute('id');
         $data = json_decode($request->getBody()->getContents(), true);
-        $name = $data['name'] ?? "";
-        $surname = $data['surname'] ?? "";
-        $phone = $data['phone'] ?? "";
-        $email = $data['email'] ?? "";
-        $bizname = $data['bizname'] ?? null;
-        $vat = $data['vat'] ?? null;
-        $fiscal = $data['fiscal'] ?? null;
-        $sdi = $data['sdi'] ?? null;
-        $address = $data['address'] ?? null;
-        $city = $data['city'] ?? null;
-        $zip = $data['zip'] ?? null;
-        $nation = $data['state'] ?? null;
-        $note = $data['note'] ?? null;
-        error_log("Updating customer with ID: $aid");
-        error_log("Data received: " . json_encode($data));
-        $q = 'UPDATE customer SET name = ?, surname = ?, phone = ?, email = ?, bizname = ?, vat = ?, fiscal_code = ?, sdi = ?, address = ?, city = ?, cap = ?, nation = ?, note = ? WHERE id = ?';
-        $params = [$name, $surname, $phone, $email, $bizname, $vat, $fiscal, $sdi, $address, $city, $zip, $nation, $note, $aid];
-        error_log("params: " . json_encode($params));
-        $row_affected = DB::Execute($q, $params);
-        error_log("Updated customer successfully with ID: $aid, affected rows: $row_affected");
-        if ($row_affected == 0) throw new Exception("Error while updating customer", 500);
+        $reason = $data['reason'] ?? "";
+        $date = new DateTime("now", new DateTimeZone("Europe/Rome"));
+        $formatedDate = $date->format("Y-m-d H:i:s");
+        $row_affected = DB::Execute("UPDATE opportunity set del_reason = ?, del_dt = ? WHERE id = ?", [$reason, $formatedDate, $id]);
+        if ($row_affected == 0) throw new Exception("Error while deleting the opportunity", 500);
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
-
+    
     /**
      * @throws Exception
      */

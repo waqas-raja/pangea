@@ -21,11 +21,15 @@ class OpportunityRoutes {
         })->add($this->authMiddleware);
 
         $group->get('/{id}', function (Request $request, Response $response) {
-            return Opportunity::GetCustomer($request, $response);
+            return Opportunity::GetOpportunity($request, $response);
         })->add($this->authMiddleware);
 
         $group->patch('/{id}', function (Request $request, Response $response) {
             return Opportunity::Update($request, $response);
+        })->add($this->authMiddleware);
+        
+        $group->patch('/{id}/mark-delete', function (Request $request, Response $response) {
+            return Opportunity::MarkOpportunityDelete($request, $response);
         })->add($this->authMiddleware);
 
         $group->delete('/{id}', function (Request $request, Response $response) {
