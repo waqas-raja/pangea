@@ -86,5 +86,14 @@ class AppRoutes {
             $response->getBody()->write(ob_get_clean());
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
+
+        $app->get('/opportunity/{id}', function ($request, $response) {
+            $oid = $request->getAttribute('id');
+            extract(['oid' => $oid]);
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/opportunity-detail.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
     }
 }
