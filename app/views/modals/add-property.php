@@ -1,5 +1,5 @@
 <div id="modalAddProperty" class="modal fade" tabindex="-1" aria-labelledby="modalAddPropertyLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalAddPropertyLabel"><i class="bi bi-buildings me-3"></i>Aggiungi Proprietà</h5>
@@ -7,49 +7,83 @@
             </div>
             <div class="modal-body">
                 <form id="">
-                    <div class="row mb-3">
-                        <label for="txtFirstName" class="col-sm-4 col-form-label">Nome<span class="text-danger ms-2">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtFirstName" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="txtLastName" class="col-sm-4 col-form-label">Cognome<span class="text-danger ms-2">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtLastName" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="txtEmail" class="col-sm-4 col-form-label">Email<span class="text-danger ms-2">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtEmail" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="txtPhone" class="col-sm-4 col-form-label">Phone<span class="text-danger ms-2">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtPhone" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label for="ckIsCompany" class="col-sm-4 col-form-label">Is Company</label>
-                        <div class="col-sm-8">
-                            <div class="form-check form-switch pt-2">
-                                <input id="ckIsCompany" class="form-check-input" type="checkbox" role="switch" onchange="toggleCompanyFields(this)">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row mb-3">
+                                <label for="txtAlias" class="col-sm-4 col-form-label">Alias<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtAlias" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="ddlState" class="col-sm-4 col-form-label">Stato<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <select id="ddlState" class="form-select">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtCity" class="col-sm-4 col-form-label">Citta<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtCity" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtAddress" class="col-sm-4 col-form-label">Indirizzo<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtAddress" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtZip" class="col-sm-4 col-form-label">CAP<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="txtZip" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="ddlPropertyStatus" class="col-sm-4 col-form-label">Stato di proprietà<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <select id="ddlPropertyStatus" class="form-select">
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div id="divCompanyFields" class="d-none">
-                        <div class="row mb-3">
-                            <label for="txtBizname" class="col-sm-4 col-form-label">Bizname<span class="text-danger ms-2">*</span></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtBizname" required>
+                        <div class="col-sm-6">
+                            <div class="row mb-3">
+                                <label for="txtSize" class="col-sm-5 col-form-label">Size<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="txtSize" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="txtVat" class="col-sm-4 col-form-label">VAT<span class="text-danger ms-2">*</span></label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtVat" required>
+                            <div class="row mb-3">
+                                <label for="txtFloor" class="col-sm-5 col-form-label">Floor<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="txtFloor" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtAcqPrice" class="col-sm-5 col-form-label">Prezzo di acquisizione<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="txtAcqPrice" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtRenPrice" class="col-sm-5 col-form-label">Prezzo di ristrutturazione<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="txtRenPrice" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Prezzo aggiuntivo<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="txtExtraPrice" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtSellPrice" class="col-sm-5 col-form-label">Prezzo di vendita<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-7">
+                                    <input type="number" class="form-control" id="txtSellPrice" required>
+                                </div>
                             </div>
                         </div>
                     </div>

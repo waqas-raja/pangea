@@ -74,6 +74,10 @@ class ApiRoutes {
             $group->get('/opportunity-status', function ($request, $response) {
                 return Opportunity::GetOpportunityStatus($request, $response);
             })->add($this->authMiddleware);
+            
+            $group->get('/property-status', function ($request, $response) {
+                return Property::GetPropertyStatus($request, $response);
+            })->add($this->authMiddleware);
 
             // Entity's routes
 
@@ -85,6 +89,11 @@ class ApiRoutes {
             $customerRoutes = new CustomerRoutes($this->authMiddleware);
             $group->group('/customer', function (RouteCollectorProxy $customerGroup) use ($customerRoutes) {
                 $customerRoutes->register($customerGroup);
+            });
+            
+            $propertyRoutes = new PropertyRoutes($this->authMiddleware);
+            $group->group('/property', function (RouteCollectorProxy $propertyGroup) use ($propertyRoutes) {
+                $propertyRoutes->register($propertyGroup);
             });
             
             $opportunityRoutes = new OpportunityRoutes($this->authMiddleware);
