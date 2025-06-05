@@ -1,5 +1,5 @@
 <div id="modalAddOpportunity" class="modal fade" tabindex="-1" aria-labelledby="modalAddOpportunityLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalAddOpportunityLabel"><i class="bi bi-file-earmark-text me-3"></i>Aggiungi Opportunità</h5>

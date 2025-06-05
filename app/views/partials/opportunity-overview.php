@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="pai-card position-relative">
+        <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
                 <div class="row mb-0 align-items-center">
                     <label for="txtAlias" class="col-sm-5 col-form-label">Alias:<span class="text-danger ms-2 editControl d-none">*</span></label>
@@ -102,7 +102,7 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="pai-card position-relative">
+        <div class="pai-card position-relative cardHeight">
             <div class="row mb-0 align-items-center">
                 <label for="txtUrl" class="col-sm-5 col-form-label">URL:</label>
                 <div class="col-sm-7">
