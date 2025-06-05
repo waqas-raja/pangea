@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="pai-card position-relative">
+        <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
                 <div class="row mb-0 align-items-center">
                     <label for="ddlCustomer" class="col-sm-5 col-form-label">Cliente:</label>
@@ -100,40 +100,55 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="pai-card position-relative">
+        <div class="pai-card position-relative cardHeight">
             <div class="row mb-0 align-items-center">
                 <label for="txtRoom" class="col-sm-5 col-form-label">Stanze:</label>
                 <div class="col-sm-7">
                     <span id="spRoom" class="valueControl"></span>
-                    <input type="number" id="txtRoom" class="form-control editControl d-none mb-1" value="">
+                    <div class="form-check form-switch editControl d-none">
+                        <input id="txtRoom" class="form-check-input" type="checkbox" role="switch">
+                    </div>
+                    <!-- <input type="number" id="txtRoom" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
                 <label for="txtBathroom" class="col-sm-5 col-form-label">Bagno:</label>
                 <div class="col-sm-7">
                     <span id="spBathroom" class="valueControl"></span>
-                    <input type="number" id="txtBathroom" class="form-control editControl d-none mb-1" value="">
+                    <div class="form-check form-switch editControl d-none">
+                        <input id="txtBathroom" class="form-check-input" type="checkbox" role="switch">
+                    </div>
+                    <!-- <input type="number" id="txtBathroom" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
                 <label for="txtGarden" class="col-sm-5 col-form-label">Giardino:</label>
                 <div class="col-sm-7">
                     <span id="spGarden" class="valueControl"></span>
-                    <input type="number" id="txtGarden" class="form-control editControl d-none mb-1" value="">
+                    <div class="form-check form-switch editControl d-none">
+                        <input id="txtGarden" class="form-check-input" type="checkbox" role="switch">
+                    </div>
+                    <!-- <input type="number" id="txtGarden" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
                 <label for="txtBox" class="col-sm-5 col-form-label">Box:</label>
                 <div class="col-sm-7">
                     <span id="spBox" class="valueControl"></span>
-                    <input type="number" id="txtBox" class="form-control editControl d-none mb-1" value="">
+                    <div class="form-check form-switch editControl d-none">
+                        <input id="txtBox" class="form-check-input" type="checkbox" role="switch">
+                    </div>
+                    <!-- <input type="number" id="txtBox" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
                 <label for="txtElevator" class="col-sm-5 col-form-label">Ascensore:</label>
                 <div class="col-sm-7">
                     <span id="spElevator" class="valueControl"></span>
-                    <input type="number" id="txtElevator" class="form-control editControl d-none mb-1" value="">
+                    <div class="form-check form-switch editControl d-none">
+                        <input id="txtElevator" class="form-check-input" type="checkbox" role="switch">
+                    </div>
+                    <!-- <input type="number" id="txtElevator" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
             <hr>

@@ -68,7 +68,8 @@ async function signIn() {
         const data = await response.json();
         localStorage.setItem("uname", data.name);
         localStorage.setItem("urole", data.role);
-        window.location.href = '/dashboard';
+        // window.location.href = '/dashboard';
+        window.location.href = '/customers';
     } catch (error) {
         msg.textContent = 'Si è verificato un errore. Riprova più tardi.';
         msg.classList.add('text-danger');

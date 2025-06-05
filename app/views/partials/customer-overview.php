@@ -1,8 +1,8 @@
 <div class="row">
-    <div class="col-4">
-        <div class="pai-card position-relative">
+    <div class="col-sm-12">
+        <div class="pai-card mb-3">
             <div class="position-relative">
-                <p class="lato-black text-blue"><i class="bi bi-person-vcard"></i>&nbsp;&nbsp;Informazioni cliente</p>
+                <p class="lato-black text-blue mb-0"><i class="bi bi-person-vcard"></i>&nbsp;&nbsp;Informazioni proprietà</p>
                 <span id="iconAllowEditGenericInfo" class="position-absolute editIcon" role="button" style="right:0px;top:0;" title="Edit" onclick="allowEditGeneralInfo()">
                     <i class="bi bi-pencil"></i>
                 </span>
@@ -13,7 +13,12 @@
                     <i class="bi bi-x-circle"></i> Annulla
                 </button>
             </div>
-            <div id="divInfo">
+            <div id="errEditCustomer" class="text-danger"></div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="pai-card position-relative cardHeight">
+            <div id="">
                 <div class="row mb-0 align-items-center">
                     <label for="txtFirstName" class="col-sm-5 col-form-label">Nome:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
@@ -42,6 +47,13 @@
                         <input type="text" id="txtPhone" class="form-control editControl d-none mb-1" value="">
                     </div>
                 </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="pai-card position-relative cardHeight">
+            <div id="">
                 <div class="row mb-3">
                     <label for="ckIsCompany" class="col-sm-5 col-form-label">Is Company</label>
                     <div class="col-sm-7">
@@ -51,7 +63,6 @@
                     </div>
                 </div>
                 <div id="divCompanyFields" class="d-none">
-                    <hr>
                     <div class="row mb-0 align-items-center">
                         <label for="txtBizname" class="col-sm-5 col-form-label">Bizname:<span class="text-danger ms-2 editControl d-none">*</span></label>
                         <div class="col-sm-7">
@@ -81,9 +92,14 @@
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="row mb-0 align-items-center">
-                    <label for="txtAddress" class="col-sm-5 col-form-label">Indirizzo:<span class="text-danger ms-2 editControl d-none">*</span></label>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="pai-card position-relative cardHeight">
+            <div id="">
+                <div class="row mb-0 align-items-enter">
+                    <label for="txtAddress" class="ccol-sm-5 col-form-label">Indirizzo:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spAddress" class="valueControl"></span>
                         <input type="text" id="txtAddress" class="form-control editControl d-none mb-1" value="">
@@ -121,18 +137,8 @@
                         <input type="text" id="txtNote" class="form-control editControl d-none mb-1" value="">
                     </div>
                 </div>
-                <div id="errEditCustomer" class="text-danger"></div>
+
             </div>
-        </div>
-    </div>
-    <div class="col-8">
-        <div class="pai-card mb-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="lato-black text-blue mb-0">
-                    <i class="bi-piggy-bank me-2"></i>Riepilogo Rientri
-                </p>
-            </div>
-            <div id="listOfReport" class="mt-3"></div>
         </div>
     </div>
 </div>

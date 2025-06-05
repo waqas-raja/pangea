@@ -54,11 +54,11 @@ async function loadPropertyDetail() {
     document.getElementById("spPropertyStatus").innerText = r.payload.property_status_name ?? 'n.d.';
     document.getElementById("spSize").innerText = r.payload.size ?? 'n.d.';
     document.getElementById("spFloor").innerText = r.payload.floor ?? 'n.d.';
-    document.getElementById("spRoom").innerText = r.payload.rooms ?? 'n.d.';
-    document.getElementById("spBathroom").innerText = r.payload.bathrooms ?? 'n.d.';
-    document.getElementById("spGarden").innerText = r.payload.garden ?? 'n.d.';
-    document.getElementById("spBox").innerText = r.payload.box ?? 'n.d.';
-    document.getElementById("spElevator").innerText = r.payload.elevator ?? 'n.d.';
+    document.getElementById("spRoom").innerText = r.payload.rooms ? "Yes" : "No";
+    document.getElementById("spBathroom").innerText = r.payload.bathrooms ? "Yes" : "No";
+    document.getElementById("spGarden").innerText = r.payload.garden ? "Yes" : "No";
+    document.getElementById("spBox").innerText = r.payload.box ? "Yes" : "No";
+    document.getElementById("spElevator").innerText = r.payload.elevator ? "Yes" : "No";
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price)) ?? formatNumber(0);
     document.getElementById("spRenPrice").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
     document.getElementById("spExtraPrice").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
@@ -74,11 +74,11 @@ async function loadPropertyDetail() {
     document.getElementById("ddlPropertyStatus").value = r.payload.property_status ?? '';
     document.getElementById("txtSize").value = r.payload.size ?? '';
     document.getElementById("txtFloor").value = r.payload.floor ?? '';
-    document.getElementById("txtRoom").value = r.payload.rooms ?? '';
-    document.getElementById("txtBathroom").value = r.payload.bathrooms ?? '';
-    document.getElementById("txtGarden").value = r.payload.garden ?? '';
-    document.getElementById("txtBox").value = r.payload.box ?? '';
-    document.getElementById("txtElevator").value = r.payload.elevator ?? '';
+    document.getElementById("txtRoom").checked = r.payload.rooms ? true : false;
+    document.getElementById("txtBathroom").checked = r.payload.bathrooms ? true : false;
+    document.getElementById("txtGarden").checked = r.payload.garden ? true : false;
+    document.getElementById("txtBox").checked = r.payload.box ? true : false;
+    document.getElementById("txtElevator").checked = r.payload.elevator ? true : false;
     document.getElementById("txtAcqPrice").value = r.payload.acquisition_price ?? '';
     document.getElementById("txtRenPrice").value = r.payload.renovation_price ?? '';
     document.getElementById("txtExtraPrice").value = r.payload.renovation_price ?? '';
@@ -168,16 +168,15 @@ async function updateGenericInfo() {
     const propertyStatus = document.getElementById("ddlPropertyStatus").value;
     const size = document.getElementById("txtSize").value.trim();
     const floor = document.getElementById("txtFloor").value.trim();
-    const room = document.getElementById("txtRoom").value.trim();
-    const bathroom = document.getElementById("txtBathroom").value.trim();
-    const garden = document.getElementById("txtGarden").value.trim();
-    const box = document.getElementById("txtBox").value.trim();
-    const elevator = document.getElementById("txtElevator").value.trim();
+    const room = document.getElementById("txtRoom").checked === true ? 1 : 0;
+    const bathroom = document.getElementById("txtBathroom").checked === true ? 1 : 0;
+    const garden = document.getElementById("txtGarden").checked === true ? 1 : 0;
+    const box = document.getElementById("txtBox").checked === true ? 1 : 0;
+    const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const renPrice = document.getElementById("txtRenPrice").value.trim();
     const extraPrice = document.getElementById("txtExtraPrice").value.trim();
     const sellPrice = document.getElementById("txtSellPrice").value.trim();
-    
     if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === "" || sellPrice === "") {
         err.innerText = "Si prega di compilare tutti i campi richiesti";
         btn.disabled = false;
