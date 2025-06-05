@@ -1,21 +1,4 @@
 <div class="row">
-    <div class="col-sm-12">
-        <div class="pai-card mb-3">
-            <div class="position-relative">
-                <p class="lato-black text-blue mb-0"><i class="bi bi-person-vcard"></i>&nbsp;&nbsp;Informazioni proprietà</p>
-                <span id="iconAllowEditGenericInfo" class="position-absolute editIcon" role="button" style="right:0px;top:0;" title="Edit" onclick="allowEditGeneralInfo()">
-                    <i class="bi bi-pencil"></i>
-                </span>
-                <button id="iconSaveEditGenericInfo" class="btn btn-orange-inverted position-absolute saveIcon d-none py-0 px-2" role="button" style="right:0px;top:0;" title="Save" onclick="updateGenericInfo()">
-                    <i class="bi bi-floppy"></i> Salva
-                </button>
-                <button id="iconCancelEditGenericInfo" class="btn btn-outline-secondary position-absolute cancelIcon d-none py-0 px-2" role="button" style="right:80px;top:0;" title="Cancel" onclick="cancelEditGeneralInfo()">
-                    <i class="bi bi-x-circle"></i> Annulla
-                </button>
-            </div>
-            <div id="errMessage" class="text-danger"></div>
-        </div>
-    </div>
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
