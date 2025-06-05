@@ -67,6 +67,7 @@ function cancelEditGeneralInfo() {
     document.getElementById("iconSaveEditGenericInfo").classList.add('d-none');
     document.getElementById("iconCancelEditGenericInfo").classList.add('d-none');
     document.getElementById("iconAllowEditGenericInfo").classList.remove('d-none');
+    document.getElementById('errMessage').innerHTML = '';
 }
 
 async function loadSources() {

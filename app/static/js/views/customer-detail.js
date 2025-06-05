@@ -1,3 +1,4 @@
+let _customerDetail = [];
 document.addEventListener("DOMContentLoaded", async () => {
     await loadCustomerDetail();
 });
@@ -5,41 +6,55 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadCustomerDetail() {
     const response = await fetch('/api/customer/' + customerId);
     const r = await response.json();
-    console.log(r);
-    document.getElementById("spFirstName").innerText = r.payload.name ?? 'n.d.';
-    document.getElementById("txtFirstName").value = r.payload.name ?? '';
-    document.getElementById("spLastName").innerText = r.payload.surname ?? 'n.d.';
-    document.getElementById("txtLastName").value = r.payload.surname ?? '';
-    document.getElementById("spEmail").innerText = r.payload.email ?? 'n.d.';
-    document.getElementById("txtEmail").value = r.payload.email ?? '';
-    document.getElementById("spPhone").innerText = r.payload.phone ?? 'n.d.';
-    document.getElementById("txtPhone").value = r.payload.phone ?? '';
-    document.getElementById("ckIsCompany").checked = r.payload.bizname !== null;
-    document.getElementById("ckIsCompany").disabled = true;
-    if (r.payload.bizname !== null && r.payload.bizname !== '') document.getElementById('divCompanyFields').classList.remove("d-none");
-    document.getElementById("spBizname").innerText = r.payload.bizname ?? 'n.d.';
-    document.getElementById("txtBizname").value = r.payload.bizname ?? '';
-    document.getElementById("spVat").innerText = r.payload.vat ?? 'n.d.';
-    document.getElementById("txtVat").value = r.payload.vat ?? '';
-    document.getElementById("spFiscal").innerText = r.payload.fiscal_code ?? 'n.d.';
-    document.getElementById("txtFiscal").value = r.payload.fiscal_code ?? '';
-    document.getElementById("spSdi").innerText = r.payload.sdi ?? 'n.d.';
-    document.getElementById("txtSdi").value = r.payload.sdi ?? '';
-    document.getElementById("spAddress").innerText = r.payload.address ?? 'n.d.';
-    document.getElementById("txtAddress").value = r.payload.address ?? '';
-    document.getElementById("spCity").innerText = r.payload.city ?? 'n.d.';
-    document.getElementById("txtCity").value = r.payload.city ?? '';
-    document.getElementById("spZip").innerText = r.payload.cap ?? 'n.d.';
-    document.getElementById("txtZip").value = r.payload.cap ?? '';
-    document.getElementById("spState").innerText = r.payload.nation ?? 'n.d.';
-    document.getElementById("ddlState").value = r.payload.nation ?? '';
-    document.getElementById("spNote").innerText = r.payload.note ?? 'n.d.';
-    document.getElementById("txtNote").value = r.payload.note ?? '';
+    _customerDetail = r.payload;
+    loadDetail();
+}
+
+function loadDetail(d=null) {
+    document.getElementById("spFirstName").innerText = _customerDetail.name ?? 'n.d.';
+    document.getElementById("txtFirstName").value = _customerDetail.name ?? '';
+    document.getElementById("spLastName").innerText = _customerDetail.surname ?? 'n.d.';
+    document.getElementById("txtLastName").value = _customerDetail.surname ?? '';
+    document.getElementById("spEmail").innerText = _customerDetail.email ?? 'n.d.';
+    document.getElementById("txtEmail").value = _customerDetail.email ?? '';
+    document.getElementById("spPhone").innerText = _customerDetail.phone ?? 'n.d.';
+    document.getElementById("txtPhone").value = _customerDetail.phone ?? '';
+    document.getElementById("ckIsCompany").checked = _customerDetail.bizname !== null;
+    if(d === null) document.getElementById("ckIsCompany").disabled = true;
+    if (_customerDetail.bizname !== null && _customerDetail.bizname !== '') document.getElementById('divCompanyFields').classList.remove("d-none");
+    document.getElementById("spBizname").innerText = _customerDetail.bizname ?? 'n.d.';
+    document.getElementById("txtBizname").value = _customerDetail.bizname ?? '';
+    document.getElementById("spVat").innerText = _customerDetail.vat ?? 'n.d.';
+    document.getElementById("txtVat").value = _customerDetail.vat ?? '';
+    document.getElementById("spFiscal").innerText = _customerDetail.fiscal_code ?? 'n.d.';
+    document.getElementById("txtFiscal").value = _customerDetail.fiscal_code ?? '';
+    document.getElementById("spSdi").innerText = _customerDetail.sdi ?? 'n.d.';
+    document.getElementById("txtSdi").value = _customerDetail.sdi ?? '';
+    document.getElementById("spAddress").innerText = _customerDetail.address ?? 'n.d.';
+    document.getElementById("txtAddress").value = _customerDetail.address ?? '';
+    document.getElementById("spCity").innerText = _customerDetail.city ?? 'n.d.';
+    document.getElementById("txtCity").value = _customerDetail.city ?? '';
+    document.getElementById("spZip").innerText = _customerDetail.cap ?? 'n.d.';
+    document.getElementById("txtZip").value = _customerDetail.cap ?? '';
+    document.getElementById("spState").innerText = _customerDetail.nation ?? 'n.d.';
+    document.getElementById("ddlState").value = _customerDetail.nation ?? '';
+    document.getElementById("spNote").innerText = _customerDetail.note ?? 'n.d.';
+    document.getElementById("txtNote").value = _customerDetail.note ?? '';
 }
 
 function toggleCompanyFields(el) {
-    if (el.checked) document.getElementById("divCompanyFields").classList.remove("d-none");
-    else document.getElementById("divCompanyFields").classList.add("d-none");
+    if (el.checked) {
+        loadDetail(1);
+        document.getElementById("divCompanyFields").style.pointerEvents = 'initial';
+        document.getElementById("divCompanyFields").style.opacity = 1;
+    } else {
+        document.getElementById("txtBizname").value = '';
+        document.getElementById("txtVat").value = '';
+        document.getElementById("txtFiscal").value = '';
+        document.getElementById("txtSdi").value = '';
+        document.getElementById("divCompanyFields").style.pointerEvents = 'none';
+        document.getElementById("divCompanyFields").style.opacity = 0.5;
+    }
 }
 
 function allowEditGeneralInfo() {
@@ -62,6 +77,7 @@ function cancelEditGeneralInfo() {
     document.getElementById("iconSaveEditGenericInfo").classList.add('d-none');
     document.getElementById("iconCancelEditGenericInfo").classList.add('d-none');
     document.getElementById("iconAllowEditGenericInfo").classList.remove('d-none');
+    document.getElementById('errEditCustomer').innerHTML = '';
 }
 
 async function updateGenericInfo() {
@@ -101,12 +117,12 @@ async function updateGenericInfo() {
     try {
         const response = await fetch("/api/customer/" + customerId, {
             method: "PATCH",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 name: name,
                 surname: surname,
-                email:email,
-                phone:phone,
+                email: email,
+                phone: phone,
                 bizname: isCompany ? bizname : null,
                 vat: isCompany ? vat : null,
                 fiscal: fiscal !== "" ? fiscal : null,
@@ -134,7 +150,7 @@ async function deleteCustomerModal() {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
             try {
-                const response = await fetch("/api/customer/" + customerId, {method: "DELETE" });
+                const response = await fetch("/api/customer/" + customerId, { method: "DELETE" });
                 const res = await response.json();
                 if (res.result) {
                     $("#modalConfirmDelete").modal('hide');
