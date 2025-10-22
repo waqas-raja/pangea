@@ -27,7 +27,7 @@ function get_user_os() {
 }
 
 function setMenuActive() {
-    const currentPage = window.location.pathname.split('/').pop();
+    const currentPage = window.location.pathname.split('/')[1];
     const sidebar_links = document.querySelectorAll('#main-sidebar .nav-link > a');
     const sidebar_links_alt = document.querySelectorAll('#main-sidebar-alt .nav-link > a');
     const header_links = document.querySelectorAll('#main-content > div:first-child a');
@@ -38,8 +38,10 @@ function setMenuActive() {
     switch (currentPage) {
         //sidebar
         case 'dashboard': activeMenuId = 'Dashboard'; break;
+        case 'customers':
+        case 'customer': activeMenuId = 'Customers'; break;
         case 'properties': activeMenuId = 'Properties'; break;
-        case 'agents': activeMenuId = 'Agents'; break;
+        case 'opportunities': activeMenuId = 'Opportunities'; break;
         //header
         case 'settings': activeMenuId = 'Settings'; break;
         case 'users': activeMenuId = 'Users'; break;

@@ -64,6 +64,15 @@ class AppRoutes {
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
 
+        $app->get('/customer/{id}', function ($request, $response) {
+            $cid = $request->getAttribute('id');
+            extract(['cid' => $cid]);
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/customer-detail.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+
         $app->get('/properties', function ($request, $response) {
             ob_start();
             require_once __DIR__ . '/../../views/pages/properties.php';
@@ -71,9 +80,27 @@ class AppRoutes {
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
 
-        $app->get('/quotations', function ($request, $response) {
+        $app->get('/property/{id}', function ($request, $response) {
+            $id = $request->getAttribute('id');
+            extract(['id' => $id]);
             ob_start();
-            require_once __DIR__ . '/../../views/pages/quotations.php';
+            require_once __DIR__ . '/../../views/pages/property-detail.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+
+        $app->get('/opportunities', function ($request, $response) {
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/opportunities.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+
+        $app->get('/opportunity/{id}', function ($request, $response) {
+            $oid = $request->getAttribute('id');
+            extract(['oid' => $oid]);
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/opportunity-detail.php';
             $response->getBody()->write(ob_get_clean());
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
