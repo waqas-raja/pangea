@@ -41,7 +41,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Annulla</button>
                 <button id="btnDisableUser" type="button" class="btn btn-outline-secondary" onclick="disableUser()"><i class="bi bi-x"></i> Disabilita utente</button>
-                <button id="btnUpdateUser" type="button" class="btn btn-orange" onclick="updateUser()">
+                <button id="btnUpdateUser" type="button" class="btn btn-blue" onclick="updateUser()">
                     <i class="bi bi-check-lg"></i> Salva
                     <div id="spinnerEditUser" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>

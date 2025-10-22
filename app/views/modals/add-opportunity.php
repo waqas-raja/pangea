@@ -90,7 +90,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Annulla</button>
-                <button id="btnSaveOpportunity" type="button" class="btn btn-orange" onclick="saveOpportunity()">
+                <button id="btnSaveOpportunity" type="button" class="btn btn-blue" onclick="saveOpportunity()">
                     <i class="bi bi-check-lg"></i> Salva
                     <div id="spinnerNewOpportunity" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>

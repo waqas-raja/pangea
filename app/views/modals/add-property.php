@@ -92,7 +92,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Annulla</button>
-                <button id="btnSaveProperty" type="button" class="btn btn-orange" onclick="saveProperty()">
+                <button id="btnSaveProperty" type="button" class="btn btn-blue" onclick="saveProperty()">
                     <i class="bi bi-check-lg"></i> Salva
                     <div id="spinnerNewProperty" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>
