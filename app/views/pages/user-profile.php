@@ -29,7 +29,7 @@ ob_start();
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <span id="resultPersonalData"></span>
-                        <button id="btnUpdatePersonalData" type="button" class="btn btn-orange" onclick="updatePersonalData()">
+                        <button id="btnUpdatePersonalData" type="button" class="btn btn-blue" onclick="updatePersonalData()">
                             <i class="bi bi-check-lg"></i> Salva
                             <div id="spinnerPersonalData" class="spinner-border spinner-border-sm d-none" role="status">
                                 <span class="visually-hidden">Loading...</span>
@@ -67,7 +67,7 @@ ob_start();
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <span id="resultChangePsw"></span>
-                        <button id="btnUpdatePassword" type="button" class="btn btn-orange" onclick="updatePassword()">
+                        <button id="btnUpdatePassword" type="button" class="btn btn-blue" onclick="updatePassword()">
                             <i class="bi bi-check-lg"></i> Salva
                             <div id="spinnerPassword" class="spinner-border spinner-border-sm d-none" role="status">
                                 <span class="visually-hidden">Loading...</span>

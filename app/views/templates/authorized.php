@@ -10,16 +10,16 @@
                 <span onclick="handleSidebarMenu()"><i class="bi bi-list fs-4 me-3 pointer"></i></span>
                 <span id="spUserLoggedName"></span>
                 <div class="ms-auto">
-                    <a id="menuUsers" href="/users" class="visually-hidden text-secondary text-decoration-none hover-orange" title="Gestione Utenti">
+                    <a id="menuUsers" href="/users" class="visually-hidden text-secondary text-decoration-none hover-gold" title="Gestione Utenti">
                         <i class="bi bi-people fs-4"></i>
                     </a>
-                    <a id="menuSettings" href="/settings" class="visually-hidden text-secondary text-decoration-none hover-orange" title="Impostazioni">
+                    <a id="menuSettings" href="/settings" class="visually-hidden text-secondary text-decoration-none hover-gold" title="Impostazioni">
                         <i class="bi bi-gear fs-4"></i>
                     </a>
-                    <a id="menuUserProfile" href="/user-profile" class="text-secondary text-decoration-none hover-orange" title="Profilo Utente">
+                    <a id="menuUserProfile" href="/user-profile" class="text-secondary text-decoration-none hover-gold" title="Profilo Utente">
                         <i class="bi bi-person-circle fs-4"></i>
                     </a>
-                    <a href="#" class="text-secondary text-decoration-none hover-orange" title="Logout" onclick="logout();">
+                    <a href="#" class="text-secondary text-decoration-none hover-gold" title="Logout" onclick="logout();">
                         <i class="bi bi-box-arrow-right fs-4"></i>
                     </a>
                 </div>

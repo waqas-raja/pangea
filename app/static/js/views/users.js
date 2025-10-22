@@ -41,7 +41,7 @@ function loadList(data) {
                             const modal = new bootstrap.Modal(modalElement);
                             modal.show();
                         },
-                        elementAttr: { class: "btn-orange" }
+                        elementAttr: { class: "btn-gold" }
                     }
                 }
             ]
