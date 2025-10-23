@@ -89,7 +89,7 @@ class AppRoutes {
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
         
-        $app->get('/estimate', function ($request, $response) {
+        $app->get('/estimates', function ($request, $response) {
             ob_start();
             require_once __DIR__ . '/../../views/pages/list-estimates.php';
             $response->getBody()->write(ob_get_clean());
