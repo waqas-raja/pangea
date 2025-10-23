@@ -71,7 +71,7 @@ async function signIn() {
         // window.location.href = '/dashboard';
         window.location.href = '/customers';
     } catch (error) {
-        msg.textContent = 'Si è verificato un errore. Riprova più tardi.';
+        msg.textContent = 'Credenziali non valide.';
         msg.classList.add('text-danger');
         console.error('Errore durante il login:', error);
     }
