@@ -33,6 +33,10 @@ body { font-family:"Lato", serif; font-size: 16px; }
 .btn-gold-inverted:hover { background-color: rgba(var(--primary-gold-rgba), 0.8); border-color: rgba(var(--primary-gold-rgba), 0.8); color: white; }
 .pointer:hover { cursor: pointer !important; }
 .text-blue { color: var(--primary-blue); }
+.text-green { color: var(--primary-green); }
+.text-red { color: var(--primary-red); }
+.bg-blue { background-color: var(--primary-blue) !important; background: var(--primary-blue) !important;}
+.bg-green { background-color: var(--primary-green) !important; background: var(--primary-green) !important;}
 .text-gold { color: var(--primary-gold); }
 .hover-gold:hover { color: var(--primary-gold) !important; }
 .text-small { font-size: 0.8em; }
