@@ -3,11 +3,50 @@ document.addEventListener("DOMContentLoader", () => {
 
 })
 
-function saveNewEstimate() {
+async function saveNewEstimate() {
     if (!_isEstimated) return;
+    const btn = document.getElementById("btnSaveNewEstimate");
+    const customer = document.getElementById('ddlSelectClient');
+    const property = document.getElementById('ddlSelectProperty');
+    const result = document.getElementById('errAddNewEstimate');
+    result.innerHTML = '';
+    customer.style.borderColor = '#dee2e6';
+    property.style.borderColor = '#dee2e6';
+    if (customer.value.trim() === '' || property.value.trim() === "") {
+        if (customer.value.trim() === '') customer.style.borderColor = 'red';
+        if (property.value.trim() === '') property.style.borderColor = 'red';
+        showMessage('Si prega di compilare tutti i campi richiesti', 'errAddNewEstimate', 'text-danger');
+        return;
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove("d-none");
+    result.classList.add("d-none");
+    try {
+        const response = await fetch("/api/estimate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "customer": customer.value.trim(), "property": property.value.trim() })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = true;
+            btn.lastElementChild.classList.add("d-none");
+            showMessage('Registrazione salvata con successo', 'errAddNewEstimate', 'text-success');
+        } else {
+            showMessage('Si sono verificati degli errori durante il salvataggio', 'errAddNewEstimate', 'text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.remove("d-none");
+        }
+    } catch (error) {
+        console.error(error.message);
+        showMessage('Si è verificato un errore', 'errAddNewEstimate', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.add("d-none");
+    }
 }
 
 function calculateEstimate() {
+    _isEstimated = true;
     document.getElementById('btnSaveNewEstimate').disabled = false;
 }
 
@@ -26,3 +65,4 @@ function addCostVariant() {
 function removeCostSection(ele) {
     ele.parentNode.remove();
 }
+

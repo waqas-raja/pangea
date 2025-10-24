@@ -13,10 +13,13 @@ ob_start();
             </div>
             <div class="d-flex justify-content-between align-items-center gap-2">
                 <button type="button" id="btnCancel" class="btn btn-light border" onclick="">Annulla</button>
-                <button type="button" id="btnSaveNewEstimate" class="btn btn-blue" onclick="saveNewEstimate()" disabled>Salva Preventivo</button>
+                <button id="btnSaveNewEstimate" type="button" class="btn btn-blue" onclick="saveNewEstimate()" disabled>
+                    <i class="bi bi-check-lg"></i> Salva Preventivo
+                    <div id="spinnerNewEstimate" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
+                </button>
             </div>
         </div>
-        <div id="errAddNewEstimate" class="text-danger mt-3 d-none"></div>
+        <div id="errAddNewEstimate" class="mt-3 d-none"></div>
     </div>
     <?php //require_once __DIR__ . "/../partials/customer-overview.php"; 
     ?>
@@ -31,16 +34,14 @@ ob_start();
                                 <label for="ddlSelectClient" class="form-label">Seleziona Cliente</label>
                                 <select id="ddlSelectClient" class="form-select">
                                     <option value="" selected>Cerca e seleziona un cliente</option>
-                                    <option value="1">Mario Rossi</option>
-                                    <option value="2">Rossi Mario</option>
+                                    <option value="4">Mario Rossi</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="ddlSelectProperty" class="form-label">Seleziona Immobile</label>
                                 <select id="ddlSelectProperty" class="form-select">
                                     <option value="" selected>Cerca e seleziona un immobile</option>
-                                    <option value="1">Mario Rossi</option>
-                                    <option value="2">Rossi Mario</option>
+                                    <option value="3">Mario Rossi</option>
                                 </select>
                             </div>
                         </div>

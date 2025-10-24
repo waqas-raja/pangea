@@ -6,6 +6,7 @@ use App\Framework\Middlewares\AuthMiddleware;
 use App\Framework\Models\User;
 use App\Framework\Models\Customer;
 use App\Framework\Models\Property;
+use App\Framework\Models\Estimate;
 use App\Framework\Models\Opportunity;
 use Slim\App;
 use Slim\Exception\HttpNotImplementedException;
@@ -94,6 +95,11 @@ class ApiRoutes {
             $propertyRoutes = new PropertyRoutes($this->authMiddleware);
             $group->group('/property', function (RouteCollectorProxy $propertyGroup) use ($propertyRoutes) {
                 $propertyRoutes->register($propertyGroup);
+            });
+            
+            $estimateRoutes = new EstimateRoutes($this->authMiddleware);
+            $group->group('/estimate', function (RouteCollectorProxy $estimateGroup) use ($estimateRoutes) {
+                $estimateRoutes->register($estimateGroup);
             });
             
             $opportunityRoutes = new OpportunityRoutes($this->authMiddleware);
