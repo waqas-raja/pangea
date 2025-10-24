@@ -12,8 +12,8 @@ ob_start();
                 <span class="text-muted text-small">Crea un nuovo preventivo per un cliente e un immobile.</span>
             </div>
             <div class="d-flex justify-content-between align-items-center gap-2">
-                <button type="button" class="btn btn-light border" onclick="">Annulla</button>
-                <button type="button" class="btn btn-blue" onclick="">Salva Preventivo</button>
+                <button type="button" id="btnCancel" class="btn btn-light border" onclick="">Annulla</button>
+                <button type="button" id="btnSaveNewEstimate" class="btn btn-blue" onclick="saveNewEstimate()" disabled>Salva Preventivo</button>
             </div>
         </div>
         <div id="errAddNewEstimate" class="text-danger mt-3 d-none"></div>
@@ -22,7 +22,7 @@ ob_start();
     ?>
     <div class="row">
         <div class="col-sm-8">
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-sm-12">
                     <div class="pai-card">
                         <div class="pai-title mb-3 fw-bold">Dati Generali</div>
@@ -47,6 +47,105 @@ ob_start();
                     </div>
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <div class="pai-card">
+                        <div class="pai-title mb-3 fw-bold">Stime di Affitto Mensili</div>
+                        <div class="d-flex justify-content-between align-items-center fw-semibold gap-3 mb-3">
+                            <span class="w-20">Mese</span>
+                            <span class="w-40">Prezzo Medio Giornaliero (&euro;)</span>
+                            <span class="w-40">Giorni Affittati Stimati</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span style="width: 20%;">Gennio</span>
+                            <input type="number" id="averageJen" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedJen" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Febbraio</span>
+                            <input type="number" id="averageFeb" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedFeb" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Marzo</span>
+                            <input type="number" id="averageMar" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedMar" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Aprile</span>
+                            <input type="number" id="averageApr" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedApr" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Maggio</span>
+                            <input type="number" id="averageMay" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedMAy" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Giugno</span>
+                            <input type="number" id="averageJun" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedJun" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Luglio</span>
+                            <input type="number" id="averageJul" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedJul" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Agosto</span>
+                            <input type="number" id="averageAug" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedAug" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Settembre</span>
+                            <input type="number" id="averageSep" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedSep" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Novembre</span>
+                            <input type="number" id="averageNov" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedNov" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Dicembre</span>
+                            <input type="number" id="averageDec" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="estimatedDec" class="form-control w-40" value="" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <div class="pai-card">
+                        <div class="pai-title mb-3 fw-bold">Decurtazioni e Spese Fisse</div>
+                        <div id="deductionFixedCost">
+                            <div id="costSection_1" class="d-flex justify-content-between align-items-center gap-3 mb-3">
+                                <input type="text" id="txtCostDesc_1_1" class="form-control w-80" value="" placeholder="Es. TARI, SPESE Condominiali...">
+                                <input type="number" id="txtCost_1_1" class="form-control w-15" value="" placeholder="€">
+                                <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
+                            </div>
+                            <div id="costSection_2" class="d-flex justify-content-between align-items-center gap-3 mb-3">
+                                <input type="text" id="txtCostDesc_2_1" class="form-control w-80" value="" placeholder="Es. Assicurazione">
+                                <input type="number" id="txtCost_2_1" class="form-control w-15" value="" placeholder="€">
+                                <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
+                            </div>
+                        </div>
+                        <div class="text-blue fw-semibold" role="button" onclick="addCostVariant()">
+                            <i class="bi bi-plus-circle me-2"></i> Aggiungi Voce
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-sm-4">
             <div class="pai-card">
@@ -55,15 +154,17 @@ ob_start();
                     <span>Rendita Annu Lorda Stimata</span><br>
                     <span class="fs-3 fw-bold mt-3">0,00 &euro;</span>
                 </div>
-                <button class="btn bg-green p-2 text-white w-100">Calcola Rendita</button>
+                <button id="btnCalculateEstimate" class="btn bg-green p-2 text-white w-100 mb-3" onclick="calculateEstimate()">
+                    <i class="bi bi-file-earmark-diff me-2"></i>Calcola Rendita
+                </button>
+                <div class="text-center text-body-tertiary">
+                    Clicca "Calcola Rendita" per aggiornare la stima. Il pulsante "Salva Preventivo" si attivera dopo il primo calcolo.
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-    const customerId = '<?= $cid ?>';
-</script>
-<script src="/static/js/views/estimate-detail.js"></script>
+<script src="/static/js/views/new-estimate.js"></script>
 
 <?php
 $content = ob_get_clean();
