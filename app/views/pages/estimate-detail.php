@@ -11,7 +11,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
     <div class="pai-card mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <div class="pai-title fw-bold text-blue">Dettaglio Preventivi <span id="estimateId">#P2024-045</span></div>
+                <div class="pai-title fw-bold text-blue">Dettaglio Preventivi <span id="estimateId">#P2024-<?php echo $eid;?></span></div>
                 <span class="text-muted text-small">Visualizza i dettagli del preventivo per l'immobile e il cliente.</span>
             </div>
             <div class="d-flex justify-content-between align-items-center">
@@ -162,7 +162,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 mb-4">
             <div class="pai-card bg-blue">
                 <div class="w-50 mx-auto my-3 text-center text-white">
                     <h3 style="color: #abcabc; font-weight:bold;">Fedita Annua Netta Stimata</h3>
@@ -172,6 +172,11 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                         <i class="bi bi-info-circle fs-5 ms-2"></i>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="text-center text-body-tertiary text-small">
+                Preventivo generato il 24/10/2025. Ultima modifica da Mario Rossi.
             </div>
         </div>
     </div>
