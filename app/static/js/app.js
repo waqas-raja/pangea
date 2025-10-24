@@ -41,6 +41,7 @@ function setMenuActive() {
         case 'customers':
         case 'customer': activeMenuId = 'Customers'; break;
         case 'properties': activeMenuId = 'Properties'; break;
+        case 'estimate':
         case 'estimates': activeMenuId = 'Quotes'; break;
         case 'opportunities': activeMenuId = 'Opportunities'; break;
         //header

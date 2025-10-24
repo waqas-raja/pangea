@@ -44,7 +44,7 @@ async function loadListEstimates() {
         showBorders: true,
         searchPanel: {
             visible: true,
-            width: 250,
+            width: 450,
             placeholder: "Cerca..."
         },
         noDataText: "Non risultano immobili registrati per questa sede",
@@ -93,9 +93,9 @@ async function loadListEstimates() {
                     const data = options.data;
                     let div = '';
                     switch ((data.status).toLowerCase()) {
-                        case 'approved': div = '<div class="mx-auto rounded-pill alert alert-success px-1 py-0 text-center m-0" style="width: fit-content;">Approvato</div>'; break;
-                        case 'pending': div = '<div class="mx-auto rounded-pill alert alert-warning px-1 py-0 text-center m-0" style="width: fit-content;">In attesa</div>'; break;
-                        case 'cancel': div = '<div class="mx-auto rounded-pill alert alert-danger px-1 py-0 text-center m-0" style="width: fit-content;">Rifiutato</div>'; break;
+                        case 'approved': div = '<div class="mx-auto rounded-pill alert alert-success px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #a3cfbb;">Approvato</div>'; break;
+                        case 'pending': div = '<div class="mx-auto rounded-pill alert alert-warning px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #ffe69c;"">In attesa</div>'; break;
+                        case 'cancel': div = '<div class="mx-auto rounded-pill alert alert-danger px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #f1aeb5;"">Rifiutato</div>'; break;
                     }
                     container.html(div);
                 }
@@ -105,7 +105,7 @@ async function loadListEstimates() {
                 caption: "AZIONI",
                 sortIndex: 7,
                 cellTemplate: function (container, options) {
-                    container.html('<div class="d-flex justify-content-between align-items-center"><i class="bi bi-eye text-primary"></i> <i class="bi bi-pencil"></i> <i class="bi bi-trash text-danger"></i>');
+                    container.html('<div class="d-flex justify-content-between align-items-center"><i class="bi bi-eye text-primary" title="Visualizzazione"></i> <i class="bi bi-pencil" title="Modificare"></i> <i class="bi bi-trash text-danger" title="Eliminare"></i>');
                 }
             },
         ],
@@ -115,8 +115,11 @@ async function loadListEstimates() {
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
             items: [
+                {
+                    name: "searchPanel",
+                    location: "before"
+                },
                 "groupPanel",
-                "searchPanel",
             ]
         },
         onRowClick: function (e) { 
