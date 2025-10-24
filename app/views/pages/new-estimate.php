@@ -34,7 +34,7 @@ ob_start();
                                 <label for="ddlSelectClient" class="form-label">Seleziona Cliente</label>
                                 <select id="ddlSelectClient" class="form-select">
                                     <option value="" selected>Cerca e seleziona un cliente</option>
-                                    <option value="3">Mario Rossi</option>
+                                    <option value="4">Mario Rossi</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
