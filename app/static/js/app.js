@@ -56,7 +56,7 @@ function setMenuActive() {
     if (activeMenuAlt) activeMenuAlt.classList.add('active');
 }
 
-function setCopyright(){
+function setCopyright() {
     const span = document.getElementById("copyright");
     const startY = 2025;
     const currentY = new Date().getFullYear();
@@ -65,7 +65,7 @@ function setCopyright(){
 
 function setUserLoggedSettings() {
     document.getElementById("spUserLoggedName").innerText = `Ciao ${localStorage.uname}!`;
-    if(localStorage.urole > 100) {
+    if (localStorage.urole > 100) {
         document.getElementById("menuUsers").classList.remove("visually-hidden");
         document.getElementById("menuSettings").classList.remove("visually-hidden");
     }
@@ -152,4 +152,17 @@ function formatNumber(num) {
         currency: 'EUR',
         maximumFractionDigits: 0
     }));
+}
+
+function showMessage(msg, id, cls) {
+    const result = document.getElementById(id);
+    result.innerHTML = msg;
+    result.classList.add(cls);
+    result.classList.remove('d-none');
+    setTimeout(() => {
+        result.innerHTML = '';
+        result.classList.remove(cls);
+        result.classList.add('d-none');
+    }, 3000);
+
 }
