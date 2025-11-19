@@ -38,7 +38,7 @@
         <div class="pai-card position-relative cardHeight">
             <div id="">
                 <div class="row mb-3">
-                    <label for="ckIsCompany" class="col-sm-5 col-form-label">Is Company</label>
+                    <label for="ckIsCompany" class="col-sm-5 col-form-label">È Compagnia?</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch pt-2">
                             <input id="ckIsCompany" class="form-check-input" type="checkbox" role="switch" onchange="toggleCompanyFields(this)">

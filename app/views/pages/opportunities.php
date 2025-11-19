@@ -1,11 +1,11 @@
 <?php
-    $title = 'Opportunities';
+    $title = 'Opportunità';
     ob_start();
     require_once __DIR__ . '/../modals/add-opportunity.php';
 ?>
     <div id="page-opportunities">
         <div class="pai-card mb-3 d-flex justify-content-between align-items-center">
-            <span class="pai-title">Opportunities</span>
+            <span class="pai-title">Opportunità</span>
             <!-- <div class="bg-light p-3 mt-3"><i>Page under constructions</i></div> -->
              <button type="button" class="btn btn-blue" onclick="showModalAddOpportunity(null, 'Aggiungi opportunità')"><i class="bi bi-plus-lg me-2"></i> Aggiungi Opportunità</button>
         </div>

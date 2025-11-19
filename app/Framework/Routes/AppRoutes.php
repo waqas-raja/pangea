@@ -88,6 +88,29 @@ class AppRoutes {
             $response->getBody()->write(ob_get_clean());
             return $response->withHeader('Content-Type', 'text/html');
         })->add($this->authMiddleware);
+        
+        $app->get('/estimates', function ($request, $response) {
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/list-estimates.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+        
+        $app->get('/estimate', function ($request, $response) {
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/new-estimate.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
+
+        $app->get('/estimate/{id}', function ($request, $response) {
+            $id = $request->getAttribute('id');
+            extract(['id' => $id]);
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/estimate-detail.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })->add($this->authMiddleware);
 
         $app->get('/opportunities', function ($request, $response) {
             ob_start();
