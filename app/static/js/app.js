@@ -94,6 +94,11 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
+function isValidPhone(phone) {
+  const regx = /^[0-9]\d{9}$/ ;
+  return regx.test(phone);
+}
+
 function initInternalTabs() {
     const tabs = document.querySelectorAll(".pai-tab");
     const contents = document.querySelectorAll(".pai-tab-content");

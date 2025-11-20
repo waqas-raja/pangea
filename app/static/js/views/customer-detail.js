@@ -111,7 +111,12 @@ async function updateGenericInfo() {
         if (state === "") { err.textContent = "Lo Stato è obbligatorio"; return; }
     }
     if (email !== "" && !isValidEmail(email)) {
-        err.textContent = "L'email fornita non risulta valida";
+        err.textContent = "L'email fornita non risulta valida.";
+        btn.disabled = false;
+        return;
+    }
+    if (!isValidPhone(phone)) {
+        err.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;
         return;
     }
