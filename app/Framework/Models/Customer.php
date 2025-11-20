@@ -20,7 +20,7 @@ final class Customer {
             select 
                 c.*
             from customer as c
-            order by c.id
+            order by c.name
         query;
         $customers = DB::Query($q);
         $response->getBody()->write(json_encode(["payload" => $customers]));
