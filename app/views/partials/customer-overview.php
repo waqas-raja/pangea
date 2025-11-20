@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
-                    <label for="txtEmail" class="col-sm-5 col-form-label">Email:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <label for="txtEmail" class="col-sm-5 col-form-label">E-mail:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spEmail" class="valueControl"></span>
                         <input type="text" id="txtEmail" class="form-control editControl d-none mb-1" value="">
@@ -38,7 +38,7 @@
         <div class="pai-card position-relative cardHeight">
             <div id="">
                 <div class="row mb-3">
-                    <label for="ckIsCompany" class="col-sm-5 col-form-label">È Compagnia?</label>
+                    <label for="ckIsCompany" class="col-sm-5 col-form-label">È un'azienda</label>
                     <div class="col-sm-7">
                         <div class="form-check form-switch pt-2">
                             <input id="ckIsCompany" class="form-check-input" type="checkbox" role="switch" onchange="toggleCompanyFields(this)">
