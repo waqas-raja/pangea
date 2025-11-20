@@ -59,12 +59,7 @@ async function signIn() {
                 "os": os
             })
         });
-        if (!response.ok) {
-            const error = await response.json();
-            msg.textContent = error.message || 'Credenziali non valide.';
-            msg.classList.add('text-danger');
-            return;
-        }
+        if (!response.ok) throw new Error('Mancata risposta dal server api');
         const data = await response.json();
         localStorage.setItem("uname", data.name);
         localStorage.setItem("urole", data.role);

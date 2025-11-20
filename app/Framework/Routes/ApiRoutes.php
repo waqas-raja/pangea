@@ -19,8 +19,7 @@ class ApiRoutes {
         $this->authMiddleware = $authMiddleware;
     }
 
-    public function register(App $app): void
-    {
+    public function register(App $app): void {
         $app->group('/api', function (RouteCollectorProxy $group) {
             $group->post('/sign-in', function ($request, $response) {
                 return User::SignIn($request, $response);
