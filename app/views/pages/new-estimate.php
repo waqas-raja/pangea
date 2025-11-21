@@ -32,17 +32,11 @@ ob_start();
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="ddlSelectClient" class="form-label">Seleziona Cliente</label>
-                                <select id="ddlSelectClient" class="form-select">
-                                    <option value="" selected>Cerca e seleziona un cliente</option>
-                                    <option value="4">Mario Rossi</option>
-                                </select>
+                                <select id="ddlSelectClient" class="form-select"></select>
                             </div>
                             <div class="col-md-6">
                                 <label for="ddlSelectProperty" class="form-label">Seleziona Immobile</label>
-                                <select id="ddlSelectProperty" class="form-select">
-                                    <option value="" selected>Cerca e seleziona un immobile</option>
-                                    <option value="3">Mario Rossi</option>
-                                </select>
+                                <select id="ddlSelectProperty" class="form-select"></select>
                             </div>
                         </div>
                     </div>
@@ -128,7 +122,7 @@ ob_start();
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <div class="pai-card">
-                        <div class="pai-title mb-3 fw-bold">Decurtazioni e Spese Fisse</div>
+                        <div class="pai-title mb-3 fw-bold">Spese Fisse</div>
                         <div id="deductionFixedCost">
                             <div id="costSection_1" class="d-flex justify-content-between align-items-center gap-3 mb-3">
                                 <input type="text" id="txtCostDesc_1_1" class="form-control w-80" value="" placeholder="Es. TARI, SPESE Condominiali...">
