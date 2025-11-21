@@ -4,7 +4,7 @@ async function init() {
     try {
         const response = await fetch("/api/users");
         const data = await response.json();
-        if(data.payload === undefined) throw new Error("Data payload is undefined");
+        if (data.payload === undefined) throw new Error("Data payload is undefined");
         loadList(data.payload);
     } catch (error) { console.error("Errore durante la chiamata:", error); }
 }
@@ -46,7 +46,7 @@ function loadList(data) {
                 }
             ]
         },
-        onRowClick: function(e) {
+        onRowClick: function (e) {
             document.getElementById("hUserId").value = e.data.id;
             document.getElementById("txtEditUserName").value = e.data.name || "N/A";
             document.getElementById("txtEditUserSurname").value = e.data.surname || "N/A";
@@ -91,7 +91,7 @@ async function saveUser() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: name, surname: surname, email: email, role: role })
-        });
+            });
         const data = await response.json();
         if (data.result) {
             init();
@@ -109,5 +109,60 @@ async function saveUser() {
 
 async function disableUser() {
     const userId = document.getElementById("hUserId").value;
-    confirm('the user with id = '+ userId + ', is going to disable');
+    confirm('the user with id = ' + userId + ', is going to disable');
+}
+
+async function updateUser() {
+    const id = document.getElementById('hUserId').value;
+    const btn = document.getElementById('btnUpdateUser');
+    const name = document.getElementById("txtEditUserName").value.trim();
+    const surname = document.getElementById("txtEditUserSurname").value.trim();
+    const email = document.getElementById("txtEditUserEmail").value.trim();
+    // const password = document.getElementById("txtNewUserPassword").value.trim();
+    const role = document.getElementById("ddlEditUserRole").value;
+    const result = document.getElementById("spEditUserResult");
+    result.textContent = "";
+    result.classList.add("d-none");
+
+    if (!name || !surname || !email || !role) {
+        result.classList.remove("d-none");
+        if (name === '') { result.textContent = "Il nome è obbligatorio"; return; }
+        if (surname === '') { result.textContent = "Il cognome è obbligatorio"; return; }
+        if (email === '') { result.textContent = "L'e-mail è obbligatoria"; return; }
+        if (role === '') { result.textContent = "Il ruolo è obbligatorio"; return; }
+    }
+    const password = document.getElementById('txtEditUserPassword').disabled ? '' : document.getElementById('txtEditUserPassword').value.trim();
+    if (!document.getElementById('txtEditUserPassword').disabled) {
+        if (password === '' || password.length < 6) {
+            result.classList.remove('d-none');
+            result.textContent = 'La password deve contenere almeno 6 caratteri';
+            return;
+        }
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    try {
+        const response = await fetch(`api/user/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: name, surname: surname, email: email, role: role, password: password })
+        });
+        const data = await response.json();
+        if (data.result) {
+            init();
+            $("#modalEditUser").modal("hide");
+        } else throw new Error(data.message || "Si è verificato un errore durante la modifica dei dettagli dell'utente.");
+    } catch (error) {
+        console.error("Error while edit user:", error);
+        result.textContent = "Si è verificato un errore durante la modifica dei dettagli dell'utente.";
+        result.classList.remove("d-none");
+    } finally {
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+    }
+}
+
+function resetPasswordField(el) {
+    el.previousElementSibling.disabled = false;
+    el.previousElementSibling.value = '';
 }
