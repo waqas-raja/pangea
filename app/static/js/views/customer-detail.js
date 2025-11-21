@@ -19,9 +19,11 @@ function loadDetail(d=null) {
     document.getElementById("txtEmail").value = _customerDetail.email ?? '';
     document.getElementById("spPhone").innerText = _customerDetail.phone ?? 'n.d.';
     document.getElementById("txtPhone").value = _customerDetail.phone ?? '';
-    document.getElementById("ckIsCompany").checked = _customerDetail.bizname !== null;
-    if(d === null) document.getElementById("ckIsCompany").disabled = true;
     if (_customerDetail.bizname !== null && _customerDetail.bizname !== '') document.getElementById('divCompanyFields').classList.remove("d-none");
+    if(d === null) {
+        document.getElementById("ckIsCompany").checked = _customerDetail.bizname !== null;
+        document.getElementById("ckIsCompany").disabled = true;
+    } else document.getElementById('divCompanyFields').classList.remove("d-none");
     document.getElementById("spBizname").innerText = _customerDetail.bizname ?? 'n.d.';
     document.getElementById("txtBizname").value = _customerDetail.bizname ?? '';
     document.getElementById("spVat").innerText = _customerDetail.vat ?? 'n.d.';
@@ -54,6 +56,7 @@ function toggleCompanyFields(el) {
         document.getElementById("txtSdi").value = '';
         document.getElementById("divCompanyFields").style.pointerEvents = 'none';
         document.getElementById("divCompanyFields").style.opacity = 0.5;
+        document.getElementById('divCompanyFields').classList.add("d-none");
     }
 }
 
