@@ -130,15 +130,24 @@ async function saveOpportunity() {
     const price = document.getElementById("txtPrice").value.trim();
     const address = document.getElementById("txtAddress").value.trim();
     const city = document.getElementById("txtCity").value.trim();
-    const nation = document.getElementById("ddlState").value;
+    const state = document.getElementById("ddlState").value;
     const tax = document.getElementById("txtTaxes").value.trim();
     const note = document.getElementById("txtNote").value.trim();
     const result = document.getElementById("spNewOpportunityResult");
     result.innerHTML = '';
-    if (alias === '' || source === '' || propertyType === '' || propertyStatus === '' || size === '' || price === '' || address === '' || city === '' || nation === '' || tax === '' || note === '') {
-        result.innerText = "Si prega di compilare tutti i campi richiesti";
+    if (alias === '' || source === '' || propertyType === '' || propertyStatus === '' || size === '' || price === '' || address === '' || city === '' || state === '' || tax === '' || note === '') {
         result.classList.remove("d-none");
-        return;
+        if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
+        if (source === '') { result.innerText = "La fonte è obbligatoria"; return; }
+        if (propertyType === '') { result.innerText = "Il tipo di proprietà è obbligatorio"; return; }
+        if (size === '') { result.innerText = "La taglia è richiesta"; return; }
+        if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
+        if (city === '') { result.innerText = "La città è obbligatoria"; return; }
+        if (state === '') { result.innerText = "Lo Stato è obbligatorio"; return; }
+        if (propertyStatus === '') { result.innerText = "È richiesto lo stato dell'opportunità"; return; }
+        if (price === '') { result.innerText = "Il prezzo è richiesto con un numero valido"; return; }
+        if (tax === '') { result.innerText = "La tassa è richiesta"; return; }
+        if (note === '') { result.innerText = "La nota è obbligatoria"; return; }
     }
     btn.disabled = true;
     spinner.classList.remove("d-none");
@@ -146,7 +155,7 @@ async function saveOpportunity() {
         const response = await fetch("/api/opportunity", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "alias": alias, "source": source, "nation": nation, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note })
+            body: JSON.stringify({ "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note })
         });
         const res = await response.json();
         if (res.result) {
