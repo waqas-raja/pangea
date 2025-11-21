@@ -93,25 +93,39 @@ async function saveProperty() {
     const renPrice = document.getElementById("txtRenPrice").value.trim();
     const extraPrice = document.getElementById("txtExtraPrice").value.trim();
     const sellPrice = document.getElementById("txtSellPrice").value.trim();
-
     const result = document.getElementById("spNewPropertyResult");
     result.innerHTML = '';
+    result.classList.add("d-none");
     if (alias === '' || nation === '' || address === '' || city === '' || zip === '' || status === "" || size === "" || floor === "" || acqPrice === "" || renPrice === "" || extraPrice === "" || sellPrice === "") {
-        result.innerText = "Si prega di compilare tutti i campi richiesti";
         result.classList.remove("d-none");
-        return;
+        if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
+        if (nation === '') { result.innerText = "La nazione è obbligatoria"; return; }
+        if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
+        if (city === '') { result.innerText = "La città è obbligatoria"; return; }
+        if (zip === '') { result.innerText = "Il codice postale è obbligatorio"; return; }
+        if (status === '') { result.innerText = "Lo stato della proprietà è obbligatorio"; return; }
+        if (size === '') { result.innerText = "La Taglia è obbligatoria con un numero valido"; return; }
+        if (floor === '') { result.innerText = "Il pavimento è obbligatorio con un numero valido"; return; }
+        if (acqPrice === '') { result.innerText = "Il prezzo di acquisizione è richiesto con un numero valido"; return; }
+        if (renPrice === '') { result.innerText = "Il prezzo di ristrutturazione è richiesto con un numero valido"; return; }
+        if (extraPrice === '') { result.innerText = "Il prezzo di extra è richiesto con un numero valido"; return; }
+        if (sellPrice === '') { result.innerText = "Il prezzo di vendita è obbligatorio con un numero valido"; return; }
     }
+    // if (!isValidateNumber(size)) { result.classList.remove("d-none"); result.innerText = 'La dimensione non è un numero valido'; return; }
+    // if (!isValidateNumber(floor)) { result.classList.remove("d-none"); result.innerText = 'Il piano non è un numero valido'; return; }
+    // if (!isValidateNumber(acqPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di acquisizione non è un numero valido'; return; }
+    // if (!isValidateNumber(renPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di ristrutturazione non è un numero valido'; return; }
+    // if (!isValidateNumber(extraPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di extra non è un numero valido'; return; }
+    // if (!isValidateNumber(sellPrice)) { result.classList.remove("d-none"); result.innerText = 'l prezzo di vendita non è un numero valido'; return; }
     btn.disabled = true;
     spinner.classList.remove("d-none");
     try {
-        debugger;
         const response = await fetch("/api/property", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ "alias": alias, "nation": nation, "city": city, "address": address, "zip": zip, "propertyStatus": status, "size": size, "floor": floor, "acqPrice": acqPrice, "renPrice": renPrice, "extraPrice": extraPrice, "sellPrice": sellPrice })
         });
         const res = await response.json();
-        debugger;
         if (res.result) {
             btn.disabled = false;
             spinner.classList.add("d-none");
