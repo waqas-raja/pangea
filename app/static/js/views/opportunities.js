@@ -140,13 +140,13 @@ async function saveOpportunity() {
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
         if (source === '') { result.innerText = "La fonte è obbligatoria"; return; }
         if (propertyType === '') { result.innerText = "Il tipo di proprietà è obbligatorio"; return; }
-        if (size === '') { result.innerText = "La taglia è richiesta"; return; }
+        if (size === '') { result.innerText = "La taglia è richiesta con un numero valido"; return; }
         if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
         if (city === '') { result.innerText = "La città è obbligatoria"; return; }
         if (state === '') { result.innerText = "Lo Stato è obbligatorio"; return; }
         if (propertyStatus === '') { result.innerText = "È richiesto lo stato dell'opportunità"; return; }
         if (price === '') { result.innerText = "Il prezzo è richiesto con un numero valido"; return; }
-        if (tax === '') { result.innerText = "La tassa è richiesta"; return; }
+        if (tax === '') { result.innerText = "La tassa è richiesta con un numero valido"; return; }
         if (note === '') { result.innerText = "La nota è obbligatoria"; return; }
     }
     btn.disabled = true;
