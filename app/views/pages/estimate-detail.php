@@ -165,7 +165,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
         <div class="col-sm-12 mb-4">
             <div class="pai-card bg-blue">
                 <div class="w-50 mx-auto my-3 text-center text-white">
-                    <h3 style="color: #abcabc; font-weight:bold;">Fedita Annua Netta Stimata</h3>
+                    <h3 style="color: #abcabc; font-weight:bold;">Rendita Annua Netta Stimata</h3>
                     <h1 style="font-weight: 800;">€ 5.720,00</h1>
                     <div class="d-flex justify-content-center align-items-center">
                         <span class="bg-green p-2 rounded-pill">ROI: 4.77%</span>

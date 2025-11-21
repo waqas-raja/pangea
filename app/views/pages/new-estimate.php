@@ -78,7 +78,7 @@ ob_start();
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Maggio</span>
                             <input type="number" id="averageMay" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
-                            <input type="number" id="estimatedMAy" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedMay" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
@@ -106,6 +106,12 @@ ob_start();
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
+                            <span class="w-20">Ottobre</span>
+                            <input type="number" id="averageOct" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedOct" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Novembre</span>
                             <input type="number" id="averageNov" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                             <input type="number" id="estimatedNov" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
@@ -126,12 +132,12 @@ ob_start();
                         <div id="deductionFixedCost">
                             <div id="costSection_1" class="d-flex justify-content-between align-items-center gap-3 mb-3">
                                 <input type="text" id="txtCostDesc_1_1" class="form-control w-80" value="" placeholder="Es. TARI, SPESE Condominiali...">
-                                <input type="number" id="txtCost_1_1" class="form-control w-15" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                <input type="number" id="txtCost_1_1" class="form-control w-15 costToDeduct" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
                             </div>
                             <div id="costSection_2" class="d-flex justify-content-between align-items-center gap-3 mb-3">
                                 <input type="text" id="txtCostDesc_2_1" class="form-control w-80" value="" placeholder="Es. Assicurazione">
-                                <input type="number" id="txtCost_2_1" class="form-control w-15" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                <input type="number" id="txtCost_2_1" class="form-control w-15 costToDeduct" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
                             </div>
                         </div>
@@ -147,7 +153,7 @@ ob_start();
                 <div class="pai-title mb-3 fw-bold">Dati Generali</div>
                 <div class="alert alert-primary text-center p-3">
                     <span>Rendita Annu Lorda Stimata</span><br>
-                    <span class="fs-3 fw-bold mt-3">0,00 &euro;</span>
+                    <span id="calculatedTotal" class="fs-3 fw-bold mt-3">0,00 &euro;</span>
                 </div>
                 <button id="btnCalculateEstimate" class="btn bg-green p-2 text-white w-100 mb-3" onclick="calculateEstimate()">
                     <i class="bi bi-file-earmark-diff me-2"></i>Calcola Rendita
