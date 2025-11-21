@@ -1,6 +1,7 @@
 let _isEstimated = false;
-document.addEventListener("DOMContentLoader", () => {
-
+document.addEventListener("DOMContentLoaded", () => {
+    loadCustomers();
+    loadProperties();
 })
 
 async function saveNewEstimate() {
@@ -66,5 +67,30 @@ function addCostVariant() {
 
 function removeCostSection(ele) {
     ele.parentNode.remove();
+}
+
+async function loadCustomers() {
+    const response = await fetch('/api/customers');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlSelectClient");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona Cliente</option>';
+    r.payload.forEach(customer => {
+        if (customer.bizname !== "" && customer.bizname !== null) opt += `<option value="${customer.id}" class="text-capitalize">${customer.bizname}</option>`;
+        else opt += `<option value="${customer.id}" class="text-capitalize">${customer.name} ${customer.surname}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
+
+async function loadProperties() {
+    const response = await fetch('/api/properties');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlSelectProperty");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona Immobile</option>';
+    r.payload.forEach(p => {
+        opt += `<option value="${p.id}" class="text-capitalize">${p.alias}</option>`;
+    });
+    ctrl.innerHTML = opt;
 }
 
