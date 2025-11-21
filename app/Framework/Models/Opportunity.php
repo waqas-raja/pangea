@@ -28,7 +28,7 @@ final class Opportunity {
             left join td_source as s on o.source = s.id
             left join td_nation as n on o.nation = n.code
             left join td_opportunity_status as os on o.opportunity_status = os.id
-            where del_dt is NULL
+            where o.del_dt is NULL
             order by o.id
         query;
         $opportunities = DB::Query($q);
