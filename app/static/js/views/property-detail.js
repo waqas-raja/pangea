@@ -24,7 +24,7 @@ async function loadCustomers() {
     ctrl.innerHTML = '';
     let opt = '<option value="" selected>Seleziona</option>';
     r.payload.forEach(customer => {
-        if (customer.bizname !== "") opt += `<option value="${customer.id}">${customer.bizname}</option>`;
+        if (customer.bizname !== "" && customer.bizname !== null) opt += `<option value="${customer.id}">${customer.bizname}</option>`;
         else opt += `<option value="${customer.id}">${customer.name} ${customer.surname}</option>`;
     });
     ctrl.innerHTML = opt;
@@ -157,8 +157,8 @@ async function loadOpportunityStatus() {
 async function updateGenericInfo() {
     const btn = document.getElementById("iconSaveEditGenericInfo");
     btn.disabled = true;
-    let err = document.getElementById('errMessage');
-    err.innerText = '';
+    let result = document.getElementById('errMessage');
+    result.innerText = '';
     const customer = document.getElementById("ddlCustomer").value;
     const opportunity = document.getElementById("ddlOpportunity").value;
     const alias = document.getElementById("txtAlias").value.trim();
@@ -179,9 +179,19 @@ async function updateGenericInfo() {
     const extraPrice = document.getElementById("txtExtraPrice").value.trim();
     const sellPrice = document.getElementById("txtSellPrice").value.trim();
     if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === "" || sellPrice === "") {
-        err.innerText = "Si prega di compilare tutti i campi richiesti";
         btn.disabled = false;
-        return;
+        if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
+        if (nation === '') { result.innerText = "La nazione è obbligatoria"; return; }
+        if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
+        if (city === '') { result.innerText = "La città è obbligatoria"; return; }
+        if (zip === '') { result.innerText = "Il codice postale è obbligatorio con un numero valido"; return; }
+        if (propertyStatus === '') { result.innerText = "Lo stato della proprietà è obbligatorio"; return; }
+        if (size === '') { result.innerText = "La Taglia è obbligatoria con un numero valido"; return; }
+        if (floor === '') { result.innerText = "Il pavimento è obbligatorio con un numero valido"; return; }
+        if (acqPrice === '') { result.innerText = "Il prezzo di acquisizione è richiesto con un numero valido"; return; }
+        if (renPrice === '') { result.innerText = "Il prezzo di ristrutturazione è richiesto con un numero valido"; return; }
+        if (extraPrice === '') { result.innerText = "Il prezzo di extra è richiesto con un numero valido"; return; }
+        if (sellPrice === '') { result.innerText = "Il prezzo di vendita è obbligatorio con un numero valido"; return; }
     }
     try {
         const response = await fetch("/api/property/" + propertyId, {
@@ -214,9 +224,9 @@ async function updateGenericInfo() {
         if (res.result) {
             await loadPropertyDetail();
             cancelEditGeneralInfo();
-        } else err.innerText = "Si sono verificati degli errori";
+        } else result.innerText = "Si sono verificati degli errori";
     } catch (error) {
-        err.innerText = "Si sono verificati degli errori";
+        result.innerText = "Si sono verificati degli errori";
         console.error(error.message !== undefined ? error.message : error);
     }
 }
