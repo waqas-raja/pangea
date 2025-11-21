@@ -47,6 +47,17 @@ async function saveNewEstimate() {
 }
 
 function calculateEstimate() {
+    const months = ["Jen", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    let total = 0, deduct = 0;
+    months.forEach(month => {
+        const avg = Number(document.getElementById(`average${month}`).value) || 0;
+        const est = Number(document.getElementById(`estimated${month}`).value) || 0;
+        total += avg * est;
+    });
+    let costElements = document.getElementsByClassName('costToDeduct');
+    for (let i = 0; i < costElements.length; i++) deduct += Number(costElements[i].value) || 0;
+    total = total - deduct;
+    document.getElementById('calculatedTotal').textContent = formatNumber(total);
     _isEstimated = true;
     document.getElementById('btnSaveNewEstimate').disabled = false;
 }
@@ -59,7 +70,7 @@ function addCostVariant() {
     div.id = `costSection_${ctrl_id}`;
     div.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'gap-3', 'mb-3');
     const str = `<input type="text" id="txtCostDesc_${ctrl_id}_1" class="form-control w-80" value="" placeholder="Es. Tipo">
-                <input type="number" id="txtCost_${ctrl_id}_1" class="form-control w-15" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <input type="number" id="txtCost_${ctrl_id}_1" class="form-control w-15 costToDeduct" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                 <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>`;
     div.innerHTML = str;
     parent.append(div);
