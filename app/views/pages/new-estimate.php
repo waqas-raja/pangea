@@ -59,68 +59,68 @@ ob_start();
                         </div>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span style="width: 20%;">Gennio</span>
-                            <input type="number" id="averageJen" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedJen" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageJen" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedJen" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Febbraio</span>
-                            <input type="number" id="averageFeb" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedFeb" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageFeb" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedFeb" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Marzo</span>
-                            <input type="number" id="averageMar" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedMar" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageMar" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedMar" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Aprile</span>
-                            <input type="number" id="averageApr" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedApr" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageApr" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedApr" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Maggio</span>
-                            <input type="number" id="averageMay" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedMAy" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageMay" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedMAy" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Giugno</span>
-                            <input type="number" id="averageJun" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedJun" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageJun" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedJun" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Luglio</span>
-                            <input type="number" id="averageJul" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedJul" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageJul" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedJul" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Agosto</span>
-                            <input type="number" id="averageAug" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedAug" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageAug" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedAug" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Settembre</span>
-                            <input type="number" id="averageSep" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedSep" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageSep" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedSep" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Novembre</span>
-                            <input type="number" id="averageNov" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedNov" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageNov" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedNov" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between align-items-center gap-3">
                             <span class="w-20">Dicembre</span>
-                            <input type="number" id="averageDec" class="form-control w-40" value="" placeholder="0">
-                            <input type="number" id="estimatedDec" class="form-control w-40" value="" placeholder="0">
+                            <input type="number" id="averageDec" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                            <input type="number" id="estimatedDec" class="form-control w-40" maxlength="5" value="" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                         </div>
                     </div>
                 </div>
@@ -132,12 +132,12 @@ ob_start();
                         <div id="deductionFixedCost">
                             <div id="costSection_1" class="d-flex justify-content-between align-items-center gap-3 mb-3">
                                 <input type="text" id="txtCostDesc_1_1" class="form-control w-80" value="" placeholder="Es. TARI, SPESE Condominiali...">
-                                <input type="number" id="txtCost_1_1" class="form-control w-15" value="" placeholder="€">
+                                <input type="number" id="txtCost_1_1" class="form-control w-15" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
                             </div>
                             <div id="costSection_2" class="d-flex justify-content-between align-items-center gap-3 mb-3">
                                 <input type="text" id="txtCostDesc_2_1" class="form-control w-80" value="" placeholder="Es. Assicurazione">
-                                <input type="number" id="txtCost_2_1" class="form-control w-15" value="" placeholder="€">
+                                <input type="number" id="txtCost_2_1" class="form-control w-15" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
                             </div>
                         </div>
