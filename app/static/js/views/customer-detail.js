@@ -107,10 +107,10 @@ async function updateGenericInfo() {
         if (name === "") { err.textContent = "Il campo Nome è obbligatorio"; return; }
         if (surname === "") { err.textContent = "Il campo Cognome è obbligatorio"; return; }
         if (email === "") { err.textContent = "L'e-mail è obbligatoria"; return; }
-        if (phone === "") { err.textContent = "È richiesto il telefono"; return; }
+        if (phone === "") { err.textContent = "È richiesto il telefono con un numero valido"; return; }
         if (address === "") { err.textContent = "L'indirizzo è obbligatorio"; return; }
         if (city === "") { err.textContent = "La città è obbligatoria"; return; }
-        if (zip === "") { err.textContent = "Il codice postale è obbligatorio"; return; }
+        if (zip === "") { err.textContent = "È richiesto il codice postale con un numero valido"; return; }
         if (state === "") { err.textContent = "Lo Stato è obbligatorio"; return; }
     }
     if (email !== "" && !isValidEmail(email)) {
