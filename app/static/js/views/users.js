@@ -41,7 +41,7 @@ function loadList(data) {
                             const modal = new bootstrap.Modal(modalElement);
                             modal.show();
                         },
-                        elementAttr: { class: "btn-gold" }
+                        elementAttr: { class: "btn-blue" }
                     }
                 }
             ]
@@ -63,19 +63,21 @@ async function saveUser() {
     const name = document.getElementById("txtNewUserName").value.trim();
     const surname = document.getElementById("txtNewUserSurname").value.trim();
     const email = document.getElementById("txtNewUserEmail").value.trim();
-    const password = document.getElementById("txtNewUserPassword").value.trim();
+    // const password = document.getElementById("txtNewUserPassword").value.trim();
     const role = document.getElementById("ddlNewUserRole").value;
     const result = document.getElementById("spNewUserResult");
     result.textContent = "";
     result.classList.add("d-none");
-    if (!name || !surname || !email || !password || !role) {
-        result.textContent = "Tutti i campi sono obbligatori";
+    if (!name || !surname || !email || !role) {
         result.classList.remove("d-none");
-        return;
+        if (name === '') { result.textContent = "Il nome è obbligatorio"; return; }
+        if (surname === '') { result.textContent = "Il cognome è obbligatorio"; return; }
+        if (email === '') { result.textContent = "L'e-mail è obbligatoria"; return; }
+        if (role === '') { result.textContent = "Il ruolo è obbligatorio"; return; }
     }
     if (!isValidEmail(email)) {
-        result.textContent = "L'email fornita non risulta valida";
         result.classList.remove("d-none");
+        result.textContent = "L'email fornita non risulta valida";
         return;
     }
     const spinner = document.getElementById("spinnerNewUser");
@@ -88,12 +90,13 @@ async function saveUser() {
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: name, surname: surname, email: email, password: password, role: role })
+                body: JSON.stringify({ name: name, surname: surname, email: email, role: role })
         });
         const data = await response.json();
-        init();
-        const modal = new bootstrap.Modal(document.getElementById("modalAddUser"));
-        modal.hide();
+        if (data.result) {
+            init();
+            $("#modalAddUser").modal("hide");
+        } else throw new Error(data.message || "Si è verificato un errore durante il salvataggio.");
     } catch (error) {
         console.error("Error adding user:", error);
         result.textContent = "Si è verificato un errore durante il salvataggio.";

@@ -49,6 +49,7 @@ body { font-family:"Lato", serif; font-size: 16px; }
 .text-small { font-size: 0.8em; }
 .pai-card { background: white; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); padding: 16px; border-radius: 5px; }
 .pai-title { font-size: 1.1em; }
+.btn-blue .dx-icon { color: #fff !important; }
 
 .pai-tabs { display: flex; }
 .pai-tabs #contact_name { font-weight:900; font-size:16px; margin-top:10px; display:inline-block; border-right:1px solid #666; padding-right:16px; margin-right:32px; color:var(--primary-blue);}

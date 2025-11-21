@@ -152,11 +152,11 @@ final class User {
         $user_id = $token_info['id'];
         $user_role = $token_info['role'];
         if($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
-        $parsedBody = $request->getParsedBody();
+        $parsedBody = json_decode($request->getBody()->getContents(), true);
         $name = $parsedBody['name'] ?? "";
         $surname = $parsedBody['surname'] ?? "";
         $email = $parsedBody['email'] ?? "";
-        $role_id = $parsedBody['role_id'] ?? "";
+        $role_id = (int)$parsedBody['role'] ?? "";
         if(empty($name) || empty($surname) || empty($email))
             throw new Exception('Name, surname and email are required', 400);
         if(!in_array($role_id, Role::ToList()))
