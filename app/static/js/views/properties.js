@@ -89,6 +89,11 @@ async function saveProperty() {
     const status = document.getElementById("ddlPropertyStatus").value;
     const size = document.getElementById("txtSize").value.trim();
     const floor = document.getElementById("txtFloor").value.trim();
+    const room = document.getElementById("txtRoom").checked === true ? 1 : 0;
+    const bath = document.getElementById("txtBathroom").checked === true ? 1 : 0;
+    const garden = document.getElementById("txtGarden").checked === true ? 1 : 0;
+    const box = document.getElementById("txtBox").checked === true ? 1 : 0;
+    const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const renPrice = document.getElementById("txtRenPrice").value.trim();
     const extraPrice = document.getElementById("txtExtraPrice").value.trim();
@@ -102,7 +107,7 @@ async function saveProperty() {
         if (nation === '') { result.innerText = "La nazione è obbligatoria"; return; }
         if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
         if (city === '') { result.innerText = "La città è obbligatoria"; return; }
-        if (zip === '') { result.innerText = "Il codice postale è obbligatorio"; return; }
+        if (zip === '') { result.innerText = "Il codice postale è obbligatorio con un numero valido"; return; }
         if (status === '') { result.innerText = "Lo stato della proprietà è obbligatorio"; return; }
         if (size === '') { result.innerText = "La Taglia è obbligatoria con un numero valido"; return; }
         if (floor === '') { result.innerText = "Il pavimento è obbligatorio con un numero valido"; return; }
@@ -123,7 +128,7 @@ async function saveProperty() {
         const response = await fetch("/api/property", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "alias": alias, "nation": nation, "city": city, "address": address, "zip": zip, "propertyStatus": status, "size": size, "floor": floor, "acqPrice": acqPrice, "renPrice": renPrice, "extraPrice": extraPrice, "sellPrice": sellPrice })
+            body: JSON.stringify({ "alias": alias, "nation": nation, "city": city, "address": address, "zip": zip, "propertyStatus": status, "size": size, "floor": floor, "room": room, "bathroom": bath, "garden": garden, "box": box, "elevator": elevator, "acqPrice": acqPrice, "renPrice": renPrice, "extraPrice": extraPrice, "sellPrice": sellPrice })
         });
         const res = await response.json();
         if (res.result) {

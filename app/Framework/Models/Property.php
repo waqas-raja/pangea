@@ -48,13 +48,18 @@ final class Property {
             $status = (int)$data['propertyStatus'] ?? 0;
             $size = $data['size'] ?? 0;
             $floor = (int)$data['floor'] ?? 0;
+            $room = (int)$data['room'] ?? 0;
+            $bath = (int)$data['bathroom'] ?? 0;
+            $garden = (int)$data['garden'] ?? 0;
+            $box = (int)$data['box'] ?? 0;
+            $elevator = (int)$data['elevator'] ?? 0;
             $acqPrice = (int)$data['acqPrice'] ?? 0;
             $renPrice = (int)$data['renPrice'] ?? 0;
             $extraPrice = (int)$data['extraPrice'] ?? 0;
             $sellPrice = (int)$data['sellPrice'] ?? 0;
             
-            $q = "INSERT INTO property (alias, nation, city, address, cap, property_status, size, floor, acquisition_price, renovation_price, extra_price, sell_price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-            $params = [$alias, $nation, $city, $address, $zip, $status, $size, $floor, $acqPrice, $renPrice, $extraPrice, $sellPrice];
+            $q = "INSERT INTO property (alias, nation, city, address, cap, property_status, size, floor, rooms, bathrooms, garden, box, elevator, acquisition_price, renovation_price, extra_price, sell_price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $params = [$alias, $nation, $city, $address, $zip, $status, $size, $floor, $room, $bath, $garden, $box, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert property", 500);
             $last_inserted_id = DB::$LastId;
