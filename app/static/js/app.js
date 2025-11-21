@@ -99,6 +99,11 @@ function isValidPhone(phone) {
   return regx.test(phone);
 }
 
+function isValidateNumber(number) {
+    const regex = /^\d+$/;
+    return regex.test(number);
+}
+
 function initInternalTabs() {
     const tabs = document.querySelectorAll(".pai-tab");
     const contents = document.querySelectorAll(".pai-tab-content");
