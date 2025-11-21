@@ -156,7 +156,7 @@ final class User {
         $name = $parsedBody['name'] ?? "";
         $surname = $parsedBody['surname'] ?? "";
         $email = $parsedBody['email'] ?? "";
-        $role_id = (int)$parsedBody['role'] ?? "";
+        $role_id = (int)$parsedBody['role'] ?? null;
         if(empty($name) || empty($surname) || empty($email))
             throw new Exception('Name, surname and email are required', 400);
         if(!in_array($role_id, Role::ToList()))
@@ -211,12 +211,14 @@ final class User {
         $user_role = $token_info['role'];
         if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
         $id = (int)$request->getAttribute('id');
-        $parsedBody = $request->getParsedBody();
+        $parsedBody = json_decode($request->getBody()->getContents(), true);
         $name = $parsedBody['name'] ?? "";
         $surname = $parsedBody['surname'] ?? "";
         $email = $parsedBody['email'] ?? "";
-        $q = "update user set name = ?, surname = ?, email = ?, ule = ? where id = ?";
-        $params = [$name, $surname, $email, $user_id, $id];
+        $role = (int)$parsedBody['role'] ?? null;
+        $password = sha1($parsedBody['password']) ?? null;
+        $q = "update user set name = ?, surname = ?, email = ?, psw = ?, role_id = ?, ule = ? where id = ?";
+        $params = [$name, $surname, $email, $password, $role, $user_id, $id];
         $row_affected = DB::Execute($q, $params);
         if ($row_affected == 0) throw new Exception("Error updating user", 500);
         $response->getBody()->write(json_encode(["result" => true]));

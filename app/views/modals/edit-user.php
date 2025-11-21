@@ -31,8 +31,8 @@
                     <div class="mb-3">
                         <label for="txtEditUserPassword" class="form-label text-small">Password</label>
                         <div class="input-group">
-                            <input id="txtEditUserPassword" type="text" class="form-control" disabled>
-                            <button type="button" class="btn btn-outline-secondary" onclick="resetPasswordField()">Resetta</button>
+                            <input id="txtEditUserPassword" type="password" class="form-control" disabled>
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetPasswordField(this)">Resetta</button>
                         </div>
                     </div>
                     <span id="spEditUserResult" class="text-danger d-none"></span>
@@ -42,7 +42,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Annulla</button>
                 <button id="btnDisableUser" type="button" class="btn btn-outline-secondary" onclick="disableUser()"><i class="bi bi-x"></i> Disabilita utente</button>
                 <button id="btnUpdateUser" type="button" class="btn btn-blue" onclick="updateUser()">
-                    <i class="bi bi-check-lg"></i> Salva
+                    <i class="bi bi-check-lg"></i> Modificare
                     <div id="spinnerEditUser" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>
             </div>
