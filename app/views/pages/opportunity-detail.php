@@ -5,7 +5,7 @@ $oid = htmlspecialchars($oid, ENT_QUOTES, 'UTF-8');
 require_once __DIR__ . "/../modals/confirm-delete.php";
 ?>
 
-<input id="hOpportunityId" type="hidden" value="<?= $cid ?>">
+<input id="hOpportunityId" type="hidden" value="<?= $oid ?>">
 
 <div id="opportunity_detail">
     <div class="pai-card mb-3">

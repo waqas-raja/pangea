@@ -31,7 +31,7 @@
                     <label for="txtSize" class="col-sm-5 col-form-label">Dimensione:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spSize" class="valueControl"></span>
-                        <input type="text" id="txtSize" class="form-control editControl d-none mb-1" value="">
+                        <input type="number" id="txtSize" class="form-control editControl d-none mb-1" value="">
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
@@ -47,14 +47,14 @@
                     <label for="txtPrice" class="col-sm-5 col-form-label">Prezzo:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spPrice" class="valueControl"></span>
-                        <input type="text" id="txtPrice" class="form-control editControl d-none mb-1" value="">
+                        <input type="number" id="txtPrice" class="form-control editControl d-none mb-1" value="">
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
                     <label for="txtTaxes" class="col-sm-5 col-form-label">Tasse:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spTaxes" class="valueControl"></span>
-                        <input type="text" id="txtTaxes" class="form-control editControl d-none mb-1" value="">
+                        <input type="number" id="txtTaxes" class="form-control editControl d-none mb-1" value="">
                     </div>
                 </div>
                 <hr>

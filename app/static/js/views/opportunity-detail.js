@@ -121,8 +121,8 @@ async function loadOpportunityStatus() {
 async function updateGenericInfo() {
     const btn = document.getElementById("iconSaveEditGenericInfo");
     btn.disabled = true;
-    let err = document.getElementById('errMessage');
-    err.innerText = '';
+    let result = document.getElementById('errMessage');
+    result.innerText = '';
     const alias = document.getElementById("txtAlias").value.trim();
     const source = document.getElementById("ddlSource").value;
     const propertyType = document.getElementById("ddlPropertyType").value;
@@ -142,12 +142,26 @@ async function updateGenericInfo() {
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const proService = document.getElementById("ddlProServices").value;
     if (alias === '' || source === '' || propertyType === '' || opportunityStatus === '' || size === '' || price === '' || address === '' || city === '' || nation === '' || tax === '' || note === '') {
-        err.innerText = "Si prega di compilare tutti i campi richiesti";
+        btn.disabled = false;
+        if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
+        if (source === '') { result.innerText = "La fonte è obbligatoria"; return; }
+        if (propertyType === '') { result.innerText = "Il tipo di proprietà è obbligatorio"; return; }
+        if (size === '') { result.innerText = "La taglia è richiesta con un numero valido"; return; }
+        if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
+        if (city === '') { result.innerText = "La città è obbligatoria"; return; }
+        if (nation === '') { result.innerText = "Lo Stato è obbligatorio"; return; }
+        if (opportunityStatus === '') { result.innerText = "È richiesto lo stato dell'opportunità"; return; }
+        if (price === '') { result.innerText = "Il prezzo è richiesto con un numero valido"; return; }
+        if (tax === '') { result.innerText = "La tassa è richiesta con un numero valido"; return; }
+        if (note === '') { result.innerText = "La nota è obbligatoria"; return; }
+    }
+    if (refEmail !== "" && !isValidEmail(refEmail)) {
+        result.textContent = "L'email fornita non risulta valida";
         btn.disabled = false;
         return;
     }
-    if (refEmail !== "" && !isValidEmail(refEmail)) {
-        err.textContent = "L'email fornita non risulta valida";
+    if (refPhone !== "" && !isValidPhone(refPhone)) {
+        result.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;
         return;
     }
@@ -181,9 +195,9 @@ async function updateGenericInfo() {
         if (res.result) {
             await loadOpportunityDetail();
             cancelEditGeneralInfo();
-        } else err.innerText = "Si sono verificati degli errori";
+        } else result.innerText = "Si sono verificati degli errori";
     } catch (error) {
-        err.innerText = "Si sono verificati degli errori";
+        result.innerText = "Si sono verificati degli errori";
         console.error(error.message !== undefined ? error.message : error);
     }
 }
