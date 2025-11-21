@@ -63,7 +63,7 @@
                         <div class="col-sm-6">
 
                             <div class="row mb-1 align-items-center">
-                                <label for="txtRoom" class="col-sm-5 col-form-label">Stanze<span class="text-danger ms-2">*</span></label>
+                                <label for="txtRoom" class="col-sm-5 col-form-label">Stanze</label>
                                 <div class="col-sm-7">
                                     <div class="form-check form-switch mb-0">
                                         <input id="txtRoom" class="form-check-input" type="checkbox" role="switch">
@@ -71,7 +71,7 @@
                                 </div>
                             </div>
                             <div class="row mb-1 align-items-center">
-                                <label for="txtBathroom" class="col-sm-5 col-form-label">Bagno<span class="text-danger ms-2">*</span></label>
+                                <label for="txtBathroom" class="col-sm-5 col-form-label">Bagno</label>
                                 <div class="col-sm-7">
                                     <div class="form-check form-switch mb-0">
                                         <input id="txtBathroom" class="form-check-input" type="checkbox" role="switch">
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div class="row mb-1 align-items-center">
-                                <label for="txtGarden" class="col-sm-5 col-form-label">Giardino<span class="text-danger ms-2">*</span></label>
+                                <label for="txtGarden" class="col-sm-5 col-form-label">Giardino</label>
                                 <div class="col-sm-7">
                                     <div class="form-check form-switch mb-0">
                                         <input id="txtGarden" class="form-check-input" type="checkbox" role="switch">
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
                             <div class="row mb-1 align-items-center">
-                                <label for="txtBox" class="col-sm-5 col-form-label">Box<span class="text-danger ms-2">*</span></label>
+                                <label for="txtBox" class="col-sm-5 col-form-label">Box</label>
                                 <div class="col-sm-7">
                                     <div class="form-check form-switch mb-0">
                                         <input id="txtBox" class="form-check-input" type="checkbox" role="switch">
@@ -95,7 +95,7 @@
                                 </div>
                             </div>
                             <div class="row mb-2 align-items-center">
-                                <label for="txtElevator" class="col-sm-5 col-form-label">Ascensore<span class="text-danger ms-2">*</span></label>
+                                <label for="txtElevator" class="col-sm-5 col-form-label">Ascensore</label>
                                 <div class="col-sm-7">
                                     <div class="form-check form-switch mb-0">
                                         <input id="txtElevator" class="form-check-input" type="checkbox" role="switch">

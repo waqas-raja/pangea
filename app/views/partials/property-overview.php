@@ -52,7 +52,7 @@
                     <label for="txtZip" class="col-sm-5 col-form-label">CAP:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spZip" class="valueControl"></span>
-                        <input type="text" id="txtZip" class="form-control editControl d-none mb-1" value="">
+                        <input type="number" id="txtZip" class="form-control editControl d-none mb-1" value="">
                     </div>
                 </div>
                 <hr>
