@@ -118,8 +118,18 @@ async function updateGenericInfo() {
         btn.disabled = false;
         return;
     }
-    if (!isValidPhone(phone)) {
+    if (phone !== "" && !isValidPhone(phone)) {
         err.textContent = "Il numero di telefono fornito non è valido.";
+        btn.disabled = false;
+        return;
+    }
+    if (zip !== "" && !isValidZip(zip)) {
+        err.textContent = "È richiesto il codice postale con un numero valido.";
+        btn.disabled = false;
+        return;
+    }
+    if (city !=="" && !isValidLetter(city)) {
+        err.textContent = "Per la città sono accettate solo lettere.";
         btn.disabled = false;
         return;
     }
