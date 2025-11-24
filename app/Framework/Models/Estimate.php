@@ -37,6 +37,8 @@ final class Estimate {
             $data = json_decode($request->getBody()->getContents(), true);
             $customer = (int)$data['customer'] ?? 0;
             $property = (int)$data['property'] ?? 0;
+            $monthlyEstimate = $data['monthlyEstimate'] ?? [];
+            $fixedCost = $data['fixedCost'] ?? [];
             $date = new DateTime("now", new DateTimeZone("Europe/Rome"));
             $formatedDate = $date->format("Y-m-d H:i:s");
             $q = "INSERT INTO estimate (customer, property, dtcr, ucr) VALUES (?,?,?,?)";
@@ -44,6 +46,18 @@ final class Estimate {
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert new estimate", 500);
             $last_inserted_id = DB::$LastId;
+            for ($i = 0; $i < count($fixedCost); $i++) {
+                $q = "INSERT INTO estimate_fixed_costs (estimate_id, label, amount, ucr, ule) VALUES (?,?,?,?,?)";
+                $params = [$last_inserted_id, $fixedCost[$i]['label'], (float)$fixedCost[$i]['amount'], $user_id, $user_id];
+                $row_affected = DB::Execute($q, $params);
+                if ($row_affected == 0) throw new Exception("Error while inserting fixed cost record", 500);
+            }
+            for ($i = 0; $i < count($monthlyEstimate); $i++) {
+                $q = "INSERT INTO estimate_monthly (estimate_id, month, avge_daily_price, rented_days, ucr, ule) VALUES (?,?,?,?,?,?)";
+                $params = [$last_inserted_id, $monthlyEstimate[$i]['month'], (float)$monthlyEstimate[$i]['average'], (int)$monthlyEstimate[$i]['estimated'], $user_id, $user_id];
+                $row_affected = DB::Execute($q, $params);
+                if ($row_affected == 0) throw new Exception("Error while inserting average and rented days record", 500);
+            }
             $response->getBody()->write(json_encode(["result" => true, "id" => $last_inserted_id]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
