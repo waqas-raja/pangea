@@ -97,13 +97,23 @@ function isValidEmail(email) {
 }
 
 function isValidPhone(phone) {
-  const regx = /^[0-9]\d{9}$/ ;
+  const regx = /^[0-9]\d{10}$/ ;
   return regx.test(phone);
+}
+
+function isValidZip(zip) {
+  const regx = /^[0-9]\d{4}$/ ;
+  return regx.test(zip);
 }
 
 function isValidateNumber(number) {
     const regex = /^\d+$/;
     return regex.test(number);
+}
+
+function isValidLetter(text) {
+    const regex = /^[A-Za-z]+$/;
+    return regex.test(text);
 }
 
 function initInternalTabs() {
