@@ -1,4 +1,6 @@
 let _isEstimated = false;
+let _estimateMonthly = [];
+let _estimateFixedCost = [];
 document.addEventListener("DOMContentLoaded", () => {
     loadCustomers();
     loadProperties();
@@ -26,13 +28,16 @@ async function saveNewEstimate() {
         const response = await fetch("/api/estimate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "customer": customer.value.trim(), "property": property.value.trim() })
+            body: JSON.stringify({ "customer": customer.value.trim(), "property": property.value.trim(), "monthlyEstimate": _estimateMonthly, "fixedCost": _estimateFixedCost })
         });
         const res = await response.json();
         if (res.result) {
             btn.disabled = true;
             btn.lastElementChild.classList.add("d-none");
             showMessage('Registrazione salvata con successo', 'errAddNewEstimate', 'text-success');
+            _isEstimated = false;
+            _estimateFixedCost = [];
+            _estimateMonthly = [];
         } else {
             showMessage('Si sono verificati degli errori durante il salvataggio', 'errAddNewEstimate', 'text-danger');
             btn.disabled = false;
@@ -53,9 +58,13 @@ function calculateEstimate() {
         const avg = Number(document.getElementById(`average${month}`).value) || 0;
         const est = Number(document.getElementById(`estimated${month}`).value) || 0;
         total += avg * est;
+        if (avg > 0 && est > 0) _estimateMonthly.push({ month: month, average: avg, estimated: est});
     });
     let costElements = document.getElementsByClassName('costToDeduct');
-    for (let i = 0; i < costElements.length; i++) deduct += Number(costElements[i].value) || 0;
+    for (let i = 0; i < costElements.length; i++) {
+        deduct += Number(costElements[i].value) || 0;
+        if (Number(costElements[i].value) > 0) _estimateFixedCost.push({ label: costElements[i].previousElementSibling.value || '', amount: Number(costElements[i].value) || 0 });
+    }
     total = total - deduct;
     document.getElementById('calculatedTotal').textContent = formatNumber(total);
     _isEstimated = true;
