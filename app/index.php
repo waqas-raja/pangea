@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
 
 use App\Framework\Middlewares\AuthMiddleware;
 use App\Framework\Middlewares\JWTMiddleware;
@@ -21,9 +23,10 @@ $errorMiddleware->setDefaultErrorHandler(function (Request $request, Throwable $
     $response->getBody()->write(json_encode(['error' => $errMsg]));
     return $response->withHeader('Content-Type', 'application/json')->withStatus($ex->getCode());
 });
-$app->add(new JWTMiddleware());
-$appRoutes = new AppRoutes(new AuthMiddleware());
+// $app->add(new JWTMiddleware());
+// $appRoutes = new AppRoutes(new AuthMiddleware());
+$appRoutes = new AppRoutes(new AuthMiddleware(), new JWTMiddleware());
 $appRoutes->register($app);
-$apiRoutes = new ApiRoutes(new AuthMiddleware());
+$apiRoutes = new ApiRoutes(new AuthMiddleware(), new JWTMiddleware());
 $apiRoutes->register($app);
 $app->run();
