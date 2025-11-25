@@ -55,10 +55,12 @@ function calculateEstimate() {
     const months = ["Jen", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let total = 0, deduct = 0;
     months.forEach(month => {
-        const avg = Number(document.getElementById(`average${month}`).value) || 0;
-        const est = Number(document.getElementById(`estimated${month}`).value) || 0;
+        let avg = Number(document.getElementById(`average${month}`).value) || 0;
+        let est = Number(document.getElementById(`estimated${month}`).value) || 0;
+        if (avg < 0) avg = 0;
+        if (est < 0) est = 0;
         total += avg * est;
-        if (avg > 0 && est > 0) _estimateMonthly.push({ month: month, average: avg, estimated: est});
+        _estimateMonthly.push({ month: month, average: avg, estimated: est});
     });
     let costElements = document.getElementsByClassName('costToDeduct');
     for (let i = 0; i < costElements.length; i++) {
