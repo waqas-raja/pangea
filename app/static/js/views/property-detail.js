@@ -193,6 +193,16 @@ async function updateGenericInfo() {
         if (extraPrice === '') { result.innerText = "Il prezzo di extra è richiesto con un numero valido"; return; }
         if (sellPrice === '') { result.innerText = "Il prezzo di vendita è obbligatorio con un numero valido"; return; }
     }
+    if (city !=="" && !isValidLetter(city)) {
+        result.textContent = "Per la città sono accettate solo lettere.";
+        btn.disabled = false;
+        return;
+    }
+    if (zip !== "" && !isValidZip(zip)) {
+        result.textContent = "È richiesto il codice postale con un numero valido.";
+        btn.disabled = false;
+        return;
+    }
     try {
         const response = await fetch("/api/property/" + propertyId, {
             method: "PATCH",
