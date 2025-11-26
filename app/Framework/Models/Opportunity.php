@@ -92,8 +92,13 @@ final class Opportunity {
             $taxes = (int)$data['taxes'] ?? 0;
             $status = (int)$data['status'] ?? 0;
             $note = $data['note'] ?? "";
-            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, note) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-            $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $note];
+            $url = $data['url'] ?? null;
+            $referenceName = $data['referenceName'] ?? null;
+            $referenceSurname = $data['referenceSurname'] ?? null;
+            $referenceEmail = $data['referenceEmail'] ?? null;
+            $referencePhone = $data['referencePhone'] ?? null;
+            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, note, url, reference_name, reference_surname, reference_email, reference_phone) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $note, $url, $referenceName, $referenceSurname, $referenceEmail, $referencePhone];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert Opportunity", 500);
             $last_inserted_id = DB::$LastId;

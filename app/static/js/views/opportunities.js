@@ -133,8 +133,14 @@ async function saveOpportunity() {
     const state = document.getElementById("ddlState").value;
     const tax = document.getElementById("txtTaxes").value.trim();
     const note = document.getElementById("txtNote").value.trim();
+    const url = document.getElementById("txtUrl").value.trim();
+    const refName = document.getElementById("txtRefName").value.trim();
+    const refSurname = document.getElementById("txtRefSurname").value.trim();
+    const refEmail = document.getElementById("txtRefEmail").value.trim();
+    const refPhone = document.getElementById("txtRefPhone").value.trim();
     const result = document.getElementById("spNewOpportunityResult");
     result.innerHTML = '';
+    result.classList.add("d-none");
     if (alias === '' || source === '' || propertyType === '' || propertyStatus === '' || size === '' || price === '' || address === '' || city === '' || state === '' || tax === '' || note === '') {
         result.classList.remove("d-none");
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
@@ -149,13 +155,31 @@ async function saveOpportunity() {
         if (tax === '') { result.innerText = "La tassa è richiesta con un numero valido"; return; }
         if (note === '') { result.innerText = "La nota è obbligatoria"; return; }
     }
+    if (refEmail !== "" && !isValidEmail(refEmail)) {
+        result.classList.remove("d-none");
+        result.textContent = "L'email fornita non risulta valida";
+        btn.disabled = false;
+        return;
+    }
+    if (refPhone !== "" && !isValidateNumber(refPhone)) {
+        result.classList.remove("d-none");
+        result.textContent = "Il numero di telefono fornito non è valido.";
+        btn.disabled = false;
+        return;
+    }
     btn.disabled = true;
     spinner.classList.remove("d-none");
     try {
         const response = await fetch("/api/opportunity", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note })
+            body: JSON.stringify({ "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note,
+                "url": url,
+                "referenceName": refName,
+                "referenceSurname": refSurname,
+                "referenceEmail": refEmail,
+                "referencePhone": refPhone,
+             })
         });
         const res = await response.json();
         if (res.result) {

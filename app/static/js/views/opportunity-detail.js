@@ -160,7 +160,7 @@ async function updateGenericInfo() {
         btn.disabled = false;
         return;
     }
-    if (refPhone !== "" && !isValidPhone(refPhone)) {
+    if (refPhone !== "" && !isValidateNumber(refPhone)) {
         result.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;
         return;
