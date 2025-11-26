@@ -18,9 +18,19 @@ final class Estimate {
     public static function GetAll($request, $response) {
         $q = <<<query
             select 
-                c.*
-            from customer as c
-            order by c.id
+                q.*,
+                c.name as customer_name,
+                c.surname as customer_surname,
+                c.bizname as customer_bizname,
+                p.alias as property_alias,
+                p.address as property_address, 
+                p.city as property_city,
+                p.cap as property_cap,
+                p.nation as property_nation
+            from estimate as q
+            left join customer as c on q.customer = c.id
+            left join property as p on q.property = p.id
+            order by q.id
         query;
         $customers = DB::Query($q);
         $response->getBody()->write(json_encode(["payload" => $customers]));

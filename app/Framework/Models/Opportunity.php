@@ -99,7 +99,7 @@ final class Opportunity {
             $referenceSurname = $data['referenceSurname'] ?? null;
             $referenceEmail = $data['referenceEmail'] ?? null;
             $referencePhone = $data['referencePhone'] ?? null;
-            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, note, url, reference_name, reference_surname, reference_email, reference_phone, acquisition_price, professional_services,) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, note, url, reference_name, reference_surname, reference_email, reference_phone, acquisition_price, professional_services) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $note, $url, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $acqPrice, $professionalService];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert Opportunity", 500);

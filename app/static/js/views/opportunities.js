@@ -169,7 +169,7 @@ async function saveOpportunity() {
         btn.disabled = false;
         return;
     }
-    if (acqPrice !== "" && !isValidateNumber(acqPrice)) {
+    if ((acqPrice !== "" && !isValidateNumber(acqPrice)) || parseInt(acqPrice) < 0) {
         result.classList.remove("d-none");
         result.textContent = "Il prezzo di acquisizione indicato non è valido.";
         btn.disabled = false;
