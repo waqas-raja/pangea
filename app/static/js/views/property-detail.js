@@ -51,6 +51,8 @@ async function loadPropertyDetail() {
     document.getElementById("spCity").innerText = r.payload.city ?? 'n.d.';
     document.getElementById("spAddress").innerText = r.payload.address ?? 'n.d.';
     document.getElementById("spZip").innerText = r.payload.cap ?? 'n.d.';
+    document.getElementById("spStreet").innerText = 'n.d.';
+    document.getElementById("spDistrict").innerText = 'n.d.';
     document.getElementById("spPropertyStatus").innerText = r.payload.property_status_name ?? 'n.d.';
     document.getElementById("spSize").innerText = r.payload.size ?? 'n.d.';
     document.getElementById("spFloor").innerText = r.payload.floor ?? 'n.d.';
@@ -166,6 +168,8 @@ async function updateGenericInfo() {
     const city = document.getElementById("txtCity").value.trim();
     const address = document.getElementById("txtAddress").value.trim();
     const zip = document.getElementById("txtZip").value.trim();
+    const street = document.getElementById("txtStreet").value.trim();
+    const district = document.getElementById("txtDistrict").value.trim();
     const propertyStatus = document.getElementById("ddlPropertyStatus").value;
     const size = document.getElementById("txtSize").value.trim();
     const floor = document.getElementById("txtFloor").value.trim();
@@ -178,13 +182,15 @@ async function updateGenericInfo() {
     const renPrice = document.getElementById("txtRenPrice").value.trim();
     const extraPrice = document.getElementById("txtExtraPrice").value.trim();
     const sellPrice = document.getElementById("txtSellPrice").value.trim();
-    if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === "" || sellPrice === "") {
+    if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === '' || sellPrice === '' || street === '' || district === '') {
         btn.disabled = false;
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
         if (nation === '') { result.innerText = "La nazione è obbligatoria"; return; }
         if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
         if (city === '') { result.innerText = "La città è obbligatoria"; return; }
         if (zip === '') { result.innerText = "Il codice postale è obbligatorio con un numero valido"; return; }
+        if (street === '') { result.innerText = "La strada è obbligatoria"; return; }
+        if (district === '') { result.innerText = "È necessario il distretto"; return; }
         if (propertyStatus === '') { result.innerText = "Lo stato della proprietà è obbligatorio"; return; }
         if (size === '') { result.innerText = "La Taglia è obbligatoria con un numero valido"; return; }
         if (floor === '') { result.innerText = "Il pavimento è obbligatorio con un numero valido"; return; }
@@ -195,6 +201,11 @@ async function updateGenericInfo() {
     }
     if (city !=="" && !isValidLetter(city)) {
         result.textContent = "Per la città sono accettate solo lettere.";
+        btn.disabled = false;
+        return;
+    }
+    if (district !=="" && !isValidLetter(district)) {
+        result.textContent = "Per il distretto si accettano solo lettere.";
         btn.disabled = false;
         return;
     }
@@ -215,6 +226,8 @@ async function updateGenericInfo() {
                 city: city,
                 address: address,
                 zip: zip,
+                street: street,
+                district: district,
                 propertyStatus: parseInt(propertyStatus),
                 size: size,
                 floor: floor,

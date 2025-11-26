@@ -49,6 +49,20 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
+                    <label for="txtStreet" class="col-sm-5 col-form-label">Strada:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <div class="col-sm-7">
+                        <span id="spStreet" class="valueControl"></span>
+                        <input type="text" id="txtStreet" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
+                <div class="row mb-0 align-items-center">
+                    <label for="txtDistrict" class="col-sm-5 col-form-label">Distretto:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <div class="col-sm-7">
+                        <span id="spDistrict" class="valueControl"></span>
+                        <input type="text" id="txtDistrict" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
+                <div class="row mb-0 align-items-center">
                     <label for="txtZip" class="col-sm-5 col-form-label">CAP:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spZip" class="valueControl"></span>
