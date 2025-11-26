@@ -133,6 +133,8 @@ async function saveOpportunity() {
     const state = document.getElementById("ddlState").value;
     const tax = document.getElementById("txtTaxes").value.trim();
     const note = document.getElementById("txtNote").value.trim();
+    const acqPrice = document.getElementById("txtAcqPrice").value.trim();
+    const proService = document.getElementById("ddlProServices").value;
     const url = document.getElementById("txtUrl").value.trim();
     const refName = document.getElementById("txtRefName").value.trim();
     const refSurname = document.getElementById("txtRefSurname").value.trim();
@@ -167,6 +169,12 @@ async function saveOpportunity() {
         btn.disabled = false;
         return;
     }
+    if (acqPrice !== "" && !isValidateNumber(acqPrice)) {
+        result.classList.remove("d-none");
+        result.textContent = "Il prezzo di acquisizione indicato non è valido.";
+        btn.disabled = false;
+        return;
+    }
     btn.disabled = true;
     spinner.classList.remove("d-none");
     try {
@@ -174,6 +182,8 @@ async function saveOpportunity() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note,
+                "acuisitionPrice": acqPrice,
+                "professionalService": proService,
                 "url": url,
                 "referenceName": refName,
                 "referenceSurname": refSurname,

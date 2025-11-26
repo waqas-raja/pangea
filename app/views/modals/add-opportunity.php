@@ -88,6 +88,28 @@
                     <hr>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="row">
+                                <label for="txtAcqPrice" class="col-sm-4 col-form-label">Prezzo acquisizione:</label>
+                                <div class="col-sm-8">
+                                    <input type="number" id="txtAcqPrice" class="form-control" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="row">
+                                <label for="ddlProServices" class="col-sm-4 col-form-label">Servizi professionali:</label>
+                                <div class="col-sm-8">
+                                    <select id="ddlProServices" class="form-select">
+                                        <option value="" selected>Seleziona</option>
+                                        <option value="1">Development</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-6">
                             <div class="row mb-3">
                                 <label for="txtUrl" class="col-sm-4 col-form-label">URL:</label>
                                 <div class="col-sm-8">
