@@ -85,6 +85,45 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="row mb-3">
+                                <label for="txtUrl" class="col-sm-4 col-form-label">URL:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="txtUrl" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtRefName" class="col-sm-4 col-form-label">Nome di riferimento:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="txtRefName" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtRefSurname" class="col-sm-4 col-form-label">Cognome di riferimento:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="txtRefSurname" class="form-control" value="">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="row mb-3">
+                                <label for="txtRefEmail" class="col-sm-4 col-form-label">Email di riferimento:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="txtRefEmail" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="txtRefPhone" class="col-sm-4 col-form-label">Telefono di riferimento:</label>
+                                <div class="col-sm-8">
+                                    <span id="spRefPhone" class="valueControl"></span>
+                                    <input type="text" id="txtRefPhone" class="form-control" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <span id="spNewOpportunityResult" class="text-danger d-none"></span>
                 </form>
             </div>
