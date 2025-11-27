@@ -25,14 +25,11 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                             <i class="bi bi-x-circle"></i> Annulla
                         </button>
                     </div>
-                    <!-- <button type="button" class="btn btn-link text-danger border" onclick="deleteCustomerModal()">
-                        <i class="bi bi-trash3 me-2"></i> Elimina Cliente
-                    </button> -->
                 </div>
             </div>
             <div class="d-flex align-items-center bg-blue w-25 text-center text-white py-2 px-4 rounded-2 fw-bold">
                 <span class="me-3">Rendita Netta Annua:</span>
-                <span class="fs-4">€ 5.720,00</span>
+                <span id="netAnnualIncome" class="fs-4">€ 00</span>
             </div>
         </div>
         <div id="errEditEstimate" class="text-danger"></div>
@@ -45,34 +42,34 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 <div class="text-blue pai-title mb-3 fw-bold"><i class="bi bi-person me-2"></i>Informazioni Cliente</div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Cliente:</span>
-                    <span class="text-end fw-semibold">Mario Rossi</span>
+                    <span id="customerName" class="text-end fw-semibold">Mario Rossi</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Email:</span>
-                    <span class="text-end fw-semibold">mario.rossi@email.com</span>
+                    <span id="customerEmail" class="text-end fw-semibold">mario.rossi@email.com</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Telefono:</span>
-                    <span class="text-end fw-semibold">+39 333 1234567</span>
+                    <span id="customerPhone" class="text-end fw-semibold">+39 333 1234567</span>
                 </div>
             </div>
             <div class="pai-card mb-3">
                 <div class="text-blue pai-title mb-3 fw-bold"><i class="bi bi-house-door me-2"></i>Informazioni Immobile</div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Indirizzo:</span>
-                    <span class="text-end fw-semibold">Via Roma 1, 10123 Torino</span>
+                    <span id="propertyAddress" class="text-end fw-semibold">Via Roma 1, 10123 Torino</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Tipologia:</span>
-                    <span class="text-end fw-semibold">Appartamento</span>
+                    <span id="propertyType" class="text-end fw-semibold">Appartamento</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Superficie:</span>
-                    <span class="text-end fw-semibold">85 mq</span>
+                    <span id="propertySize" class="text-end fw-semibold">85 mq</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Rif. Catastale:</span>
-                    <span class="text-end fw-semibold">F.23, Part. 123, Sub. 4</span>
+                    <span id="propertyRegistryRef" class="text-end fw-semibold">F.23, Part. 123, Sub. 4</span>
                 </div>
             </div>
         </div>
@@ -88,37 +85,13 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                             <th scope="col" class="text-end">Totale</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="">Gennaio</td>
-                            <td class="text-center">20 €</td>
-                            <td class="text-center">20 €</td>
-                            <td class="fw-semibold text-end">4000 €</td>
-                        </tr>
-                        <tr>
-                            <td class="">Febbraio</td>
-                            <td class="text-center">20 €</td>
-                            <td class="text-center">20 €</td>
-                            <td class="fw-semibold text-end">4000 €</td>
-                        </tr>
-                        <tr>
-                            <td class="">Marzo</td>
-                            <td class="text-center">20 €</td>
-                            <td class="text-center">20 €</td>
-                            <td class="fw-semibold text-end">4000 €</td>
-                        </tr>
+                    <tbody id="tBodyMonthlyEstimate">
                     </tbody>
-                    <tfoot class="table-light" style="border-top: 2px solid #000;">
-                        <tr>
-                            <td class="fw-bold">Totale Annuo</td>
-                            <td class="text-success fw-semibold"></td>
-                            <td class="text-danger fw-semibold"></td>
-                            <td class="text-success fw-bold text-end">7.740,00</td>
-                        </tr>
+                    <tfoot id="tFooterMonthlyEstimate" class="table-light" style="border-top: 2px solid #000;">
                     </tfoot>
                 </table>
             </div>
-            <div class="pai-card mb-3">
+            <div id="divFixedCost" class="pai-card mb-3">
                 <h3 class="pai-title mb-3 fw-bold text-blue">Spese Fisse</h3>
                 <table class="table table-borderless mb-1">
                     <thead class="table-light">
@@ -129,27 +102,9 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                             <th scope="col" class="text-end">Costo</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="">Spesa 1</td>
-                            <td class=""></td>
-                            <td class=""></td>
-                            <td class="fw-semibold text-end">200 €</td>
-                        </tr>
-                        <tr>
-                            <td class="">Spesa 2</td>
-                            <td class=""></td>
-                            <td class=""></td>
-                            <td class="fw-semibold text-end">200 €</td>
-                        </tr>
+                    <tbody id="tBodyFixedCost">
                     </tbody>
-                    <tfoot class="table-light" style="border-top: 2px solid #000;">
-                        <tr>
-                            <td class="fw-bold">Totale</td>
-                            <td class=""></td>
-                            <td class=""></td>
-                            <td class="text-danger fw-bold text-end">400 €</td>
-                        </tr>
+                    <tfoot id="tFooterFixedCost" class="table-light" style="border-top: 2px solid #000;">
                     </tfoot>
                 </table>
             </div>
@@ -164,7 +119,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
     </div>
 </div>
 <script>
-    const customerId = '<?= $cid ?>';
+    const estimateId = '<?= $eid ?>';
 </script>
 <script src="/static/js/views/estimate-detail.js"></script>
 

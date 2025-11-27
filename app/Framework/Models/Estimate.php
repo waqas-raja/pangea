@@ -85,19 +85,54 @@ final class Estimate
     /**
      * @throws Exception
      */
-    public static function GetCustomer($request, $response)
+    public static function GetEstimate($request, $response)
     {
-        $agent_id = (int)$request->getAttribute('id');
-        $q = <<<query
-            select 
-                c.*
-            from customer as c
-            where c.id = ?
-        query;
-        $rows = DB::Query($q, [$agent_id]);
-        if (count($rows) == 0) throw new Exception("Customer not found", 400);
-        $response->getBody()->write(json_encode(["payload" => $rows[0]]));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        try {
+            $id = (int)$request->getAttribute('id');
+            $res = [];
+            $q = <<<query
+                select 
+                    e.*,
+                    c.name as customer_name,
+                    c.surname as customer_surname,
+                    c.email as customer_email,
+                    c.phone as customer_phone,
+                    p.address as propert_address,
+                    p.size as property_size
+                from estimate as e
+                left join customer as c on e.customer = c.id
+                left join property as p on e.property = p.id
+                where e.id = ?
+            query;
+            $estimates = DB::Query($q, [$id]);
+            if (count($estimates) > 0) {
+                $res['estimate'] = $estimates[0];
+                $q = <<<estimate_month_query
+                    select
+                        em.month,
+                        em.avge_daily_price,
+                        em.rented_days
+                    from estimate_monthly as em
+                    where em.estimate_id = ?
+                estimate_month_query;
+                $rows = DB::Query($q, [$id]);
+                count($rows) > 0 ? $res['estimate_month'] = $rows : $res['estimate_month'] = [];
+                $q = <<<estimate_fixed_cost_query
+                    select
+                        efc.label as fixed_cost_label,
+                        efc.amount as fixed_cost_amount
+                    from estimate_fixed_costs as efc
+                    where efc.estimate_id = ?
+                estimate_fixed_cost_query;
+                $rows = DB::Query($q, [$id]);
+                count($rows) > 0 ? $res['estimate_fixed_cost'] = $rows : $res['estimate_fixed_cost'] = [];
+            } else throw new Exception("Quote not found", 400);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $res]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
     }
 
     /**

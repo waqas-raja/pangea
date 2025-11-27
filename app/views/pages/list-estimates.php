@@ -1,7 +1,7 @@
 <?php
     $title = 'Preventivi';
     ob_start();
-    require_once __DIR__ . '/../modals/add-customer.php';
+    require_once __DIR__ . '/../modals/confirm-delete.php';
 ?>
 
     <div id="page-list-estimates">
