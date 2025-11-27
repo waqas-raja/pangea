@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Framework\Models;
 
 use App\Framework\Tools\DB;
@@ -10,12 +11,14 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Random\RandomException;
 
-final class Estimate {
+final class Estimate
+{
 
     /**
      * @throws Exception
      */
-    public static function GetAll($request, $response) {
+    public static function GetAll($request, $response)
+    {
         $q = <<<query
             select 
                 q.*,
@@ -26,21 +29,25 @@ final class Estimate {
                 p.address as property_address, 
                 p.city as property_city,
                 p.cap as property_cap,
-                p.nation as property_nation
+                p.nation as property_nation,
+                p.property_status as property_status_id,
+                ps.name as property_status_label
             from estimate as q
             left join customer as c on q.customer = c.id
             left join property as p on q.property = p.id
-            order by q.id
+            left join td_property_status as ps on p.property_status = ps.id
+            order by c.name
         query;
-        $customers = DB::Query($q);
-        $response->getBody()->write(json_encode(["payload" => $customers]));
+        $estimates = DB::Query($q);
+        $response->getBody()->write(json_encode(["payload" => $estimates]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
     /**
      * @throws Exception
      */
-    public static function Add($request, $response) {
+    public static function Add($request, $response)
+    {
         try {
             $token_info = User::GetTokenInfo($request);
             $user_id = $token_info['id'];
@@ -78,7 +85,8 @@ final class Estimate {
     /**
      * @throws Exception
      */
-    public static function GetCustomer($request, $response) {
+    public static function GetCustomer($request, $response)
+    {
         $agent_id = (int)$request->getAttribute('id');
         $q = <<<query
             select 
@@ -87,7 +95,7 @@ final class Estimate {
             where c.id = ?
         query;
         $rows = DB::Query($q, [$agent_id]);
-        if(count($rows) == 0) throw new Exception("Customer not found", 400);
+        if (count($rows) == 0) throw new Exception("Customer not found", 400);
         $response->getBody()->write(json_encode(["payload" => $rows[0]]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
@@ -95,7 +103,8 @@ final class Estimate {
     /**
      * @throws Exception
      */
-    public static function Update($request, $response) {
+    public static function Update($request, $response)
+    {
         // $response->getBody()->write(json_encode(["result" => true]));
         // return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         $aid = (int)$request->getAttribute('id');
@@ -128,12 +137,12 @@ final class Estimate {
     /**
      * @throws Exception
      */
-    public static function Delete($request, $response) {
+    public static function Delete($request, $response)
+    {
         $aid = (int)$request->getAttribute('id');
         $row_affected = DB::Execute("DELETE FROM customer WHERE id = ?", [$aid]);
         if ($row_affected == 0) throw new Exception("Error while deleting the customer", 500);
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
-
 }
