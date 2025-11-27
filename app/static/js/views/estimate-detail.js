@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadEstimateDetail() {
     const response = await fetch('/api/estimate/' + estimateId);
     const r = await response.json();
-    debugger;
     let months = { "Jen": "Gennaio", "Feb": "Febbraio", "Mar": "Marzo", "Apr": "aprile", "May": "maggio", "Jun": "giugno", "Jul": "luglio", "Aug": "agosto", "Sep": "settembre", "Oct": "ottobre", "Nov": "novembre", "Dec": "dicembre" };
     let totalEstimate = 0, totalDeduct = 0;
     if (r.result) {
