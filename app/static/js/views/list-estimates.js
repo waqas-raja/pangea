@@ -32,12 +32,12 @@ function customData() {
 }
 
 async function loadListEstimates() {
-    // const response = await fetch('/api/opportunities');
-    // const r = await response.json();
-    const d = await customData();
+    const response = await fetch('/api/estimates');
+    const d = await response.json();
+    // const d = await customData();
     const hasData = d.length > 0;
     $("#listEstimatesGrid").dxDataGrid({
-        dataSource: d,
+        dataSource: d.payload,
         keyExpr: "id",
         showBorders: true,
         columnAutoWidth: true,
@@ -52,50 +52,77 @@ async function loadListEstimates() {
         grouping: { autoExpandAll: false },
         groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
         filterRow: { visible: false, applyFilter: "auto" },
-        headerFilter: { visible: hasData },
+        headerFilter: { visible: false },
         columns: [
             {
                 dataField: "id", 
                 caption: "ID PREVENTIVO",
                 // allowFiltering: true,
-                sortIndex: 0,
-                sortOrder: "asc",
+                // sortIndex: 0, sortOrder: "asc",
                 alignment: "left",
+                width: 150,
                 cellTemplate: function (container, options) {
                     const data = options.data;
                     const text = '#' + data.id;
                     container.text(text);
                 }
             },
-            { dataField: "client", caption: "CLIENTE", sortIndex: 2, sortOrder: "asc" },
-            { dataField: "property_type", caption: "IMMOBILE", sortIndex: 3, sortOrder: "asc" },
             {
-                dataField: "income",
+                dataField: "",
+                caption: "CLIENTE",
+                // sortIndex: 2,sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const text = data.customer_name + ' ' + data.customer_surname;
+                    container.text(text);
+                }
+            },
+            {
+                dataField: "property_alias",
+                caption: "IMMOBILE",
+                // sortIndex: 3, sortOrder: "asc"
+            },
+            {
+                dataField: "",
                 caption: "RENDITA IPOTETICA",
                 // allowFiltering: true,
                 sortIndex: 4,
-                sortOrder: "asc",
+                // sortOrder: "asc",
                 alignment: "left",
+                // cellTemplate: function (container, options) {
+                //     const data = options.data;
+                //     const text = '<div class="text-start">€' + (data.income) + '/mese</div>';
+                //     container.html(text);
+                // }
+            },
+            { 
+                dataField: "dtcr",
+                caption: "DATA CREAZIONE",
+                allowFiltering: true,
+                // sortIndex: 5, sortOrder: "asc",
                 cellTemplate: function (container, options) {
                     const data = options.data;
-                    const text = '<div class="text-start">€' + (data.income) + '/mese</div>';
-                    container.html(text);
+                    let date = data.dtcr.split(' ')[0];
+                    date = date.split('-');
+                    container.text(date[2] + '/' + date[1] + '/' + date[0]);
                 }
             },
-            { dataField: "created_at", caption: "DATA CREAZIONE", allowFiltering: true, sortIndex: 5, sortOrder: "asc" },
             {
-                dataField: "status",
+                dataField: "property_status_id",
                 caption: "STATO",
                 // allowFiltering: true,
-                sortIndex: 6, sortOrder: "asc",
-                alignment: 'left',
+                // sortIndex: 6, sortOrder: "asc",
+                alignment: 'center',
+                width: 150,
                 cellTemplate: function (container, options) {
                     const data = options.data;
                     let div = '';
-                    switch ((data.status).toLowerCase()) {
-                        case 'approved': div = '<div class="mx-auto rounded-pill alert alert-success px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #a3cfbb;">Approvato</div>'; break;
-                        case 'pending': div = '<div class="mx-auto rounded-pill alert alert-warning px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #ffe69c;"">In attesa</div>'; break;
-                        case 'cancel': div = '<div class="mx-auto rounded-pill alert alert-danger px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #f1aeb5;"">Rifiutato</div>'; break;
+                    switch (data.property_status_id) {
+                        case 2: div = `<div class="mx-auto rounded-pill alert alert-success px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #a3cfbb;">${data.property_status_label}</div>`; break;
+                        case 1:
+                        case 3:
+                        case 4: div = `<div class="mx-auto rounded-pill alert alert-warning px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #ffe69c;"">${data.property_status_label}</div>`; break;
+                        case 5: div = `<div class="mx-auto rounded-pill alert alert-danger px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #f1aeb5;"">${data.property_status_label}</div>`; break;
                     }
                     container.html(div);
                 }
@@ -110,7 +137,7 @@ async function loadListEstimates() {
             },
         ],
         sorting: { mode: "multiple" },
-        remoteOperations: { paging: true, filtering: true, sorting: true },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
         paging: { pageSize: 10 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {

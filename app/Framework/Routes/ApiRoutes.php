@@ -62,6 +62,12 @@ class ApiRoutes {
             ->add($this->authMiddleware)
             ->add($this->jwtMiddleware);
             
+            $group->get('/estimates', function ($request, $response) {
+                return Estimate::GetAll($request, $response);
+            })
+            ->add($this->authMiddleware)
+            ->add($this->jwtMiddleware);
+            
             $group->get('/properties', function ($request, $response) {
                 return Property::GetAll($request, $response);
             })
