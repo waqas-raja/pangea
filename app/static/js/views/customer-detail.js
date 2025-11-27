@@ -186,17 +186,3 @@ async function deleteCustomerModal() {
         }
     });
 }
-
-function showDeleteConfirmationModal(callback) {
-    document.getElementById("deleteErrorMessage").innerHTML = '';
-    const modalElement = document.getElementById("modalConfirmDelete");
-    const modal = new bootstrap.Modal(modalElement);
-    modal.show();
-    const confirmButton = document.getElementById("btnConfirmDelete");
-    confirmButton.removeEventListener("click", confirmButton.clickHandler);
-    confirmButton.clickHandler = function (e) {
-        e.stopPropagation();
-        callback(true);
-    };
-    confirmButton.addEventListener("click", confirmButton.clickHandler);
-}

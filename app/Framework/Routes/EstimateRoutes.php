@@ -26,7 +26,7 @@ class EstimateRoutes {
         ->add($this->jwtMiddleware);
 
         $group->get('/{id}', function (Request $request, Response $response) {
-            return Estimate::GetCustomer($request, $response);
+            return Estimate::GetEstimate($request, $response);
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);

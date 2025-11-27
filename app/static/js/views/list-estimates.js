@@ -131,8 +131,14 @@ async function loadListEstimates() {
                 dataField: "",
                 caption: "AZIONI",
                 sortIndex: 7,
+                width: 100,
                 cellTemplate: function (container, options) {
-                    container.html('<div class="d-flex justify-content-between align-items-center"><i class="bi bi-eye text-primary" title="Visualizzazione"></i> <i class="bi bi-pencil" title="Modificare"></i> <i class="bi bi-trash text-danger" title="Eliminare"></i>');
+                    container.html(`
+                        <div class="d-flex justify-content-between align-items-center">
+                            <i class="bi bi-eye text-primary" title="Visualizzazione" onclick="viewQuote(${options.data.id})"></i>
+                            <i class="bi bi-pencil" title="Modificare" onclick="editQuote(${options.data.id})"></i>
+                            <i class="bi bi-trash text-danger" title="Eliminare" onclick="deleteQuote(${options.data.id})"></i>
+                        </div>`);
                 }
             },
         ],
@@ -149,10 +155,33 @@ async function loadListEstimates() {
                 "groupPanel",
             ]
         },
-        onRowClick: function (e) { 
-            if (e.rowType === "data") { 
-                window.location = `/estimate/${e.data.id}`;
+        // onRowClick: function (e) { 
+        //     if (e.rowType === "data") { 
+        //         window.location = `/estimate/${e.data.id}`;
+        //     }
+        // },
+    });
+}
+
+function viewQuote(id) { window.location = `/estimate/${id}`; }
+
+function editQuote(id) {debugger}
+
+async function deleteQuote(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            debugger;
+            return;
+            try {
+                const response = await fetch("/api/customer/" + customerId, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#modalConfirmDelete").modal('hide');
+                    window.location = `/customers`;
+                } else throw new Error("Error while deleting customer!");
+            } catch (error) {
+                document.getElementById("deleteErrorMessage").innerText = error.message !== undefined ? error.message : error;
             }
-        },
+        }
     });
 }
