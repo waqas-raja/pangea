@@ -58,7 +58,7 @@ final class User {
             'httponly' => true
         ];
         setcookie('token', $token, $cookieParams);
-        $response->getBody()->write(json_encode(['name' => $u['name'], 'role' => $u['role_id']]));
+        $response->getBody()->write(json_encode(['id' => $u['id'], 'name' => $u['name'], 'role' => $u['role_id']]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
@@ -223,5 +223,59 @@ final class User {
         if ($row_affected == 0) throw new Exception("Error updating user", 500);
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function UpdateProfileData($request, $response) {
+        try{
+            $token_info = self::GetTokenInfo($request);
+            $user_id = $token_info['id'];
+            $user_role = $token_info['role'];
+            if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
+            $id = (int)$request->getAttribute('id');
+            $parsedBody = json_decode($request->getBody()->getContents(), true);
+            $name = $parsedBody['name'] ?? "";
+            $surname = $parsedBody['surname'] ?? "";
+            $email = $parsedBody['email'] ?? "";
+            $q = "update user set name = ?, surname = ?, email = ? where id = ?";
+            $params = [$name, $surname, $email, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Error updating user profile data", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+        $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function UpdateProfilePsw($request, $response) {
+        try{
+            $token_info = self::GetTokenInfo($request);
+            $user_role = $token_info['role'];
+            if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
+            $id = (int)$request->getAttribute('id');
+            $parsedBody = json_decode($request->getBody()->getContents(), true);
+            $psw = $parsedBody['old_psw'] ?? "";
+            $pswNew = $parsedBody['new_psw'] ?? "";
+            $q = "select * from user where id = ? and psw = sha1(?)";
+            $params = [$id, $psw];
+            $rows = DB::Query($q, $params);
+            if (count($rows) === 0) throw new Exception("La vecchia password è sbagliata", 500);
+            $q = "update user set psw = sha1(?), force_change_psw = 1 where id = ?";
+            $params = [$pswNew, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Si è verificato un errore durante l'aggiornamento della password", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+        $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
     }
 }

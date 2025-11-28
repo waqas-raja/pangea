@@ -61,6 +61,7 @@ async function signIn() {
         });
         if (!response.ok) throw new Error('Mancata risposta dal server api');
         const data = await response.json();
+        localStorage.setItem("uid", data.id);
         localStorage.setItem("uname", data.name);
         localStorage.setItem("urole", data.role);
         // window.location.href = '/dashboard';
