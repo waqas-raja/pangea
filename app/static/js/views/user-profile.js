@@ -53,6 +53,14 @@ async function updatePersonalData() {
             return;
         }
     }
+    if (name !== '' && !isValidLetter(name)) {
+        showResult('resultPersonalData', 'Nel campo nome sono accettate solo lettere.', false);
+        return;
+    }
+    if (surname !== '' && !isValidLetter(surname)) {
+        showResult('resultPersonalData', 'Nel campo cognome sono accettate solo lettere.', false);
+        return;
+    }
     if (email !== '' && !isValidEmail(email)) {
         showResult('resultPersonalData', 'L\'indirizzo email inserito non risulta valido.', false);
         return;
