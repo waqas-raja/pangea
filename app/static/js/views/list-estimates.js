@@ -161,9 +161,17 @@ async function loadListEstimates() {
     });
 }
 
+function createNewEstimate() {
+    if (localStorage.getItem('editEstimateId') !== null) localStorage.removeItem('editEstimateId');
+    window.location.href = '/estimate';
+}
+
 function viewQuote(id) { window.location = `/estimate/${id}`; }
 
-function editQuote(id) {debugger}
+function editQuote(id) {
+    localStorage.setItem('editEstimateId', id);
+    window.location = '/estimate';
+}
 
 async function deleteQuote(id) {
     showDeleteConfirmationModal(async function (confirmed) {
