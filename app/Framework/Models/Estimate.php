@@ -151,12 +151,9 @@ final class Estimate
             $fixedCost = $data['fixedCost'] ?? [];
             $q = "UPDATE estimate SET customer = ?, property = ?, WHERE id = ?";
             $params = [$customer, $property, $id];
-            error_log('1');
             DB::Execute($q, $params);
-            error_log('2');
             if (count($fixedCost) > 0) {
                 DB::Execute('DELETE FROM estimate_fixed_costs WHERE estimate_id = ?', [$id]);
-                error_log('3');
                 for ($i = 0; $i < count($fixedCost); $i++) {
                     $q = "INSERT INTO estimate_fixed_costs (estimate_id, label, amount, ucr, ule) VALUES (?,?,?,?,?)";
                     $params = [$id, $fixedCost[$i]['label'], (float)$fixedCost[$i]['amount'], $user_id, $user_id];
@@ -166,7 +163,6 @@ final class Estimate
             }
             if (count($monthlyEstimate) > 0) {
                 DB::Execute('DELETE FROM estimate_monthly WHERE estimate_id = ?', [$id]);
-                error_log('4');
                 for ($i = 0; $i < count($monthlyEstimate); $i++) {
                     $q = "INSERT INTO estimate_monthly (estimate_id, month, avge_daily_price, rented_days, ucr, ule) VALUES (?,?,?,?,?,?)";
                     $params = [$id, $monthlyEstimate[$i]['month'], (float)$monthlyEstimate[$i]['average'], (int)$monthlyEstimate[$i]['estimated'], $user_id, $user_id];

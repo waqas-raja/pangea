@@ -1,7 +1,24 @@
+let _id = null;
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
+    loadPersonalData();
+}
 
+async function loadPersonalData() {
+    _id = localStorage.getItem('uid');
+    try {
+        const response = await fetch(`/api/user/${_id}`, { method: "GET" });
+        const data = await response.json();
+        if (data.payload.id !== null && data.payload.id !== undefined) {
+            document.getElementById('txtName').value = data.payload.name || '';
+            document.getElementById('txtSurname').value = data.payload.surname || '';
+            document.getElementById('txtEmail').value = data.payload.email || '';
+        } else showResult('resultPersonalData', 'Dati utente non trovati.', false);    
+    } catch (error) {
+        showResult('resultPersonalData', 'Dati utente non trovati.', false);
+        console.error("Errore durante la chiamata:", error);
+    }
 }
 
 function togglePassword(e) {
@@ -23,36 +40,41 @@ async function updatePersonalData() {
     const surname = document.getElementById('txtSurname').value.trim();
     const email = document.getElementById('txtEmail').value.trim();
     if (!name || !surname || !email) {
-        showResult('resultPersonalData', 'Si prega di compilare tutti i campi.', false);
-        return;
+        if (name === '') {
+            showResult('resultPersonalData', 'Il nome utente è obbligatorio.', false);
+            return;
+        }
+        if (surname === '') {
+            showResult('resultPersonalData', 'Il cognome utente è obbligatorio.', false);
+            return;
+        }
+        if (email === '') {
+            showResult('resultPersonalData', 'Il e-mail utente è obbligatorio.', false);
+            return;
+        }
     }
-    if (!isValidEmail(email)) {
+    if (email !== '' && !isValidEmail(email)) {
         showResult('resultPersonalData', 'L\'indirizzo email inserito non risulta valido.', false);
         return;
     }
     const btn = document.getElementById('btnUpdatePersonalData');
-    const spinner = document.getElementById('spinnerPersonalData');
-    spinner.classList.remove('d-none');
+    btn.lastElementChild.classList.remove('d-none');
     btn.disabled = true;
-    showResult('resultPersonalData', 'Funzione non ancora attiva.', false);
-    return;
     try {
-
-        // const response = await fetch(
-        //     "api/user",
-        //     {
-        //         method: "PATCH",
-        //         body: { name: name, surname: surname, email: email }
-        //     }
-        // );
-        // const data = await response.json();
-        // if(data.payload.done) showResult('resultPersonalData', 'Dati personali salvati con successo', true);
-        // else showResult('resultPersonalData', 'Si sono verificati degli errori durante il salvataggio', false);
-        // spinner.classList.add('d-none');
-        // btn.disabled = false;
-    } catch (error) {
-        spinner.classList.add('d-none');
+        const response = await fetch(`api/user/profile/${_id}`, {
+                method: "PATCH",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name: name, surname: surname, email: email })
+            }
+        );
+        const data = await response.json();
+        if(data.result) showResult('resultPersonalData', 'Dati personali salvati con successo', true);
+        else showResult('resultPersonalData', 'Si sono verificati degli errori durante il salvataggio', false);
         btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+    } catch (error) {
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
         showResult('resultPersonalData', 'Si sono verificati degli errori durante la chiamata.', false);
         console.error("Errore durante la chiamata:", error);
     }
@@ -63,8 +85,18 @@ async function updatePassword() {
     const newPsw = document.getElementById('txtNewPassword').value.trim();
     const confirmPsw = document.getElementById('txtConfirmPassword').value.trim();
     if (!oldPsw || !newPsw || !confirmPsw) {
-        showResult('resultChangePsw', 'Si prega di compilare tutti i campi.', false);
-        return;
+        if (oldPsw === '') {
+            showResult('resultChangePsw', 'È richiesta una vecchia password.', false);
+            return;
+        }
+        if (newPsw === '') {
+            showResult('resultChangePsw', 'È richiesta una nuova password.', false);
+            return;
+        }
+        if (confirmPsw === '') {
+            showResult('resultChangePsw', 'È richiesta la conferma della nuova password.', false);
+            return;
+        }
     }
     if (newPsw !== confirmPsw) {
         showResult('resultChangePsw', 'La nuova password e la conferma password non coincidono.', false);
@@ -74,34 +106,33 @@ async function updatePassword() {
         showResult('resultChangePsw', 'La nuova password deve essere di almeno 8 caratteri.', false);
         return;
     }
-
-    const spinner = document.getElementById('spinnerPassword');
     const btn = document.getElementById('btnUpdatePassword');
-    spinner.classList.remove('d-none');
     btn.disabled = true;
-    showResult('resultPersonalData', 'Funzione non ancora attiva.', false);
-    return;
-
+    btn.lastElementChild.classList.remove('d-none');
+    // showResult('resultPersonalData', 'Funzione non ancora attiva.', false);
+    // return;
     try {
-        const response = await fetch(
-            "api/user/psw",
-            {
+        const response = await fetch(`api/user/profile/psw/${_id}`,{
                 method: "PATCH",
-                body: { old_psw: oldPsw, new_psw: newPsw }
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ old_psw: oldPsw, new_psw: newPsw })
             }
         );
         const data = await response.json();
-        if (data.payload.done) showResult('resultPersonalData', 'Nuova password salvata con successo', true);
-        else {
-            if (data.payload.err_old) showResult('resultPersonalData', 'La vecchia password non risulta corretta', false);
-            else showResult('resultPersonalData', 'Si sono verificati degli errori durante il salvataggio', false);
+        debugger
+        if (data.result) {
+            document.getElementById('txtOldPassword').value = '';
+            document.getElementById('txtNewPassword').value = '';
+            document.getElementById('txtConfirmPassword').value = '';
+            showResult('resultChangePsw', 'Nuova password salvata con successo', true);
         }
-        spinner.classList.add('d-none');
+        else showResult('resultChangePsw', data.message, false);
+        btn.lastElementChild.classList.add('d-none');
         btn.disabled = false;
     } catch (error) {
-        spinner.classList.add('d-none');
+        btn.lastElementChild.classList.add('d-none');
         btn.disabled = false;
-        showResult('resultPersonalData', 'Si sono verificati degli errori durante la chiamata.', false);
+        showResult('resultChangePsw', 'Si sono verificati degli errori durante la chiamata.', false);
         console.error("Errore durante la chiamata:", error);
     }
 }

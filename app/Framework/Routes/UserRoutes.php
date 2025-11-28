@@ -36,6 +36,18 @@ class UserRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->patch('/profile/{id}', function (Request $request, Response $response) {
+            return User::UpdateProfileData($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->patch('/profile/psw/{id}', function (Request $request, Response $response) {
+            return User::UpdateProfilePsw($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
 
         $group->delete('/{id}', function (Request $request, Response $response) {
             return User::Delete($request, $response);
