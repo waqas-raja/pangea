@@ -112,7 +112,7 @@ function isValidateNumber(number) {
 }
 
 function isValidLetter(text) {
-    const regex = /^[A-Za-z]+$/;
+    const regex = /^[a-zA-Z\s]*$/;
     return regex.test(text);
 }
 
