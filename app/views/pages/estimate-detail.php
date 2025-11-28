@@ -15,15 +15,12 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 <!-- <span class="text-muted text-small">Visualizza i dettagli del preventivo per l'immobile e il cliente.</span> -->
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="position-relative" style="width: 230px;">
-                        <span id="iconAllowEditGenericInfo" class="editIcon" role="button" title="Edit" onclick="allowEditGeneralInfo()">
+                        <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="Modificare" onclick="editQuote(<?= $eid ?>)">
                             <i class="bi bi-pencil"></i>
                         </span>
-                        <button id="iconSaveEditGenericInfo" class="btn btn-blue-inverted position-absolute saveIcon d-none px-2" role="button" style="right:0px;top:-18px;" title="Save" onclick="updateGenericInfo()">
-                            <i class="bi bi-floppy"></i> Salva
-                        </button>
-                        <button id="iconCancelEditGenericInfo" class="btn btn-outline-secondary position-absolute cancelIcon d-none px-2" role="button" style="right:80px;top:-18px;" title="Cancel" onclick="cancelEditGeneralInfo()">
-                            <i class="bi bi-x-circle"></i> Annulla
-                        </button>
+                        <span id="iconAllowEditGenericInfo" class="editIcon text-danger" role="button" title="Eliminare" onclick="deleteQuote(<?= $eid ?>)">
+                            <i class="bi bi-trash"></i>
+                        </span>
                     </div>
                 </div>
             </div>

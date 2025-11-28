@@ -52,3 +52,30 @@ async function loadEstimateDetail() {
         document.getElementById('netAnnualIncome').textContent = formatNumber(totalEstimate - totalDeduct);
     }
 }
+
+function editQuote(id) {
+    localStorage.setItem('editEstimateId', id);
+    window.location.href = '/estimate';
+}
+
+async function deleteQuote(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            try {
+                const btn = document.getElementById('btnConfirmDelete');
+                btn.disabled = true;
+                btn.lastElementChild.classList.remove('d-none');
+                const response = await fetch("/api/estimate/" + id, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                    $("#modalConfirmDelete").modal('hide');
+                    window.location.href = '/estimates';
+                } else throw new Error("Errore durante l'eliminazione della citazione!");
+            } catch (error) {
+                document.getElementById("deleteErrorMessage").innerText = error.message !== undefined ? error.message : error;
+            }
+        }
+    });
+}
