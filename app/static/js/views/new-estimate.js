@@ -1,10 +1,45 @@
 let _isEstimated = false;
 let _estimateMonthly = [];
 let _estimateFixedCost = [];
+let _editEstimateId = null;
 document.addEventListener("DOMContentLoaded", () => {
     loadCustomers();
     loadProperties();
+    if (localStorage.getItem('editEstimateId') !== null) {
+        _editEstimateId = parseInt(localStorage.getItem('editEstimateId'));
+        loadEstimateDetail(_editEstimateId);
+    }
 })
+
+async function loadEstimateDetail(id) {
+    const response = await fetch('/api/estimate/' + id);
+    const r = await response.json();
+    let totalEstimate = 0, totalDeduct = 0;
+    if (r.result) {
+        document.getElementById('ddlSelectClient').value = r.payload.estimate.customer;
+        document.getElementById('ddlSelectProperty').value = r.payload.estimate.property;
+        r.payload.estimate_month.forEach(element => {
+            totalEstimate += parseInt(element.avge_daily_price) * parseInt(element.rented_days);
+            document.getElementById(`average${element.month}`).value = parseInt(element.avge_daily_price);
+            document.getElementById(`estimated${element.month}`).value = parseInt(element.rented_days);
+        });
+        let parentDiv = document.getElementById('deductionFixedCost');
+        parentDiv.innerHTML = '';
+        if (r.payload.estimate_fixed_cost.length > 0) {
+            let strCost = '';
+            r.payload.estimate_fixed_cost.forEach((element, i) => {
+                totalDeduct += parseInt(element.fixed_cost_amount);
+                strCost += `<div id="costSection_${i}" class="d-flex justify-content-between align-items-center gap-3 mb-3">
+                                <input type="text" id="txtCostDesc_${i}_1" class="form-control w-80" value="${element.fixed_cost_label}" placeholder="Es. TARI, SPESE Condominiali...">
+                                <input type="number" id="txtCost_${i}_1" class="form-control w-15 costToDeduct" maxlength="5" value="${parseInt(element.fixed_cost_amount)}" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
+                            </div>`;
+            });
+            parentDiv.innerHTML = strCost;
+        }
+        document.getElementById('calculatedTotal').textContent = formatNumber(totalEstimate - totalDeduct);
+    }
+}
 
 async function saveNewEstimate() {
     if (!_isEstimated) return;
@@ -25,16 +60,25 @@ async function saveNewEstimate() {
     btn.lastElementChild.classList.remove("d-none");
     result.classList.add("d-none");
     try {
-        const response = await fetch("/api/estimate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "customer": customer.value.trim(), "property": property.value.trim(), "monthlyEstimate": _estimateMonthly, "fixedCost": _estimateFixedCost })
-        });
+        let response;
+        if (_editEstimateId !== null) {
+            response = await fetch(`/api/estimate/${_editEstimateId}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ "customer": customer.value.trim(), "property": property.value.trim(), "monthlyEstimate": _estimateMonthly, "fixedCost": _estimateFixedCost })
+            });
+        } else {
+            response = await fetch("/api/estimate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ "customer": customer.value.trim(), "property": property.value.trim(), "monthlyEstimate": _estimateMonthly, "fixedCost": _estimateFixedCost })
+            });
+        }
         const res = await response.json();
         if (res.result) {
             btn.disabled = true;
             btn.lastElementChild.classList.add("d-none");
-            showMessage('Registrazione salvata con successo', 'errAddNewEstimate', 'text-success');
+            showMessage(res.message, 'errAddNewEstimate', 'text-success');
             _isEstimated = false;
             _estimateFixedCost = [];
             _estimateMonthly = [];

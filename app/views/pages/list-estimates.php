@@ -7,7 +7,7 @@
     <div id="page-list-estimates">
         <div class="pai-card mb-3 d-flex justify-content-between align-items-center">
             <span class="pai-title">Preventivi</span>
-             <button type="button" class="btn btn-blue" onclick="window.location.href='/estimate'">
+             <button type="button" class="btn btn-blue" onclick="createNewEstimate()">
                 <i class="bi bi-plus-lg me-2"></i> Aggiungi Preventivi
             </button>
         </div>

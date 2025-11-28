@@ -75,7 +75,7 @@ final class Estimate
                 $row_affected = DB::Execute($q, $params);
                 if ($row_affected == 0) throw new Exception("Error while inserting average and rented days record", 500);
             }
-            $response->getBody()->write(json_encode(["result" => true, "id" => $last_inserted_id]));
+            $response->getBody()->write(json_encode(["result" => true, "message" => "Registrazione salvata con successo", "id" => $last_inserted_id]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
             throw new Exception('Failed to add new estimate: ' . $e->getMessage());
@@ -140,33 +140,46 @@ final class Estimate
      */
     public static function Update($request, $response)
     {
-        // $response->getBody()->write(json_encode(["result" => true]));
-        // return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-        $aid = (int)$request->getAttribute('id');
-        $data = json_decode($request->getBody()->getContents(), true);
-        $name = $data['name'] ?? "";
-        $surname = $data['surname'] ?? "";
-        $phone = $data['phone'] ?? "";
-        $email = $data['email'] ?? "";
-        $bizname = $data['bizname'] ?? null;
-        $vat = $data['vat'] ?? null;
-        $fiscal = $data['fiscal'] ?? null;
-        $sdi = $data['sdi'] ?? null;
-        $address = $data['address'] ?? null;
-        $city = $data['city'] ?? null;
-        $zip = $data['zip'] ?? null;
-        $nation = $data['state'] ?? null;
-        $note = $data['note'] ?? null;
-        error_log("Updating customer with ID: $aid");
-        error_log("Data received: " . json_encode($data));
-        $q = 'UPDATE customer SET name = ?, surname = ?, phone = ?, email = ?, bizname = ?, vat = ?, fiscal_code = ?, sdi = ?, address = ?, city = ?, cap = ?, nation = ?, note = ? WHERE id = ?';
-        $params = [$name, $surname, $phone, $email, $bizname, $vat, $fiscal, $sdi, $address, $city, $zip, $nation, $note, $aid];
-        error_log("params: " . json_encode($params));
-        $row_affected = DB::Execute($q, $params);
-        error_log("Updated customer successfully with ID: $aid, affected rows: $row_affected");
-        if ($row_affected == 0) throw new Exception("Error while updating customer", 500);
-        $response->getBody()->write(json_encode(["result" => true]));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        try{
+            $token_info = User::GetTokenInfo($request);
+            $user_id = $token_info['id'];
+            $id = (int)$request->getAttribute('id');
+            $data = json_decode($request->getBody()->getContents(), true);
+            $customer = (int)$data['customer'] ?? 0;
+            $property = (int)$data['property'] ?? 0;
+            $monthlyEstimate = $data['monthlyEstimate'] ?? [];
+            $fixedCost = $data['fixedCost'] ?? [];
+            $q = "UPDATE estimate SET customer = ?, property = ?, WHERE id = ?";
+            $params = [$customer, $property, $id];
+            error_log('1');
+            DB::Execute($q, $params);
+            error_log('2');
+            if (count($fixedCost) > 0) {
+                DB::Execute('DELETE FROM estimate_fixed_costs WHERE estimate_id = ?', [$id]);
+                error_log('3');
+                for ($i = 0; $i < count($fixedCost); $i++) {
+                    $q = "INSERT INTO estimate_fixed_costs (estimate_id, label, amount, ucr, ule) VALUES (?,?,?,?,?)";
+                    $params = [$id, $fixedCost[$i]['label'], (float)$fixedCost[$i]['amount'], $user_id, $user_id];
+                    $row_affected = DB::Execute($q, $params);
+                    if ($row_affected == 0) throw new Exception("Error while updating fixed cost record", 500);
+                }
+            }
+            if (count($monthlyEstimate) > 0) {
+                DB::Execute('DELETE FROM estimate_monthly WHERE estimate_id = ?', [$id]);
+                error_log('4');
+                for ($i = 0; $i < count($monthlyEstimate); $i++) {
+                    $q = "INSERT INTO estimate_monthly (estimate_id, month, avge_daily_price, rented_days, ucr, ule) VALUES (?,?,?,?,?,?)";
+                    $params = [$id, $monthlyEstimate[$i]['month'], (float)$monthlyEstimate[$i]['average'], (int)$monthlyEstimate[$i]['estimated'], $user_id, $user_id];
+                    $row_affected = DB::Execute($q, $params);
+                    if ($row_affected == 0) throw new Exception("Error while updating average and rented days record", 500);
+                }
+            }
+            $response->getBody()->write(json_encode(["result" => true, "message" => "Preventivo aggiornato con successo"]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
     }
 
     /**
