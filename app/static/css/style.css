@@ -103,4 +103,4 @@ body { font-family:"Lato", serif; font-size: 16px; }
 
 #user_profile #imgAvatar { width: 150px; height: 150px; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); }
 .cardHeight { height: 100%; }
-#listEstimatesGrid .dx-datagrid-search-panel {margin: 0px !important;}
+#listEstimatesGrid .dx-datagrid-search-panel, #associatedQuoteGrid .dx-datagrid-search-panel, #associatedPropertiesGrid .dx-datagrid-search-panel {margin: 0px !important;}
