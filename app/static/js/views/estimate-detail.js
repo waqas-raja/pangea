@@ -13,6 +13,12 @@ async function loadEstimateDetail() {
         document.getElementById('customerPhone').textContent = r.payload.estimate.customer_phone;
         document.getElementById('propertyAddress').textContent = r.payload.estimate.propert_address;
         document.getElementById('propertySize').textContent = r.payload.estimate.property_size + ' mq';
+
+        document.getElementById('customerNameDraft').textContent = r.payload.estimate.customer_name + " " + r.payload.estimate.customer_surname;
+        document.getElementById('customerEmailDraft').textContent = r.payload.estimate.customer_email;
+        document.getElementById('customerPhoneDraft').textContent = r.payload.estimate.customer_phone;
+        document.getElementById('propertyAddressDraft').textContent = r.payload.estimate.propert_address;
+        document.getElementById('propertySizeDraft').textContent = r.payload.estimate.property_size + ' mq';
         let str = '';
         r.payload.estimate_month.forEach(element => {
             totalEstimate += parseInt(element.avge_daily_price) * parseInt(element.rented_days);
@@ -24,7 +30,14 @@ async function loadEstimateDetail() {
                     </tr>`;
         });
         document.getElementById('tBodyMonthlyEstimate').innerHTML = str;
+        document.getElementById('tBodyMonthlyEstimateDraft').innerHTML = str;
         document.getElementById('tFooterMonthlyEstimate').innerHTML = `<tr>
+                            <td class="fw-bold">Totale Annuo</td>
+                            <td class="text-success fw-semibold"></td>
+                            <td class="text-danger fw-semibold"></td>
+                            <td class="text-success fw-bold text-end">${formatNumber(totalEstimate)}</td>
+                        </tr>`;
+        document.getElementById('tFooterMonthlyEstimateDraft').innerHTML = `<tr>
                             <td class="fw-bold">Totale Annuo</td>
                             <td class="text-success fw-semibold"></td>
                             <td class="text-danger fw-semibold"></td>
@@ -42,14 +55,27 @@ async function loadEstimateDetail() {
                         </tr>`;
             });
             document.getElementById('tBodyFixedCost').innerHTML = strCost;
+            document.getElementById('tBodyFixedCostDraft').innerHTML = strCost;
             document.getElementById('tFooterFixedCost').innerHTML = `<tr>
                             <td class="fw-bold">Totale</td>
                             <td class=""></td>
                             <td class=""></td>
                             <td class="text-danger fw-bold text-end">${formatNumber(totalDeduct)}</td>
                         </tr>`;
-        } else document.getElementById('divFixedCost').style.display = 'none';
+            document.getElementById('tFooterFixedCostDraft').innerHTML = `<tr>
+                            <td class="fw-bold">Totale</td>
+                            <td class=""></td>
+                            <td class=""></td>
+                            <td class="text-danger fw-bold text-end">${formatNumber(totalDeduct)}</td>
+                        </tr>`;
+        } else {
+            document.getElementById('divFixedCost').style.display = 'none';
+            document.getElementById('divFixedCostDraft').style.display = 'none';
+        }
         document.getElementById('netAnnualIncome').textContent = formatNumber(totalEstimate - totalDeduct);
+        document.getElementById('netAnnualIncomeDraft').textContent = formatNumber(totalEstimate - totalDeduct);
+        const d = new Date();
+        document.getElementById('dateDraft').textContent = 'Data: ' + d.toLocaleDateString();
     }
 }
 
@@ -78,4 +104,47 @@ async function deleteQuote(id) {
             }
         }
     });
+}
+
+function showQuoteDraftModal() {
+    const modalElement = document.getElementById("modalQuoteDraftDownload");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function downloadQuoteDraft(fname) {
+    const btn = document.getElementById('btnQuoteDraftDownload');
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    const el = document.getElementById('quoteToDownloadDiv');
+    // pdf options tuned for A4
+    const opt = {
+        margin: 10,
+        filename: `${fname || 'quote'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    let res = document.getElementById('resultDraft');
+    try {
+        if (typeof html2pdf === 'undefined') {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js';
+            s.onload = () => html2pdf().set(opt).from(el).save();
+            document.body.appendChild(s);
+        } else html2pdf().set(opt).from(el).save();
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        res.textContent = 'File scaricato correttamente';
+        res.classList.add('text-success');
+        setTimeout(() => {
+            res.textContent = '';
+            $('#modalQuoteDraftDownload').modal('hide');
+        }, 3000);
+    } catch (error) {
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        res.textContent = 'Download del file non riuscito';
+        res.classList.add('text-danger');
+    }
 }
