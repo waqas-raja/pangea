@@ -64,8 +64,7 @@ async function signIn() {
         localStorage.setItem("uid", data.id);
         localStorage.setItem("uname", data.name);
         localStorage.setItem("urole", data.role);
-        // window.location.href = '/dashboard';
-        window.location.href = '/customers';
+        window.location.href = '/properties';
     } catch (error) {
         msg.textContent = 'Credenziali non valide.';
         msg.classList.add('text-danger');
