@@ -42,6 +42,18 @@ class CustomerRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/properties/{id}', function (Request $request, Response $response) {
+            return Customer::GetAssociatedProperties($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->get('/quotes/{id}', function (Request $request, Response $response) {
+            return Customer::GetAssociatedQuotes($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 

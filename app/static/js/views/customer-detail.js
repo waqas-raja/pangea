@@ -1,6 +1,8 @@
 let _customerDetail = [];
 document.addEventListener("DOMContentLoaded", async () => {
     await loadCustomerDetail();
+    loadAssociatedProperties();
+    loadAssociatedQuotes();
 });
 
 async function loadCustomerDetail() {
@@ -42,6 +44,144 @@ function loadDetail(d=null) {
     document.getElementById("ddlState").value = _customerDetail.nation ?? '';
     document.getElementById("spNote").innerText = _customerDetail.note ?? 'n.d.';
     document.getElementById("txtNote").value = _customerDetail.note ?? '';
+}
+
+async function loadAssociatedProperties() {
+    const response = await fetch('/api/customer/properties/' + customerId);
+    const r = await response.json();
+    const hasData = r.payload.length > 0;
+    $("#associatedPropertiesGrid").dxDataGrid({
+        dataSource: r.payload,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 300,
+            placeholder: "Cerca..."
+        },
+        noDataText: "Nessun immobile in gestione",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            { dataField: "alias", caption: "Alias", sortIndex: 0 },
+            // { dataField: "nation_name", caption: "Nation", sortIndex: 1 },
+            // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 2 },
+            { dataField: "acquisition_price", caption: "Prezzo acquisizione", width:150, sortIndex: 3 },
+            { dataField: "renovation_price", caption: "Prezzo rinnovamento", width:150, sortIndex: 4 },
+            { dataField: "sell_price", caption: "Prezzo vendita", width:120, sortIndex: 5 },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: true },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                {
+                    name: "searchPanel",
+                    location: "before"
+                },
+                "groupPanel",
+            ]
+        },
+        onRowClick: function (e) { if (e.rowType === "data") { window.location = `/property/${e.data.id}`; } },
+    });
+}
+
+async function loadAssociatedQuotes() {
+    const response = await fetch('/api/customer/quotes/' + customerId);
+    const r = await response.json();
+    $("#associatedQuoteGrid").dxDataGrid({
+        dataSource: r.payload,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 300,
+            placeholder: "Cerca..."
+        },
+        noDataText: "Nessun preventivi in gestione",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id", 
+                caption: "ID PREVENTIVO",
+                // allowFiltering: true,
+                // sortIndex: 0, sortOrder: "asc",
+                alignment: "left",
+                width: 120,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const text = '#' + data.id;
+                    container.text(text);
+                }
+            },
+            {
+                dataField: "property_alias",
+                caption: "IMMOBILE",
+                // sortIndex: 3, sortOrder: "asc"
+            },
+            { 
+                dataField: "dtcr",
+                caption: "DATA CREAZIONE",
+                allowFiltering: true,
+                width: 130,
+                // sortIndex: 5, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let date = data.dtcr.split(' ')[0];
+                    date = date.split('-');
+                    container.text(date[2] + '/' + date[1] + '/' + date[0]);
+                }
+            },
+            {
+                dataField: "property_status_id",
+                caption: "STATO",
+                // allowFiltering: true,
+                // sortIndex: 6, sortOrder: "asc",
+                alignment: 'center',
+                width: 150,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let div = '';
+                    switch (data.property_status_id) {
+                        case 2: div = `<div class="mx-auto rounded-pill alert alert-success px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #a3cfbb;">${data.property_status_label}</div>`; break;
+                        case 1:
+                        case 3:
+                        case 4: div = `<div class="mx-auto rounded-pill alert alert-warning px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #ffe69c;"">${data.property_status_label}</div>`; break;
+                        case 5: div = `<div class="mx-auto rounded-pill alert alert-danger px-1 py-0 text-center m-0" style="width: fit-content; box-shadow: 1px 0px 8px 0px #f1aeb5;"">${data.property_status_label}</div>`; break;
+                    }
+                    container.html(div);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                {
+                    name: "searchPanel",
+                    location: "before"
+                },
+                "groupPanel",
+            ]
+        },
+        onRowClick: function (e) { 
+            if (e.rowType === "data") window.location = `/estimate/${e.data.id}`;
+        },
+    });
 }
 
 function toggleCompanyFields(el) {

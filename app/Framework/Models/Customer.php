@@ -92,13 +92,9 @@ final class Customer {
         $zip = $data['zip'] ?? null;
         $nation = $data['state'] ?? null;
         $note = $data['note'] ?? null;
-        error_log("Updating customer with ID: $aid");
-        error_log("Data received: " . json_encode($data));
         $q = 'UPDATE customer SET name = ?, surname = ?, phone = ?, email = ?, bizname = ?, vat = ?, fiscal_code = ?, sdi = ?, address = ?, city = ?, cap = ?, nation = ?, note = ? WHERE id = ?';
         $params = [$name, $surname, $phone, $email, $bizname, $vat, $fiscal, $sdi, $address, $city, $zip, $nation, $note, $aid];
-        error_log("params: " . json_encode($params));
         $row_affected = DB::Execute($q, $params);
-        error_log("Updated customer successfully with ID: $aid, affected rows: $row_affected");
         if ($row_affected == 0) throw new Exception("Error while updating customer", 500);
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
@@ -113,6 +109,47 @@ final class Customer {
         if ($row_affected == 0) throw new Exception("Error while deleting the customer", 500);
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function GetAssociatedProperties($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $rows = DB::Query("SELECT * FROM property WHERE customer = ? order by alias", [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function GetAssociatedQuotes($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $q = <<<query
+                select 
+                    q.*,
+                    p.alias as property_alias,
+                    p.property_status as property_status_id,
+                    ps.name as property_status_label
+                from estimate as q
+                left join property as p on q.property = p.id
+                left join td_property_status as ps on p.property_status = ps.id
+                where q.customer = ? order by q.id
+            query;
+            $rows = DB::Query($q, [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
     }
 
 }
