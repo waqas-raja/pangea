@@ -2,6 +2,7 @@
 $title = 'Dettaglio Preventivi';
 ob_start();
 $eid = htmlspecialchars($id, ENT_QUOTES, 'UTF-8');
+require_once __DIR__ . "/../modals/draft-quote.php";
 require_once __DIR__ . "/../modals/confirm-delete.php";
 ?>
 
@@ -17,6 +18,9 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                     <div class="position-relative" style="width: 230px;">
                         <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="Modificare" onclick="editQuote(<?= $eid ?>)">
                             <i class="bi bi-pencil"></i>
+                        </span>
+                        <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="scarica il pdf" onclick="showQuoteDraftModal()">
+                            <i class="bi bi-download"></i>
                         </span>
                         <span id="iconAllowEditGenericInfo" class="editIcon text-danger" role="button" title="Eliminare" onclick="deleteQuote(<?= $eid ?>)">
                             <i class="bi bi-trash"></i>
