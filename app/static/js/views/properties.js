@@ -14,10 +14,10 @@ async function loadProperties() {
         showBorders: true,
         columnAutoWidth: true,
         showBorders: true,
-        noDataText: "Non risultano immobili registrati per questa sede",
+        noDataText: "Non ci sono proprietà registrate",
         rowAlternationEnabled: false,
         grouping: { autoExpandAll: false },
-        groupPanel: { visible: hasData, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
         filterRow: { visible: hasData, applyFilter: "auto" },
         headerFilter: { visible: hasData },
         columns: [
@@ -34,24 +34,97 @@ async function loadProperties() {
             //     }
             // },
             { dataField: "alias", caption: "Alias", sortIndex: 0, sortOrder: "asc" },
-            { dataField: "nation_name", caption: "Nation", sortIndex: 1, sortOrder: "asc" },
-            { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 2, sortOrder: "asc" },
-            { dataField: "acquisition_price", caption: "Prezzo acquisizione", sortIndex: 3, sortOrder: "asc" },
-            { dataField: "renovation_price", caption: "Prezzo rinnovamento", sortIndex: 4, sortOrder: "asc" },
-            { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 5, sortOrder: "asc" },
+            { dataField: "", caption: "Tipo di immobile", sortIndex: 1},
+            { dataField: "nation_name", caption: "Nation", sortIndex: 2, sortOrder: "asc" },
+            { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3, sortOrder: "asc" },
+            { dataField: "acquisition_price", caption: "Prezzo acquisizione", sortIndex: 4, sortOrder: "asc" },
+            { dataField: "renovation_price", caption: "Prezzo rinnovamento", sortIndex: 5, sortOrder: "asc" },
+            { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6, sortOrder: "asc" },
         ],
         sorting: { mode: "multiple" },
-        remoteOperations: { paging: true, filtering: true, sorting: true },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
         paging: { pageSize: 10 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
-            items: [
-                "groupPanel",
-                "searchPanel",
-            ]
+            // items: [
+            //     "groupPanel",
+            //     "searchPanel",
+            // ]
         },
         onRowClick: function (e) { if (e.rowType === "data") { window.location = `/property/${e.data.id}`; } },
     });
+    const underManagementProperties = r.payload.filter(p => p.property_status === 3);
+    if (underManagementProperties.length > 0) {
+        $("#propertyUnderManagemanetGrid").dxDataGrid({
+            dataSource: underManagementProperties,
+            keyExpr: "id",
+            showBorders: true,
+            columnAutoWidth: true,
+            showBorders: true,
+            noDataText: "Non ci sono proprietà registrate per questa categoria",
+            rowAlternationEnabled: false,
+            grouping: { autoExpandAll: false },
+            groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+            filterRow: { visible: underManagementProperties.length > 0, applyFilter: "auto" },
+            headerFilter: { visible: underManagementProperties.length > 0 },
+            columns: [
+                { dataField: "alias", caption: "Alias", sortIndex: 0},
+                { dataField: "", caption: "Tipo di immobile", sortIndex: 1},
+                { dataField: "nation_name", caption: "Nation", sortIndex: 2 },
+                { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
+                { dataField: "acquisition_price", caption: "Prezzo acquisizione", sortIndex: 4 },
+                { dataField: "renovation_price", caption: "Prezzo rinnovamento", sortIndex: 5 },
+                { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6 },
+            ],
+            sorting: { mode: "multiple" },
+            remoteOperations: { paging: true, filtering: true, sorting: false },
+            paging: { pageSize: 10 },
+            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+            toolbar: {
+                // items: [
+                //     "groupPanel",
+                //     "searchPanel",
+                // ]
+            },
+            onRowClick: function (e) { if (e.rowType === "data") { window.location = `/property/${e.data.id}`; } },
+        });
+    } else $("#propertyUnderManagemanetGrid").html("<p class='text-center p-4'>Non ci sono proprietà registrate per questa categoria</p>");
+    const underEvaluationProperties = r.payload.filter(p => p.property_status === 1);
+    if (underEvaluationProperties.length > 0) {
+        $("#propertyUnderEvaluationGrid").dxDataGrid({
+            dataSource: underEvaluationProperties,
+            keyExpr: "id",
+            showBorders: true,
+            columnAutoWidth: true,
+            showBorders: true,
+            noDataText: "Non ci sono proprietà registrate per questa categoria",
+            rowAlternationEnabled: false,
+            grouping: { autoExpandAll: false },
+            groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+            filterRow: { visible: underEvaluationProperties.length > 0, applyFilter: "auto" },
+            headerFilter: { visible: underEvaluationProperties.length > 0 },
+            columns: [
+                { dataField: "alias", caption: "Alias", sortIndex: 0},
+                { dataField: "", caption: "Tipo di immobile", sortIndex: 1},
+                { dataField: "nation_name", caption: "Nation", sortIndex: 2 },
+                { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
+                { dataField: "acquisition_price", caption: "Prezzo acquisizione", sortIndex: 4 },
+                { dataField: "renovation_price", caption: "Prezzo rinnovamento", sortIndex: 5 },
+                { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6 },
+            ],
+            sorting: { mode: "multiple" },
+            remoteOperations: { paging: true, filtering: true, sorting: false },
+            paging: { pageSize: 10 },
+            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+            toolbar: {
+                // items: [
+                //     "groupPanel",
+                //     "searchPanel",
+                // ]
+            },
+            onRowClick: function (e) { if (e.rowType === "data") { window.location = `/property/${e.data.id}`; } },
+        });
+    } else $("#propertyUnderEvaluationGrid").html("<p class='text-center p-4'>Non ci sono proprietà registrate per questa categoria</p>");
 }
 
 async function loadNations() {
