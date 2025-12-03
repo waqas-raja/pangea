@@ -10,6 +10,13 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="row mb-3">
+                                <label for="ddlCustomer" class="col-sm-4 col-form-label">Cliente<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <select id="ddlCustomer" class="form-select">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <label for="txtAlias" class="col-sm-4 col-form-label">Alias<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtAlias" required>
@@ -38,13 +45,6 @@
                                 <label for="txtZip" class="col-sm-4 col-form-label">CAP<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
                                     <input type="number" class="form-control" id="txtZip" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="ddlPropertyStatus" class="col-sm-4 col-form-label">Stato di proprietà<span class="text-danger ms-2">*</span></label>
-                                <div class="col-sm-8">
-                                    <select id="ddlPropertyStatus" class="form-select">
-                                    </select>
                                 </div>
                             </div>
                             <div class="row mb-3">

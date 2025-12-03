@@ -41,11 +41,12 @@ final class Property {
             $user_role = $token_info['role'];
             $data = json_decode($request->getBody()->getContents(), true);
             $alias = $data['alias'] ?? "";
+            $customer = (int)$data['customer'] ?? null;
             $nation = $data['nation'] ?? "";
             $city = $data['city'] ?? "";
             $address = $data['address'] ?? "";
             $zip = $data['zip'] ?? '';
-            $status = (int)$data['propertyStatus'] ?? 0;
+            $status = (int)$data['propertyStatus'] ?? 1;
             $size = $data['size'] ?? 0;
             $floor = (int)$data['floor'] ?? 0;
             $room = (int)$data['room'] ?? 0;
@@ -58,8 +59,8 @@ final class Property {
             $extraPrice = (int)$data['extraPrice'] ?? 0;
             $sellPrice = (int)$data['sellPrice'] ?? 0;
             
-            $q = "INSERT INTO property (alias, nation, city, address, cap, property_status, size, floor, rooms, bathrooms, garden, box, elevator, acquisition_price, renovation_price, extra_price, sell_price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            $params = [$alias, $nation, $city, $address, $zip, $status, $size, $floor, $room, $bath, $garden, $box, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice];
+            $q = "INSERT INTO property (alias, customer, nation, city, address, cap, property_status, size, floor, rooms, bathrooms, garden, box, elevator, acquisition_price, renovation_price, extra_price, sell_price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $params = [$alias, $customer, $nation, $city, $address, $zip, $status, $size, $floor, $room, $bath, $garden, $box, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert property", 500);
             $last_inserted_id = DB::$LastId;
@@ -78,9 +79,13 @@ final class Property {
         $q = <<<query
             select 
                 p.*,
+                c.name as customer_name,
+                c.surname as customer_surname,
+                c.bizname as customer_bizname,
                 n.name as nation_name,
                 ps. name as property_status_name
             from property as p
+            left join customer as c on p.customer = c.id
             left join td_nation as n on p.nation = n.code
             left join td_property_status as ps on p.property_status = ps.id
             where p.id = ?

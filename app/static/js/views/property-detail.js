@@ -44,7 +44,7 @@ async function loadOpportunities() {
 async function loadPropertyDetail() {
     const response = await fetch('/api/property/' + propertyId);
     const r = await response.json();
-    document.getElementById("spCustomer").innerText = r.payload.customer ?? 'n.d.';
+    document.getElementById("spCustomer").innerText = (r.payload.customer_bizname !== null ? r.payload.customer_bizname : r.payload.customer_name + ' ' + r.payload.customer_surname) ?? 'n.d.';
     document.getElementById("spOpportunity").innerText = r.payload.opportunity ?? 'n.d.';
     document.getElementById("spAlias").innerText = r.payload.alias ?? 'n.d.';
     document.getElementById("spState").innerText = r.payload.nation_name ?? 'n.d.';
