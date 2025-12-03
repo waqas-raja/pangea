@@ -117,10 +117,9 @@
                     <label for="txtNote" class="col-sm-5 col-form-label">Note:</label>
                     <div class="col-sm-7">
                         <span id="spNote" class="valueControl"></span>
-                        <input type="text" id="txtNote" class="form-control editControl d-none mb-1" value="">
+                        <textarea id="txtNote" rows="3" class="form-control editControl d-none mb-1"></textarea>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
