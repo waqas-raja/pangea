@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="row mb-3">
-                                <label for="ddlCustomer" class="col-sm-4 col-form-label">Cliente<span class="text-danger ms-2">*</span></label>
+                                <label for="ddlCustomer" class="col-sm-4 col-form-label">Contatto<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
                                     <select id="ddlCustomer" class="form-select">
                                     </select>
