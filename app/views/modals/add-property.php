@@ -52,48 +52,45 @@
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <input type="number" id="txtSize" class="form-control" required>
-                                        <span class="input-group-text" id="basic-addon2">(mq)</span>
+                                        <span class="input-group-text">(mq)</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="txtFloor" class="col-sm-4 col-form-label">Piano<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
-                                    <input type="number" class="form-control" id="txtFloor" required>
+                                    <input type="number" class="form-control" id="txtFloor" min="0" required>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label for="txtRoom" class="col-sm-4 col-form-label">Stanze</label>
+                                <div class="col-sm-8">
+                                    <input id="txtRoom" type="number" class="form-control" value="1" min="1" required>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
-
-                            <div class="row mb-1 align-items-center">
-                                <label for="txtRoom" class="col-sm-5 col-form-label">Stanze</label>
-                                <div class="col-sm-7">
-                                    <div class="form-check form-switch mb-0">
-                                        <input id="txtRoom" class="form-check-input" type="checkbox" role="switch">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-1 align-items-center">
+                            <div class="row mb-3 align-items-center">
                                 <label for="txtBathroom" class="col-sm-5 col-form-label">Bagno</label>
                                 <div class="col-sm-7">
-                                    <div class="form-check form-switch mb-0">
-                                        <input id="txtBathroom" class="form-check-input" type="checkbox" role="switch">
-                                    </div>
+                                    <input id="txtBathroom" type="number" class="form-control" value="1" min="1" required>
                                 </div>
                             </div>
-                            <div class="row mb-1 align-items-center">
+                            <div class="row mb-3 align-items-center">
                                 <label for="txtGarden" class="col-sm-5 col-form-label">Giardino</label>
                                 <div class="col-sm-7">
-                                    <div class="form-check form-switch mb-0">
-                                        <input id="txtGarden" class="form-check-input" type="checkbox" role="switch">
+                                    <div class="input-group">
+                                        <input id="txtGarden" type="number" class="form-control" value="0" min="0" required>
+                                        <span class="input-group-text">(mq)</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-1 align-items-center">
+                            <div class="row mb-3 align-items-center">
                                 <label for="txtBox" class="col-sm-5 col-form-label">Box</label>
                                 <div class="col-sm-7">
-                                    <div class="form-check form-switch mb-0">
-                                        <input id="txtBox" class="form-check-input" type="checkbox" role="switch">
+                                    <div class="input-group">
+                                        <input id="txtBox" type="number" class="form-control" value="0" min="0" required>
+                                        <span class="input-group-text">(mq)</span>
                                     </div>
                                 </div>
                             </div>
@@ -106,27 +103,27 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtAcqPrice" class="col-sm-5 col-form-label">Prezzo di acquisizione<span class="text-danger ms-2">*</span></label>
+                                <label for="txtAcqPrice" class="col-sm-5 col-form-label">Costo di acquisizione<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-7">
-                                    <input type="number" class="form-control" id="txtAcqPrice" required>
+                                    <input type="number" class="form-control" id="txtAcqPrice" min="0" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtRenPrice" class="col-sm-5 col-form-label">Prezzo di ristrutturazione<span class="text-danger ms-2">*</span></label>
+                                <label for="txtRenPrice" class="col-sm-5 col-form-label">Costo di ristrutturazione<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-7">
-                                    <input type="number" class="form-control" id="txtRenPrice" required>
+                                    <input type="number" class="form-control" id="txtRenPrice" min="0" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Prezzo aggiuntivo<span class="text-danger ms-2">*</span></label>
+                                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Costo aggiuntivo<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-7">
-                                    <input type="number" class="form-control" id="txtExtraPrice" required>
+                                    <input type="number" class="form-control" id="txtExtraPrice" min="0" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="txtSellPrice" class="col-sm-5 col-form-label">Prezzo di vendita<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-7">
-                                    <input type="number" class="form-control" id="txtSellPrice" required>
+                                    <input type="number" class="form-control" id="txtSellPrice" min="0" required>
                                 </div>
                             </div>
                         </div>
