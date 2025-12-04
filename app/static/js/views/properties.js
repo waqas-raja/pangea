@@ -1,7 +1,11 @@
+let _marginalPercentage = 0;
 document.addEventListener("DOMContentLoaded", async () => {
     await loadProperties();
     await loadNations();
     await loadCustomers();
+
+    setTimeout(() => { calculateMarginalPercentage(); }, 300);
+    document.getElementById('txtSellPrice').addEventListener('keyup', calculateMarginalPercentage);
 });
 
 async function loadProperties() {
@@ -277,4 +281,15 @@ function showModalAddProperty() {
     const modalElement = document.getElementById("modalAddProperty");
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
+}
+
+function calculateMarginalPercentage() {
+    const acqCost = parseFloat(document.getElementById('txtAcqPrice').value) || 0;
+    const renCost = parseFloat(document.getElementById('txtRenPrice').value) || 0;
+    const extraCost = parseFloat(document.getElementById('txtExtraPrice').value) || 0;
+    const sellPrice = parseFloat(document.getElementById('txtSellPrice').value) || 0;
+    const n = ((0 - 0) / 0) * 100;
+    _marginalPercentage = (((sellPrice - (acqCost + renCost + extraCost)) / (acqCost + renCost + extraCost)) * 100);
+    if (isNaN(_marginalPercentage)) _marginalPercentage = 0;
+    document.getElementById('txtMarginalPercentage').value = _marginalPercentage.toFixed(2);
 }
