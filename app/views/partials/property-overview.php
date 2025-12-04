@@ -3,7 +3,7 @@
         <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
                 <div class="row mb-0 align-items-center">
-                    <label for="ddlCustomer" class="col-sm-5 col-form-label">Cliente:</label>
+                    <label for="ddlCustomer" class="col-sm-5 col-form-label">Contatto:</label>
                     <div class="col-sm-7">
                         <span id="spCustomer" class="valueControl"></span>
                         <select id="ddlCustomer" class="form-select editControl d-none mb-1">
