@@ -50,7 +50,10 @@
                             <div class="row mb-3">
                                 <label for="txtSize" class="col-sm-4 col-form-label">Size<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
-                                    <input type="number" class="form-control" id="txtSize" required>
+                                    <div class="input-group">
+                                        <input type="number" id="txtSize" class="form-control" required>
+                                        <span class="input-group-text" id="basic-addon2">(mq)</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mb-3">

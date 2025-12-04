@@ -190,7 +190,7 @@ async function saveProperty() {
         if (extraPrice === '') { result.innerText = "Il prezzo di extra è richiesto con un numero valido"; return; }
         if (sellPrice === '') { result.innerText = "Il prezzo di vendita è obbligatorio con un numero valido"; return; }
     }
-    // if (!isValidateNumber(size)) { result.classList.remove("d-none"); result.innerText = 'La dimensione non è un numero valido'; return; }
+    if ((size !== '' && !isValidateNumber(parseInt(size))) || parseInt(size) <= 0) { result.classList.remove("d-none"); result.innerText = 'La dimensione non è un numero valido'; return; }
     // if (!isValidateNumber(floor)) { result.classList.remove("d-none"); result.innerText = 'Il piano non è un numero valido'; return; }
     // if (!isValidateNumber(acqPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di acquisizione non è un numero valido'; return; }
     // if (!isValidateNumber(renPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di ristrutturazione non è un numero valido'; return; }
