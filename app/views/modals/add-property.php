@@ -126,6 +126,15 @@
                                     <input type="number" class="form-control" id="txtSellPrice" min="0" required>
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <label for="txtMarginalPercentage" class="col-sm-5 col-form-label">Percentuale di margine</label>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="text" id="txtMarginalPercentage" class="form-control" readonly disabled>
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <span id="spNewPropertyResult" class="text-danger d-none"></span>
