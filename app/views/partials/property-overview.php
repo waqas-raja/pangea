@@ -83,14 +83,17 @@
                     <label for="txtSize" class="col-sm-5 col-form-label">Dimensione:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spSize" class="valueControl"></span>
-                        <input type="number" id="txtSize" class="form-control editControl d-none mb-1" value="">
+                        <div class="input-group editControl d-none mb-1">
+                            <input type="number" id="txtSize" class="form-control" required>
+                            <span class="input-group-text">(mq)</span>
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
-                    <label for="txtFloor" class="col-sm-5 col-form-label">Floor:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <label for="txtFloor" class="col-sm-5 col-form-label">Piano:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spFloor" class="valueControl"></span>
-                        <input type="number" id="txtFloor" class="form-control editControl d-none mb-1" value="">
+                        <input type="number" id="txtFloor" class="form-control editControl d-none mb-1" min="0" value="">
                     </div>
                 </div>
             </div>
@@ -98,44 +101,38 @@
     </div>
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
-            <div class="row mb-0 align-items-center">
+            <div class="row mb-1 align-items-center">
                 <label for="txtRoom" class="col-sm-5 col-form-label">Stanze:</label>
                 <div class="col-sm-7">
                     <span id="spRoom" class="valueControl"></span>
-                    <div class="form-check form-switch editControl d-none">
-                        <input id="txtRoom" class="form-check-input" type="checkbox" role="switch">
-                    </div>
-                    <!-- <input type="number" id="txtRoom" class="form-control editControl d-none mb-1" value=""> -->
+                    <input id="txtRoom" type="number" class="form-control editControl d-none" value="1" min="1" required>
                 </div>
             </div>
-            <div class="row mb-0 align-items-center">
+            <div class="row mb-1 align-items-center">
                 <label for="txtBathroom" class="col-sm-5 col-form-label">Bagno:</label>
                 <div class="col-sm-7">
                     <span id="spBathroom" class="valueControl"></span>
-                    <div class="form-check form-switch editControl d-none">
-                        <input id="txtBathroom" class="form-check-input" type="checkbox" role="switch">
-                    </div>
-                    <!-- <input type="number" id="txtBathroom" class="form-control editControl d-none mb-1" value=""> -->
+                    <input id="txtBathroom" type="number" class="form-control editControl d-none" value="1" min="1" required>
                 </div>
             </div>
-            <div class="row mb-0 align-items-center">
+            <div class="row mb-1 align-items-center">
                 <label for="txtGarden" class="col-sm-5 col-form-label">Giardino:</label>
                 <div class="col-sm-7">
                     <span id="spGarden" class="valueControl"></span>
-                    <div class="form-check form-switch editControl d-none">
-                        <input id="txtGarden" class="form-check-input" type="checkbox" role="switch">
+                    <div class="input-group editControl d-none">
+                        <input id="txtGarden" type="number" class="form-control" value="0" min="0" required>
+                        <span class="input-group-text">(mq)</span>
                     </div>
-                    <!-- <input type="number" id="txtGarden" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
-            <div class="row mb-0 align-items-center">
+            <div class="row mb-1 align-items-center">
                 <label for="txtBox" class="col-sm-5 col-form-label">Box:</label>
                 <div class="col-sm-7">
                     <span id="spBox" class="valueControl"></span>
-                    <div class="form-check form-switch editControl d-none">
-                        <input id="txtBox" class="form-check-input" type="checkbox" role="switch">
+                    <div class="input-group editControl d-none">
+                        <input id="txtBox" type="number" class="form-control" value="0" min="0" required>
+                        <span class="input-group-text">(mq)</span>
                     </div>
-                    <!-- <input type="number" id="txtBox" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
@@ -145,26 +142,25 @@
                     <div class="form-check form-switch editControl d-none">
                         <input id="txtElevator" class="form-check-input" type="checkbox" role="switch">
                     </div>
-                    <!-- <input type="number" id="txtElevator" class="form-control editControl d-none mb-1" value=""> -->
                 </div>
             </div>
             <hr>
             <div class="row mb-0 align-items-center">
-                <label for="txtAcqPrice" class="col-sm-5 col-form-label">Prezzo acquisizione:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <label for="txtAcqPrice" class="col-sm-5 col-form-label">Costo di acquisizione:<span class="text-danger ms-2 editControl d-none">*</span></label>
                 <div class="col-sm-7">
                     <span id="spAcqPrice" class="valueControl"></span>
                     <input type="number" id="txtAcqPrice" class="form-control editControl d-none mb-1" value="">
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
-                <label for="txtRenPrice" class="col-sm-5 col-form-label">Prezzo di ristrutturazione:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <label for="txtRenPrice" class="col-sm-5 col-form-label">Costo di ristrutturazione:<span class="text-danger ms-2 editControl d-none">*</span></label>
                 <div class="col-sm-7">
                     <span id="spRenPrice" class="valueControl"></span>
                     <input type="number" id="txtRenPrice" class="form-control editControl d-none mb-1" value="">
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
-                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Prezzo aggiuntivo:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Costo aggiuntivo:<span class="text-danger ms-2 editControl d-none">*</span></label>
                 <div class="col-sm-7">
                     <span id="spExtraPrice" class="valueControl"></span>
                     <input type="number" id="txtExtraPrice" class="form-control editControl d-none mb-1" value="">

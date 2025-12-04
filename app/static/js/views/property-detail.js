@@ -56,10 +56,10 @@ async function loadPropertyDetail() {
     document.getElementById("spPropertyStatus").innerText = r.payload.property_status_name ?? 'n.d.';
     document.getElementById("spSize").innerText = r.payload.size ?? 'n.d.';
     document.getElementById("spFloor").innerText = r.payload.floor ?? 'n.d.';
-    document.getElementById("spRoom").innerText = r.payload.rooms ? "Yes" : "No";
-    document.getElementById("spBathroom").innerText = r.payload.bathrooms ? "Yes" : "No";
-    document.getElementById("spGarden").innerText = r.payload.garden ? "Yes" : "No";
-    document.getElementById("spBox").innerText = r.payload.box ? "Yes" : "No";
+    document.getElementById("spRoom").innerText = r.payload.rooms ? r.payload.rooms : "No";
+    document.getElementById("spBathroom").innerText = r.payload.bathrooms ? r.payload.bathrooms : "No";
+    document.getElementById("spGarden").innerText = r.payload.garden ? r.payload.garden : "No";
+    document.getElementById("spBox").innerText = r.payload.box ? r.payload.box : "No";
     document.getElementById("spElevator").innerText = r.payload.elevator ? "Yes" : "No";
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price)) ?? formatNumber(0);
     document.getElementById("spRenPrice").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
@@ -76,10 +76,10 @@ async function loadPropertyDetail() {
     document.getElementById("ddlPropertyStatus").value = r.payload.property_status ?? '';
     document.getElementById("txtSize").value = r.payload.size ?? '';
     document.getElementById("txtFloor").value = r.payload.floor ?? '';
-    document.getElementById("txtRoom").checked = r.payload.rooms ? true : false;
-    document.getElementById("txtBathroom").checked = r.payload.bathrooms ? true : false;
-    document.getElementById("txtGarden").checked = r.payload.garden ? true : false;
-    document.getElementById("txtBox").checked = r.payload.box ? true : false;
+    document.getElementById("txtRoom").value = r.payload.rooms;
+    document.getElementById("txtBathroom").value = r.payload.bathrooms;
+    document.getElementById("txtGarden").value = r.payload.garden;
+    document.getElementById("txtBox").value = r.payload.box;
     document.getElementById("txtElevator").checked = r.payload.elevator ? true : false;
     document.getElementById("txtAcqPrice").value = r.payload.acquisition_price ?? '';
     document.getElementById("txtRenPrice").value = r.payload.renovation_price ?? '';
@@ -173,10 +173,10 @@ async function updateGenericInfo() {
     const propertyStatus = document.getElementById("ddlPropertyStatus").value;
     const size = document.getElementById("txtSize").value.trim();
     const floor = document.getElementById("txtFloor").value.trim();
-    const room = document.getElementById("txtRoom").checked === true ? 1 : 0;
-    const bathroom = document.getElementById("txtBathroom").checked === true ? 1 : 0;
-    const garden = document.getElementById("txtGarden").checked === true ? 1 : 0;
-    const box = document.getElementById("txtBox").checked === true ? 1 : 0;
+    const room = parseInt(document.getElementById("txtRoom").value.trim());
+    const bathroom = parseInt(document.getElementById("txtBathroom").value.trim());
+    const garden = parseInt(document.getElementById("txtGarden").value.trim());
+    const box = parseInt(document.getElementById("txtBox").value.trim());
     const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const renPrice = document.getElementById("txtRenPrice").value.trim();
@@ -199,12 +199,12 @@ async function updateGenericInfo() {
         if (extraPrice === '') { result.innerText = "Il prezzo di extra è richiesto con un numero valido"; return; }
         if (sellPrice === '') { result.innerText = "Il prezzo di vendita è obbligatorio con un numero valido"; return; }
     }
-    if (city !=="" && !isValidLetter(city)) {
+    if (city !== "" && !isValidLetter(city)) {
         result.textContent = "Per la città sono accettate solo lettere.";
         btn.disabled = false;
         return;
     }
-    if (district !=="" && !isValidLetter(district)) {
+    if (district !== "" && !isValidLetter(district)) {
         result.textContent = "Per il distretto si accettano solo lettere.";
         btn.disabled = false;
         return;
@@ -212,6 +212,61 @@ async function updateGenericInfo() {
     if (zip !== "" && !isValidZip(zip)) {
         result.textContent = "È richiesto il codice postale con un numero valido.";
         btn.disabled = false;
+        return;
+    }
+    if ((size !== '' && !isValidateNumber(parseInt(size))) || parseInt(size) <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'La dimensione non è un numero valido';
+        return;
+    }
+    if ((floor !== '' && !isValidateNumber(parseInt(floor))) || parseInt(floor) <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il piano non è un numero valido';
+        return;
+    }
+    if ((room !== '' && !isValidateNumber(room)) || room <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'La stanza non è un numero valido';
+        return;
+    }
+    if ((bathroom !== '' && !isValidateNumber(bathroom)) || bathroom <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il bagno non è un numero valido';
+        return;
+    }
+    if ((garden !== '' && !isValidateNumber(garden)) || garden < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il giardino non è un numero valido';
+        return;
+    }
+    if ((box !== '' && !isValidateNumber(box)) || box < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il garage non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(acqPrice) || parseInt(acqPrice) < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il costo di acquisizione non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(renPrice) || parseInt(renPrice) < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il costo di ristrutturazione non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(extraPrice) || parseInt(extraPrice) < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il costo di extra non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(sellPrice)) {
+        result.classList.remove("d-none");
+        result.innerText = 'l prezzo di vendita non è un numero valido';
+        return;
+    }
+    if (parseInt(sellPrice) < (parseInt(acqPrice) + parseInt(renPrice) + parseInt(extraPrice))) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il prezzo di vendita deve essere superiore alla somma di tutti i costi.';
         return;
     }
     try {

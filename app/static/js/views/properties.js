@@ -163,10 +163,10 @@ async function saveProperty() {
     const zip = document.getElementById("txtZip").value.trim();
     const size = document.getElementById("txtSize").value.trim();
     const floor = document.getElementById("txtFloor").value.trim();
-    const room = document.getElementById("txtRoom").checked === true ? 1 : 0;
-    const bath = document.getElementById("txtBathroom").checked === true ? 1 : 0;
-    const garden = document.getElementById("txtGarden").checked === true ? 1 : 0;
-    const box = document.getElementById("txtBox").checked === true ? 1 : 0;
+    const room = parseInt(document.getElementById("txtRoom").value.trim());
+    const bath = parseInt(document.getElementById("txtBathroom").value.trim());
+    const garden = parseInt(document.getElementById("txtGarden").value.trim());
+    const box = parseInt(document.getElementById("txtBox").value.trim());
     const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const renPrice = document.getElementById("txtRenPrice").value.trim();
@@ -190,12 +190,60 @@ async function saveProperty() {
         if (extraPrice === '') { result.innerText = "Il prezzo di extra è richiesto con un numero valido"; return; }
         if (sellPrice === '') { result.innerText = "Il prezzo di vendita è obbligatorio con un numero valido"; return; }
     }
-    if ((size !== '' && !isValidateNumber(parseInt(size))) || parseInt(size) <= 0) { result.classList.remove("d-none"); result.innerText = 'La dimensione non è un numero valido'; return; }
-    // if (!isValidateNumber(floor)) { result.classList.remove("d-none"); result.innerText = 'Il piano non è un numero valido'; return; }
-    // if (!isValidateNumber(acqPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di acquisizione non è un numero valido'; return; }
-    // if (!isValidateNumber(renPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di ristrutturazione non è un numero valido'; return; }
-    // if (!isValidateNumber(extraPrice)) { result.classList.remove("d-none"); result.innerText = 'Il prezzo di extra non è un numero valido'; return; }
-    // if (!isValidateNumber(sellPrice)) { result.classList.remove("d-none"); result.innerText = 'l prezzo di vendita non è un numero valido'; return; }
+    if ((size !== '' && !isValidateNumber(parseInt(size))) || parseInt(size) <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'La dimensione non è un numero valido';
+        return;
+    }
+    if ((floor !== '' && !isValidateNumber(parseInt(floor))) || parseInt(floor) <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il piano non è un numero valido';
+        return; }
+    if ((room !== '' && !isValidateNumber(room)) || room <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'La stanza non è un numero valido';
+        return;
+    }
+    if ((bath !== '' && !isValidateNumber(bath)) || bath <= 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il bagno non è un numero valido';
+        return;
+    }
+    if ((garden !== '' && !isValidateNumber(garden)) || garden < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il giardino non è un numero valido';
+        return;
+    }
+    if ((box !== '' && !isValidateNumber(box)) || box < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il garage non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(acqPrice) || parseInt(acqPrice) < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il costo di acquisizione non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(renPrice) || parseInt(renPrice) < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il costo di ristrutturazione non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(extraPrice) || parseInt(extraPrice) < 0) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il costo di extra non è un numero valido';
+        return;
+    }
+    if (!isValidateNumber(sellPrice)) {
+        result.classList.remove("d-none");
+        result.innerText = 'l prezzo di vendita non è un numero valido';
+        return;
+    }
+    if (parseInt(sellPrice) < (parseInt(acqPrice) + parseInt(renPrice) + parseInt(extraPrice))) {
+        result.classList.remove("d-none");
+        result.innerText = 'Il prezzo di vendita deve essere superiore alla somma di tutti i costi.';
+        return;
+    }
     btn.disabled = true;
     spinner.classList.remove("d-none");
     try {
