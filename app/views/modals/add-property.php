@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtFloor" class="col-sm-4 col-form-label">Floor<span class="text-danger ms-2">*</span></label>
+                                <label for="txtFloor" class="col-sm-4 col-form-label">Piano<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
                                     <input type="number" class="form-control" id="txtFloor" required>
                                 </div>
