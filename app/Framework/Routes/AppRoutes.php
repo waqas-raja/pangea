@@ -158,5 +158,14 @@ class AppRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+
+        $app->get('/lands', function ($request, $response) {
+            ob_start();
+            require_once __DIR__ . '/../../views/pages/lands.php';
+            $response->getBody()->write(ob_get_clean());
+            return $response->withHeader('Content-Type', 'text/html');
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }

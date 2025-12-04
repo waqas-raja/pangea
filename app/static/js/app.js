@@ -46,6 +46,8 @@ function setMenuActive() {
         case 'estimates': activeMenuId = 'Quotes'; break;
         case 'opportunity':
         case 'opportunities': activeMenuId = 'Opportunities'; break;
+        case 'lands':
+        case 'land': activeMenuId = 'Lands'; break;
         //header
         case 'settings': activeMenuId = 'Settings'; break;
         case 'users': activeMenuId = 'Users'; break;

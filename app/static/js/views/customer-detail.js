@@ -106,7 +106,7 @@ async function loadAssociatedQuotes() {
             width: 300,
             placeholder: "Cerca..."
         },
-        noDataText: "Nessun preventivi in gestione",
+        noDataText: "Nessun preventivo in gestione",
         rowAlternationEnabled: false,
         grouping: { autoExpandAll: false },
         groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
