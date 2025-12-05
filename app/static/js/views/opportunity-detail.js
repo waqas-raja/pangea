@@ -204,7 +204,7 @@ async function updateGenericInfo() {
 
 async function deleteModal() {
     const div = `<div id="reasonDiv" class="mb-3">
-                    <label for="txtDelReason" class="form-label">Reason</label>
+                    <label for="txtDelReason" class="form-label">Spiega la tua motivazione</label>
                     <textarea class="form-control" id="txtDelReason" rows="3"></textarea>
                 </div>`;
     const targetElement = document.querySelector('#deleteErrorMessage');
