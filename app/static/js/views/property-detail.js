@@ -1,10 +1,85 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    await loadNations();
-    await loadPropertyStatus();
-    await loadCustomers();
+    loadAssocaitedQuotes();
+    loadNations();
+    loadPropertyStatus();
+    loadCustomers();
     await loadOpportunities();
     await loadPropertyDetail();
 });
+
+async function loadAssocaitedQuotes() {
+    const response = await fetch(`/api/property/${propertyId}/quotes`);
+    const d = await response.json();
+    const hasData = d.payload.length > 0;
+    $("#associatedQuotesList").dxDataGrid({
+        dataSource: d.payload,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 450,
+            placeholder: "Cerca..."
+        },
+        noDataText: "Non ci sono preventivi associati registrati per questa immobile.",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id", 
+                caption: "ID PREVENTIVO",
+                alignment: "left",
+                width: 150,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const text = '#' + data.id;
+                    container.text(text);
+                }
+            },
+            {
+                dataField: "",
+                caption: "CLIENTE",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const text = data.customer_name + ' ' + data.customer_surname;
+                    container.text(text);
+                }
+            },
+            { 
+                dataField: "dtcr",
+                caption: "DATA CREAZIONE",
+                allowFiltering: true,
+                // sortIndex: 5, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let date = data.dtcr.split(' ')[0];
+                    date = date.split('-');
+                    container.text(date[2] + '/' + date[1] + '/' + date[0]);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                {
+                    name: "searchPanel",
+                    location: "before"
+                },
+                "groupPanel",
+            ]
+        },
+        onRowClick: function (e) { 
+            if (e.rowType === "data") { window.location.href = `/estimate/${e.data.id}`; }
+        },
+    });
+}
 
 async function loadPropertyStatus() {
     const response = await fetch('/api/property-status');
@@ -17,6 +92,7 @@ async function loadPropertyStatus() {
     });
     ctrl.innerHTML = opt;
 }
+
 async function loadCustomers() {
     const response = await fetch('/api/customers');
     const r = await response.json();
@@ -29,6 +105,7 @@ async function loadCustomers() {
     });
     ctrl.innerHTML = opt;
 }
+
 async function loadOpportunities() {
     const response = await fetch('/api/opportunities');
     const r = await response.json();

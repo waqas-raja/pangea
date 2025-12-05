@@ -42,6 +42,12 @@ class PropertyRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/{id}/quotes', function (Request $request, Response $response) {
+            return Property::GetAssociatedQuotes($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 
