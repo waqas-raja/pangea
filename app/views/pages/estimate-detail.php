@@ -28,8 +28,8 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                     </div>
                 </div>
             </div>
-            <div class="d-flex align-items-center bg-blue w-25 text-center text-white py-2 px-4 rounded-2 fw-bold">
-                <span class="me-3">Rendita Netta Annua:</span>
+            <div class="d-flex align-items-center justify-content-between bg-blue w-20 text-white py-2 px-3 rounded-2 fw-bold">
+                <span class="">Rendita Netta Annua:</span>
                 <span id="netAnnualIncome" class="fs-4">€ 00</span>
             </div>
         </div>
