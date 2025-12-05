@@ -103,7 +103,7 @@ final class Property {
         $id = (int)$request->getAttribute('id');
         $data = json_decode($request->getBody()->getContents(), true);
         $customer = $data['customer'] !== '' ? $data['customer'] : null;
-        $opportunity = $data['opportunity'] !== '' ? $data['opportunity'] : null;
+        // $opportunity = $data['opportunity'] !== '' ? $data['opportunity'] : null;
         $alias = $data['alias'] ?? "";
         $nation = $data['nation'] ?? "";
         $city = $data['city'] ?? null;
@@ -124,8 +124,8 @@ final class Property {
         $extraPrice = (int)$data['extraPrice'] ?? 0;
         $sellPrice = (int)$data['sellPrice'] ?? 0;
         
-        $q = 'UPDATE property SET customer = ?, opportunity = ?, alias = ?, nation = ?, city = ?, address = ?, cap = ?, property_status = ?, size = ?, rooms = ?, bathrooms = ?, garden = ?, box = ?, floor= ?, elevator = ?, acquisition_price = ?, renovation_price = ?, extra_price = ?, sell_price = ? WHERE id = ?';
-        $params = [$customer, $opportunity, $alias, $nation, $city, $address, $zip, $propertyStatus, $size, $room, $bathroom, $garden, $box, $floor, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice, $id];
+        $q = 'UPDATE property SET customer = ?, alias = ?, nation = ?, city = ?, address = ?, cap = ?, property_status = ?, size = ?, rooms = ?, bathrooms = ?, garden = ?, box = ?, floor= ?, elevator = ?, acquisition_price = ?, renovation_price = ?, extra_price = ?, sell_price = ? WHERE id = ?';
+        $params = [$customer, $alias, $nation, $city, $address, $zip, $propertyStatus, $size, $room, $bathroom, $garden, $box, $floor, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice, $id];
         $row_affected = DB::Execute($q, $params);
         if ($row_affected == 0) throw new Exception("Error while updating property", 500);
         $response->getBody()->write(json_encode(["result" => true]));

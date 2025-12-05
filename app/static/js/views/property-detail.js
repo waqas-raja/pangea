@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadNations();
     loadPropertyStatus();
     loadCustomers();
-    await loadOpportunities();
+    // await loadOpportunities();
     await loadPropertyDetail();
 });
 
@@ -239,7 +239,7 @@ async function updateGenericInfo() {
     let result = document.getElementById('errMessage');
     result.innerText = '';
     const customer = document.getElementById("ddlCustomer").value;
-    const opportunity = document.getElementById("ddlOpportunity").value;
+    // const opportunity = document.getElementById("ddlOpportunity").value;
     const alias = document.getElementById("txtAlias").value.trim();
     const nation = document.getElementById("ddlState").value;
     const city = document.getElementById("txtCity").value.trim();
@@ -352,7 +352,6 @@ async function updateGenericInfo() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 customer: customer,
-                opportunity: opportunity,
                 alias: alias,
                 nation: nation,
                 city: city,
