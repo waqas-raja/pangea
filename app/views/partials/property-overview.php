@@ -11,14 +11,6 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
-                    <label for="ddlOpportunity" class="col-sm-5 col-form-label">Opportunità:</label>
-                    <div class="col-sm-7">
-                        <span id="spOpportunity" class="valueControl"></span>
-                        <select id="ddlOpportunity" class="form-select editControl d-none mb-1">
-                        </select>
-                    </div>
-                </div>
-                <div class="row mb-0 align-items-center">
                     <label for="txtAlias" class="col-sm-5 col-form-label">Alias:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spAlias" class="valueControl"></span>
