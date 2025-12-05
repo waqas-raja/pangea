@@ -122,7 +122,7 @@ async function loadPropertyDetail() {
     const response = await fetch('/api/property/' + propertyId);
     const r = await response.json();
     document.getElementById("spCustomer").innerText = (r.payload.customer_bizname !== null ? r.payload.customer_bizname : r.payload.customer_name + ' ' + r.payload.customer_surname) ?? 'n.d.';
-    document.getElementById("spOpportunity").innerText = r.payload.opportunity ?? 'n.d.';
+    // document.getElementById("spOpportunity").innerText = r.payload.opportunity ?? 'n.d.';
     document.getElementById("spAlias").innerText = r.payload.alias ?? 'n.d.';
     document.getElementById("spState").innerText = r.payload.nation_name ?? 'n.d.';
     document.getElementById("spCity").innerText = r.payload.city ?? 'n.d.';
@@ -144,7 +144,7 @@ async function loadPropertyDetail() {
     document.getElementById("spSellPrice").innerText = formatNumber(parseInt(r.payload.sell_price)) ?? formatNumber(0);
 
     document.getElementById("ddlCustomer").value = r.payload.customer ?? '';
-    document.getElementById("ddlOpportunity").value = r.payload.opportunity ?? ''
+    // document.getElementById("ddlOpportunity").value = r.payload.opportunity ?? ''
     document.getElementById("txtAlias").value = r.payload.alias ?? '';
     document.getElementById("ddlState").value = r.payload.nation ?? '';
     document.getElementById("txtCity").value = r.payload.city ?? '';
