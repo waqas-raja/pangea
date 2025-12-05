@@ -22,7 +22,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                         <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="scarica il pdf" onclick="showQuoteDraftModal()">
                             <i class="bi bi-download"></i>
                         </span>
-                        <span id="iconAllowEditGenericInfo" class="editIcon text-danger" role="button" title="Eliminare" onclick="deleteQuote(<?= $eid ?>)">
+                        <span id="iconAllowEditGenericInfo" class="editIcon text-danger" role="button" title="Scartare" onclick="deleteQuote(<?= $eid ?>)">
                             <i class="bi bi-trash"></i>
                         </span>
                     </div>
