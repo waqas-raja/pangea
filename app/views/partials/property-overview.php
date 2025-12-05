@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mb-3">
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
@@ -174,6 +174,14 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="pai-card">
+            <h3 class="pai-title mb-3">Preventivi associate</h3>
+            <div id="associatedQuotesList"></div>
         </div>
     </div>
 </div>

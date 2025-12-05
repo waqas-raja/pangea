@@ -166,5 +166,26 @@ final class Property {
         $response->getBody()->write(json_encode(["payload" => $types]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
+    
+    /**
+     * @throws Exception
+     */
+    public static function GetAssociatedQuotes($request, $response) {
+        $id = (int)$request->getAttribute('id');
+        $q = <<<query
+                select
+                    e.*,
+                    c.name as customer_name,
+                    c.surname as customer_surname,
+                    c.email as customer_email,
+                    c.phone as customer_phone
+                from estimate as e
+                left join customer as c on e.customer = c.id
+                where e.property = ?
+        query;
+        $quotes = DB::Query($q, [$id]);
+        $response->getBody()->write(json_encode(["payload" => $quotes]));
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
 
 }
