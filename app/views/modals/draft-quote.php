@@ -12,7 +12,7 @@
                             <span class="me-3">Rendita Netta Annua:</span>
                             <span id="netAnnualIncomeDraft" class="fs-4">€ 00</span>
                         </div>
-                        <div class="pai-title fw-bold text-blue mb-2">Dettaglio Preventivi <span id="estimateIdDraft">#P2024-<?php echo $eid; ?></span></div>
+                        <div class="pai-title fw-bold text-blue mb-2">Preventivi <span id="estimateIdDraft">#P2024-<?php echo $eid; ?></span></div>
                         <div id="dateDraft"></span></div>
                     </div>
                     <div><img src="/static/imgs/logo.png" alt="" style="height: 150px;"></div>
@@ -21,7 +21,7 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 mb-3 pb-3 border-bottom">
                     <div class="col">
                         <div class="">
-                            <div class="text-blue pai-title mb-3 fw-bold"><i class="bi bi-person me-2"></i>Informazioni Cliente</div>
+                            <div class="text-blue pai-title mb-3 fw-bold">Informazioni Cliente</div>
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span>Cliente:</span>
                                 <span id="customerNameDraft" class="text-end fw-semibold">Mario Rossi</span>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="col">
                        <div class="">
-                            <div class="text-blue pai-title mb-3 fw-bold"><i class="bi bi-house-door me-2"></i>Informazioni Immobile</div>
+                            <div class="text-blue pai-title mb-3 fw-bold">Informazioni Immobile</div>
                             <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span>Indirizzo:</span>
                                 <span id="propertyAddressDraft" class="text-end fw-semibold">Via Roma 1, 10123 Torino</span>
