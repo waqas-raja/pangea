@@ -40,7 +40,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 mb-3">
         <div class="col">
             <div class="pai-card mb-3">
-                <div class="text-blue pai-title mb-3 fw-bold"><i class="bi bi-person me-2"></i>Informazioni Cliente</div>
+                <div class="text-blue pai-title mb-3 fw-bold">Informazioni Cliente</div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Cliente:</span>
                     <span id="customerName" class="text-end fw-semibold">Mario Rossi</span>
@@ -55,7 +55,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 </div>
             </div>
             <div class="pai-card mb-3">
-                <div class="text-blue pai-title mb-3 fw-bold"><i class="bi bi-house-door me-2"></i>Informazioni Immobile</div>
+                <div class="text-blue pai-title mb-3 fw-bold">Informazioni Immobile</div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Indirizzo:</span>
                     <span id="propertyAddress" class="text-end fw-semibold">Via Roma 1, 10123 Torino</span>
