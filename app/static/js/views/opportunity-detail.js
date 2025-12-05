@@ -19,7 +19,7 @@ async function loadOpportunityDetail() {
     document.getElementById("spAddress").innerText = r.payload.address ?? 'n.d.';
     document.getElementById("spCity").innerText = r.payload.city ?? 'n.d.';
     document.getElementById("spState").innerText = r.payload.nation_name ?? 'n.d.';
-    document.getElementById("spUrl").innerText = r.payload.url ?? 'n.d.';
+    document.getElementById("spUrl").innerHTML = `<i class="bi bi-globe me-2"></i><a href="${r.payload.url}" alt="" target="_blank">${r.payload.url}<a/>` ?? 'n.d.';
     document.getElementById("spRefName").innerText = r.payload.reference_name ?? 'n.d.';
     document.getElementById("spRefSurname").innerText = r.payload.reference_surname ?? 'n.d.';
     document.getElementById("spRefEmail").innerText = r.payload.reference_email ?? 'n.d.';
