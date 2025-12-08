@@ -17,7 +17,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="position-relative" style="width: 230px;">
                         <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="Modificare" onclick="editQuote(<?= $eid ?>)">
-                            <i class="bi bi-pencil"></i>
+                            <i class="bi bi-pencil-square"></i>
                         </span>
                         <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="scarica il pdf" onclick="showQuoteDraftModal()">
                             <i class="bi bi-download"></i>
