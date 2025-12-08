@@ -23,9 +23,17 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                         <i class="bi bi-x-circle"></i> Annulla
                     </button>
                 </div>
-                <button type="button" class="btn btn-link text-danger border" onclick="deleteModal()">
-                    <i class="bi bi-trash3 me-2"></i> Scartare
-                </button>
+                <div>
+                    <button id="btnProjectProcess" type="button" class="btn btn-blue" onclick="togglePageSections(0)">
+                        <i class="bi bi-flask me-2"></i> Progetto di processo
+                    </button>
+                    <button id="btnBack" type="button" class="btn btn-blue d-none" onclick="togglePageSections(1)">
+                        Indietro
+                    </button>
+                    <button type="button" class="btn btn-link text-danger border" onclick="deleteModal()">
+                        <i class="bi bi-trash3 me-2"></i> Scartare
+                    </button>
+                </div>
             </div>
         </div>
         <div id="errMessage" class="text-danger"></div>
