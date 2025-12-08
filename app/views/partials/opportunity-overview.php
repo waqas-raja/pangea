@@ -1,4 +1,4 @@
-<div class="row">
+<div id="opportunityDetailSec" class="row mb-3">
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
@@ -146,6 +146,37 @@
                     <span id="spNote" class="valueControl"></span>
                     <input type="text" id="txtNote" class="form-control editControl d-none mb-1" value="">
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="projectProcessSec" class="row d-none mb-3">
+    <div class="col-sm-12">
+        <div class="pai-card">
+            <div class="pai-title mb-4">Progetto di Processo</div>
+            <div class="row mb-3">
+                <label for="txtProjectProcessPrice" class="col-sm-5 col-form-label">Prezzo d'acquisto:<span class="text-danger ms-2">*</span></label>
+                <div class="col-sm-7">
+                    <input type="number" id="txtProjectProcessPrice" class="form-control" min="0" value="">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="txtProjectProcessRenCost" class="col-sm-5 col-form-label">Costo di ristrutturazione:<span class="text-danger ms-2">*</span></label>
+                <div class="col-sm-7">
+                    <input type="number" id="txtProjectProcessRenCost" class="form-control" min="0" value="">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="txtProjectProcessExtraCost" class="col-sm-5 col-form-label">Costo aggiuntivo:<span class="text-danger ms-2">*</span></label>
+                <div class="col-sm-7">
+                    <input type="number" id="txtProjectProcessExtraCost" class="form-control" min="0" value="">
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div id="projectProcessResult" class=""></div>
+                <button id="" type="button" class="btn btn-blue" onclick="startProjectProcess()">
+                    <i class="bi bi-flask me-2"></i> Processo
+                </button>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@ async function loadOpportunityDetail() {
     document.getElementById("spAddress").innerText = r.payload.address ?? 'n.d.';
     document.getElementById("spCity").innerText = r.payload.city ?? 'n.d.';
     document.getElementById("spState").innerText = r.payload.nation_name ?? 'n.d.';
-    document.getElementById("spUrl").innerHTML = `<i class="bi bi-globe me-2"></i><a href="${r.payload.url}" alt="" target="_blank">${r.payload.url}<a/>` ?? 'n.d.';
+    document.getElementById("spUrl").innerHTML = r.payload.url !== '' && r.payload.url !== null ? `<i class="bi bi-globe me-2"></i><a href="${r.payload.url}" alt="" target="_blank">${r.payload.url}<a/>` : 'n.d.';
     document.getElementById("spRefName").innerText = r.payload.reference_name ?? 'n.d.';
     document.getElementById("spRefSurname").innerText = r.payload.reference_surname ?? 'n.d.';
     document.getElementById("spRefEmail").innerText = r.payload.reference_email ?? 'n.d.';
@@ -34,6 +34,7 @@ async function loadOpportunityDetail() {
     document.getElementById("txtSize").value = r.payload.size ?? '';
     document.getElementById("ddlPropertyStatus").value = r.payload.opportunity_status ?? '';
     document.getElementById("txtPrice").value = r.payload.price ?? '';
+    document.getElementById("txtProjectProcessPrice").value = r.payload.price ?? '';
     document.getElementById("txtTaxes").value = r.payload.taxes ?? '';
     document.getElementById("txtAddress").value = r.payload.address ?? '';
     document.getElementById("txtCity").value = r.payload.city ?? '';
@@ -202,6 +203,64 @@ async function updateGenericInfo() {
     }
 }
 
+function togglePageSections(t) {
+    if (t === 0) {
+        document.getElementById('btnProjectProcess').classList.add('d-none');
+        document.getElementById('iconAllowEditGenericInfo').classList.add('d-none');
+        document.getElementById('btnBack').classList.remove('d-none');
+        document.getElementById('opportunityDetailSec').classList.add('d-none');
+        document.getElementById('projectProcessSec').classList.remove('d-none');
+    } else {
+        document.getElementById('btnProjectProcess').classList.remove('d-none');
+        document.getElementById('iconAllowEditGenericInfo').classList.remove('d-none');
+        document.getElementById('btnBack').classList.add('d-none');
+        document.getElementById('opportunityDetailSec').classList.remove('d-none');
+        document.getElementById('projectProcessSec').classList.add('d-none');
+    }
+}
+
+function startProjectProcess() {
+    const price = document.getElementById('txtProjectProcessPrice').value.trim();
+    const renCost = document.getElementById('txtProjectProcessRenCost').value.trim();
+    const extCost = document.getElementById('txtProjectProcessExtraCost').value.trim();
+    let result = document.getElementById('projectProcessResult');
+    result.textContent = '';
+    if (price === '' || renCost === '' || extCost === '') {
+        result.classList.add('text-danger');
+        if (price === '') {
+            result.textContent = 'Il prezzo di acquisto è obbligatorio';
+            return;
+        }
+        if (renCost === '') {
+            result.textContent = 'Sono richiesti costi di ristrutturazione';
+            return;
+        }
+        if (extCost === '') {
+            result.textContent = 'È richiesto un costo aggiuntivo';
+            return;
+        }
+    }
+    if ((price !== '' && !isValidateNumber(parseInt(price))) || parseInt(price) < 1) {
+        result.classList.add('text-danger');
+        result.textContent = 'Il prezzo di acquisto non è un numero valido';
+        return;
+    }
+    if ((renCost !== '' && !isValidateNumber(parseInt(renCost))) || parseInt(renCost) < 0) {
+        result.classList.add('text-danger');
+        result.textContent = 'Il costo della ristrutturazione non è un numero valido';
+        return;
+    }
+    if ((extCost !== '' && !isValidateNumber(parseInt(extCost))) || parseInt(extCost) < 0) {
+        result.classList.add('text-danger');
+        result.textContent = 'Un costo aggiuntivo non è un numero valido';
+        return;
+    }
+    result.classList.remove('text-danger');
+    result.classList.add('text-success');
+    result.textContent = "L'elaborazione è in costruzione...";
+    return;
+}
+
 async function deleteModal() {
     const div = `<div id="reasonDiv" class="mb-3">
                     <label for="txtDelReason" class="form-label">Spiega la tua motivazione</label>
@@ -212,14 +271,14 @@ async function deleteModal() {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
             let err = document.getElementById('deleteErrorMessage');
-            err.innerHTML = ''; 
+            err.innerHTML = '';
             const reason = document.getElementById('txtDelReason').value.trim();
             if (reason === "") {
                 err.innerText = "Si prega di compilare tutti i campi richiesti";
                 return;
             }
             try {
-                const response = await fetch("/api/opportunity/" + opportunityId + "/mark-delete", { 
+                const response = await fetch("/api/opportunity/" + opportunityId + "/mark-delete", {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ reason: reason })
