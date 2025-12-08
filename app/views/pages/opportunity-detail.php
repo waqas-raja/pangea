@@ -1,5 +1,5 @@
 <?php
-$title = 'Dettaglio opportunità';
+$title = 'Dettaglio valutazione';
 ob_start();
 $oid = htmlspecialchars($oid, ENT_QUOTES, 'UTF-8');
 require_once __DIR__ . "/../modals/confirm-delete.php";
@@ -10,7 +10,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
 <div id="opportunity_detail">
     <div class="pai-card mb-3">
         <div class="d-flex justify-content-between align-items-center">
-            <span class="pai-title">Dettaglio opportunità</span>
+            <span class="pai-title">Dettaglio valutazione</span>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="position-relative me-2" style="width: 230px;">
                     <span id="iconAllowEditGenericInfo" class="position-absolute editIcon" role="button" style="right:0px;top:-10px;" title="Edit" onclick="allowEditGeneralInfo()">
