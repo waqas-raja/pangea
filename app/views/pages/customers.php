@@ -1,14 +1,14 @@
 <?php
-    $title = 'Clienti';
+    $title = 'Persone';
     ob_start();
     require_once __DIR__ . '/../modals/add-customer.php';
 ?>
 
     <div id="page-customers">
         <div class="pai-card mb-3 d-flex justify-content-between align-items-center">
-            <span class="pai-title">Clienti</span>
+            <span class="pai-title">Persone</span>
             <!-- <div class="bg-light p-3 mt-3"><i>Page under constructions</i></div> -->
-             <button type="button" class="btn btn-blue" onclick="showModalAddEditCustomer(null, 'Aggiungi proprietà')"><i class="bi bi-plus-lg me-2"></i> Aggiungi Cliente</button>
+             <button type="button" class="btn btn-blue" onclick="showModalAddEditCustomer(null, 'Aggiungi Persone')"><i class="bi bi-plus-lg me-2"></i> Aggiungi Persone</button>
         </div>
         <div class="pai-card">
             <div id="customerGrid" class=""></div>
