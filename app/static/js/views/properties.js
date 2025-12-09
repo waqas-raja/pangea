@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     setTimeout(() => { calculateMarginalPercentage(); }, 300);
     document.getElementById('txtSellPrice').addEventListener('keyup', calculateMarginalPercentage);
+    document.getElementById('txtExtraPrice').addEventListener('keyup', calculateMarginalPercentage);
+    document.getElementById('txtAcqPrice').addEventListener('keyup', calculateMarginalPercentage);
+    document.getElementById('txtRenPrice').addEventListener('keyup', calculateMarginalPercentage);
 });
 
 async function loadProperties() {
