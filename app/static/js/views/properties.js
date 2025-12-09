@@ -41,7 +41,7 @@ async function loadProperties() {
             //     }
             // },
             { dataField: "alias", caption: "Alias", sortIndex: 0, sortOrder: "asc" },
-            { dataField: "", caption: "Tipo di immobile", sortIndex: 1},
+            { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
             { dataField: "nation_name", caption: "Nation", sortIndex: 2, sortOrder: "asc" },
             // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3, sortOrder: "asc" },
             { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4, sortOrder: "asc" },
@@ -75,12 +75,12 @@ async function loadProperties() {
             filterRow: { visible: underManagementProperties.length > 0, applyFilter: "auto" },
             headerFilter: { visible: underManagementProperties.length > 0 },
             columns: [
-                { dataField: "alias", caption: "Alias", sortIndex: 0},
-                { dataField: "", caption: "Tipo di immobile", sortIndex: 1},
+                { dataField: "alias", caption: "Alias", sortIndex: 0 },
+                { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
                 { dataField: "nation_name", caption: "Nation", sortIndex: 2 },
                 { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
-                { dataField: "acquisition_price", caption: "Prezzo acquisizione", sortIndex: 4 },
-                { dataField: "renovation_price", caption: "Prezzo rinnovamento", sortIndex: 5 },
+                { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4 },
+                { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5 },
                 { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6 },
             ],
             sorting: { mode: "multiple" },
@@ -111,12 +111,12 @@ async function loadProperties() {
             filterRow: { visible: underEvaluationProperties.length > 0, applyFilter: "auto" },
             headerFilter: { visible: underEvaluationProperties.length > 0 },
             columns: [
-                { dataField: "alias", caption: "Alias", sortIndex: 0},
-                { dataField: "", caption: "Tipo di immobile", sortIndex: 1},
+                { dataField: "alias", caption: "Alias", sortIndex: 0 },
+                { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
                 { dataField: "nation_name", caption: "Nation", sortIndex: 2 },
                 { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
-                { dataField: "acquisition_price", caption: "Prezzo acquisizione", sortIndex: 4 },
-                { dataField: "renovation_price", caption: "Prezzo rinnovamento", sortIndex: 5 },
+                { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4 },
+                { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5 },
                 { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6 },
             ],
             sorting: { mode: "multiple" },
@@ -205,7 +205,8 @@ async function saveProperty() {
     if ((floor !== '' && !isValidateNumber(parseInt(floor))) || parseInt(floor) <= 0) {
         result.classList.remove("d-none");
         result.innerText = 'Il piano non è un numero valido';
-        return; }
+        return;
+    }
     if ((room !== '' && !isValidateNumber(room)) || room <= 0) {
         result.classList.remove("d-none");
         result.innerText = 'La stanza non è un numero valido';
