@@ -68,6 +68,28 @@ async function loadCustomers() {
                     container.text(text);
                 }
             },
+            {
+                dataField: "",
+                caption: "Onere",
+                width: 100,
+                // sortIndex: 4, sortOrder: "asc"
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const text = 'n.d.'
+                    container.text(text);
+                }
+            },
+            {
+                dataField: "",
+                caption: "Agenzia",
+                width: 100,
+                // sortIndex: 4, sortOrder: "asc"
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const text = 'n.d.'
+                    container.text(text);
+                }
+            },
         ],
         sorting: { mode: "multiple" },
         remoteOperations: { paging: true, filtering: true, sorting: false },
