@@ -12,7 +12,7 @@ async function loadCustomerDetail() {
     loadDetail();
 }
 
-function loadDetail(d=null) {
+function loadDetail(d = null) {
     document.getElementById("spFirstName").innerText = _customerDetail.name ?? 'n.d.';
     document.getElementById("txtFirstName").value = _customerDetail.name ?? '';
     document.getElementById("spLastName").innerText = _customerDetail.surname ?? 'n.d.';
@@ -22,7 +22,7 @@ function loadDetail(d=null) {
     document.getElementById("spPhone").innerText = _customerDetail.phone ?? 'n.d.';
     document.getElementById("txtPhone").value = _customerDetail.phone ?? '';
     if (_customerDetail.bizname !== null && _customerDetail.bizname !== '') document.getElementById('divCompanyFields').classList.remove("d-none");
-    if(d === null) {
+    if (d === null) {
         document.getElementById("ckIsCompany").checked = _customerDetail.bizname !== null;
         document.getElementById("ckIsCompany").disabled = true;
     } else document.getElementById('divCompanyFields').classList.remove("d-none");
@@ -71,9 +71,27 @@ async function loadAssociatedProperties() {
             { dataField: "alias", caption: "Alias", sortIndex: 0 },
             // { dataField: "nation_name", caption: "Nation", sortIndex: 1 },
             // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 2 },
-            { dataField: "acquisition_price", caption: "Prezzo acquisizione", width:150, sortIndex: 3 },
-            { dataField: "renovation_price", caption: "Prezzo rinnovamento", width:150, sortIndex: 4 },
-            { dataField: "sell_price", caption: "Prezzo vendita", width:120, sortIndex: 5 },
+            {
+                dataField: "acquisition_price", caption: "Costo di acquisizione", width: 150, sortIndex: 3,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(formatNumber(parseFloat(data.acquisition_price)));
+                }
+            },
+            {
+                dataField: "renovation_price", caption: "Costo di ristrutturazione", width: 150, sortIndex: 4,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(formatNumber(parseFloat(data.renovation_price)));
+                }
+            },
+            {
+                dataField: "sell_price", caption: "Prezzo vendita", width: 120, sortIndex: 5,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(formatNumber(parseFloat(data.sell_price)));
+                }
+            },
         ],
         sorting: { mode: "multiple" },
         remoteOperations: { paging: true, filtering: true, sorting: true },
@@ -114,7 +132,7 @@ async function loadAssociatedQuotes() {
         headerFilter: { visible: false },
         columns: [
             {
-                dataField: "id", 
+                dataField: "id",
                 caption: "ID PREVENTIVO",
                 // allowFiltering: true,
                 // sortIndex: 0, sortOrder: "asc",
@@ -131,7 +149,7 @@ async function loadAssociatedQuotes() {
                 caption: "IMMOBILE",
                 // sortIndex: 3, sortOrder: "asc"
             },
-            { 
+            {
                 dataField: "dtcr",
                 caption: "DATA CREAZIONE",
                 allowFiltering: true,
@@ -178,7 +196,7 @@ async function loadAssociatedQuotes() {
                 "groupPanel",
             ]
         },
-        onRowClick: function (e) { 
+        onRowClick: function (e) {
             if (e.rowType === "data") window.location = `/estimate/${e.data.id}`;
         },
     });
@@ -268,7 +286,7 @@ async function updateGenericInfo() {
         btn.disabled = false;
         return;
     }
-    if (city !=="" && !isValidLetter(city)) {
+    if (city !== "" && !isValidLetter(city)) {
         err.textContent = "Per la città sono accettate solo lettere.";
         btn.disabled = false;
         return;

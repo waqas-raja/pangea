@@ -43,10 +43,55 @@ async function loadProperties() {
             { dataField: "alias", caption: "Alias", sortIndex: 0, sortOrder: "asc" },
             { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
             { dataField: "nation_name", caption: "Nazione", sortIndex: 2, sortOrder: "asc" },
+            {
+                dataField: "size",
+                caption: "Voltura",
+                sortIndex: 3, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(data.size + ' (mq)');
+                }
+            },
+            {
+                dataField: "rooms",
+                caption: "Ipoteca",
+                sortIndex: 3, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(data.rooms);
+                }
+            },
             // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3, sortOrder: "asc" },
-            { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4, sortOrder: "asc" },
-            { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5, sortOrder: "asc" },
-            { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6, sortOrder: "asc" },
+            {
+                dataField: "acquisition_price",
+                caption: "Costo di acquisizione",
+                sortIndex: 4, sortOrder: "asc",
+                width: 200,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(formatNumber(parseFloat(data.acquisition_price)));
+                }
+            },
+            {
+                dataField: "renovation_price",
+                caption: "Costo di ristrutturazione",
+                sortIndex: 5, sortOrder: "asc",
+                width: 200,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(formatNumber(parseFloat(data.renovation_price)));
+                }
+            },
+            {
+                dataField: "sell_price",
+                caption: "Prezzo vendita",
+                sortIndex: 6, sortOrder: "asc",
+                width: 200,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.text(formatNumber(parseFloat(data.sell_price)));
+                }
+            },
         ],
         sorting: { mode: "multiple" },
         remoteOperations: { paging: true, filtering: true, sorting: false },
@@ -78,10 +123,49 @@ async function loadProperties() {
                 { dataField: "alias", caption: "Alias", sortIndex: 0 },
                 { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
                 { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
-                { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
-                { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4 },
-                { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5 },
-                { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6 },
+                {
+                    dataField: "size",
+                    caption: "Voltura",
+                    sortIndex: 3, sortOrder: "asc",
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(data.size + ' (mq)');
+                    }
+                },
+                {
+                    dataField: "rooms",
+                    caption: "Ipoteca",
+                    sortIndex: 3, sortOrder: "asc",
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(data.rooms);
+                    }
+                },
+                // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
+                {
+                    dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4,
+                    width: 200,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(formatNumber(parseFloat(data.acquisition_price)));
+                    }
+                },
+                {
+                    dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5,
+                    width: 200,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(formatNumber(parseFloat(data.renovation_price)));
+                    }
+                },
+                {
+                    dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6,
+                    width: 200,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(formatNumber(parseFloat(data.sell_price)));
+                    }
+                },
             ],
             sorting: { mode: "multiple" },
             remoteOperations: { paging: true, filtering: true, sorting: false },
@@ -114,10 +198,49 @@ async function loadProperties() {
                 { dataField: "alias", caption: "Alias", sortIndex: 0 },
                 { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
                 { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
-                { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
-                { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4 },
-                { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5 },
-                { dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6 },
+                {
+                    dataField: "size",
+                    caption: "Voltura",
+                    sortIndex: 3, sortOrder: "asc",
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(data.size + ' (mq)');
+                    }
+                },
+                {
+                    dataField: "rooms",
+                    caption: "Ipoteca",
+                    sortIndex: 3, sortOrder: "asc",
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(data.rooms);
+                    }
+                },
+                // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
+                {
+                    dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4,
+                    width: 200,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(formatNumber(parseFloat(data.acquisition_price)));
+                    }
+                },
+                {
+                    dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5,
+                    width: 200,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(formatNumber(parseFloat(data.renovation_price)));
+                    }
+                },
+                {
+                    dataField: "sell_price", caption: "Prezzo vendita", sortIndex: 6,
+                    width: 200,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        container.text(formatNumber(parseFloat(data.sell_price)));
+                    }
+                },
             ],
             sorting: { mode: "multiple" },
             remoteOperations: { paging: true, filtering: true, sorting: false },
