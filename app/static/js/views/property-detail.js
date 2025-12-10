@@ -131,7 +131,7 @@ async function loadPropertyDetail() {
     document.getElementById("spStreet").innerText = 'n.d.';
     document.getElementById("spDistrict").innerText = 'n.d.';
     document.getElementById("spPropertyStatus").innerText = r.payload.property_status_name ?? 'n.d.';
-    document.getElementById("spSize").innerText = r.payload.size ?? 'n.d.';
+    document.getElementById("spSize").innerText = r.payload.size ? parseInt(r.payload.size) + ' (mq)' : 'n.d.';
     document.getElementById("spFloor").innerText = r.payload.floor ?? 'n.d.';
     document.getElementById("spRoom").innerText = r.payload.rooms ? r.payload.rooms : "No";
     document.getElementById("spBathroom").innerText = r.payload.bathrooms ? r.payload.bathrooms : "No";
