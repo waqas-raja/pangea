@@ -79,7 +79,7 @@ body { font-family:"Lato", serif; font-size: 16px; }
 }
 
 #main-sidebar { background-color: #1e223e; height: 100vh; min-height: 370px; width: var(--sidebar-width); box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 50; position: relative; }
-#main-sidebar #logoAG { height: 60px; margin:20px 10px; }
+#main-sidebar #logoAG { height: 120px; margin:20px 10px; }
 @media (max-width: 1300px) { #main-sidebar #logoAG { width:150px; } }
 #main-sidebar .nav-link { color: #b5b5b5; display: flex; align-items: center; padding: 10px 25px; transition: background-color 0.3s, color 0.3s; }
 #main-sidebar .nav-link:hover { background-color: #141728; }
@@ -87,7 +87,7 @@ body { font-family:"Lato", serif; font-size: 16px; }
 #main-sidebar p { font-size: .7em; text-align: center; color: #bbb; width: 100%; position: absolute; bottom: 0; }
 
 #main-sidebar-alt { background-color: #1e223e; height: 100vh; min-height: 370px; width: var(--sidebar-alt-width); box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 50; position: relative; }
-#main-sidebar-alt #logoAGAlt { width: 34px; margin:23px 13px; }
+#main-sidebar-alt #logoAGAlt { width: 60px; margin:23px 0px; }
 #main-sidebar-alt ul { margin-top: 7px; }
 #main-sidebar-alt .nav-link:hover { background-color: #141728; }
 #main-sidebar-alt .nav-link.active { background-color: #141728; color: white; }

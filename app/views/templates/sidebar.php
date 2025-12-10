@@ -1,5 +1,5 @@
 <div id="main-sidebar-alt" class="visually-hidden">
-    <div class="text-center" style="height: 100px;">
+    <div class="text-center" style="height: auto;">
         <img id="logoAGAlt" src="/static/imgs/logo-symbol.png" alt="Logo">
     </div>
     <ul class="nav flex-column">
@@ -11,7 +11,7 @@
     </ul>
 </div>
 <div id="main-sidebar">
-    <div class="text-center" style="height: 100px;">
+    <div class="text-center" style="height: auto;">
         <img id="logoAG" src="/static/imgs/logo.png" alt="Logo">
     </div>
     <ul class="nav flex-column">
