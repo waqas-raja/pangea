@@ -235,7 +235,6 @@ async function loadOpportunityStatus() {
 
 async function updateGenericInfo() {
     const btn = document.getElementById("iconSaveEditGenericInfo");
-    btn.disabled = true;
     let result = document.getElementById('errMessage');
     result.innerText = '';
     const customer = document.getElementById("ddlCustomer").value;
@@ -301,42 +300,42 @@ async function updateGenericInfo() {
         result.innerText = 'Il piano non è un numero valido';
         return;
     }
-    if ((room !== '' && !isValidateNumber(room)) || room <= 0) {
+    if ((room !== '' && !isValidateNumber(parseInt(room))) || parseInt(room) <= 0) {
         result.classList.remove("d-none");
         result.innerText = 'La stanza non è un numero valido';
         return;
     }
-    if ((bathroom !== '' && !isValidateNumber(bathroom)) || bathroom <= 0) {
+    if ((bathroom !== '' && !isValidateNumber(parseInt(bathroom))) || parseInt(bathroom) <= 0) {
         result.classList.remove("d-none");
         result.innerText = 'Il bagno non è un numero valido';
         return;
     }
-    if ((garden !== '' && !isValidateNumber(garden)) || garden < 0) {
+    if ((garden !== '' && !isValidateNumber(parseInt(garden))) || parseInt(garden) < 0) {
         result.classList.remove("d-none");
         result.innerText = 'Il giardino non è un numero valido';
         return;
     }
-    if ((box !== '' && !isValidateNumber(box)) || box < 0) {
+    if ((box !== '' && !isValidateNumber(parseInt(box))) || parseInt(box) < 0) {
         result.classList.remove("d-none");
         result.innerText = 'Il garage non è un numero valido';
         return;
     }
-    if (!isValidateNumber(acqPrice) || parseInt(acqPrice) < 0) {
+    if (!isValidateNumber(parseInt(acqPrice)) || parseInt(acqPrice) < 0) {
         result.classList.remove("d-none");
         result.innerText = 'Il costo di acquisizione non è un numero valido';
         return;
     }
-    if (!isValidateNumber(renPrice) || parseInt(renPrice) < 0) {
+    if (!isValidateNumber(parseInt(renPrice)) || parseInt(renPrice) < 0) {
         result.classList.remove("d-none");
         result.innerText = 'Il costo di ristrutturazione non è un numero valido';
         return;
     }
-    if (!isValidateNumber(extraPrice) || parseInt(extraPrice) < 0) {
+    if (!isValidateNumber(parseInt(extraPrice)) || parseInt(extraPrice) < 0) {
         result.classList.remove("d-none");
         result.innerText = 'Il costo di extra non è un numero valido';
         return;
     }
-    if (!isValidateNumber(sellPrice)) {
+    if (!isValidateNumber(parseInt(sellPrice))) {
         result.classList.remove("d-none");
         result.innerText = 'l prezzo di vendita non è un numero valido';
         return;
@@ -347,6 +346,7 @@ async function updateGenericInfo() {
         return;
     }
     try {
+        btn.disabled = true;
         const response = await fetch("/api/property/" + propertyId, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },

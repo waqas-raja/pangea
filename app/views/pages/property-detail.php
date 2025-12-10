@@ -10,7 +10,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
 <div id="property_detail">
     <div class="pai-card mb-3">
         <div class="d-flex justify-content-between align-items-center">
-            <span class="pai-title">Dettaglio Immobili</span>
+            <span class="pai-title">Dettaglio immobili</span>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="position-relative me-2" style="width: 230px;">
                     <span id="iconAllowEditGenericInfo" class="position-absolute editIcon" role="button" style="right:0px;top:-20px;" title="Edit" onclick="allowEditGeneralInfo()">

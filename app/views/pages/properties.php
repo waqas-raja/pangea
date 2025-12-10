@@ -8,7 +8,7 @@ require_once __DIR__ . '/../modals/add-property.php';
     <div class="pai-card mb-3 d-flex justify-content-between align-items-center">
         <span class="pai-title">Immobili</span>
         <!-- <div class="bg-light p-3 mt-3"><i>Page under constructions</i></div> -->
-        <button type="button" class="btn btn-blue" onclick="showModalAddProperty(null, 'Aggiungi Immobili')"><i class="bi bi-plus-lg me-2"></i> Aggiungi Immobili</button>
+        <button type="button" class="btn btn-blue" onclick="showModalAddProperty(null, 'Aggiungi immobili')"><i class="bi bi-plus-lg me-2"></i> Aggiungi immobili</button>
     </div>
     <div class="pai-card">
         <ul class="nav nav-tabs" id="myTab" role="tablist">

@@ -29,7 +29,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 </div>
             </div>
             <div class="d-flex align-items-center justify-content-between bg-blue w-20 text-white py-2 px-3 rounded-2 fw-bold">
-                <span class="">Rendita Netta Annua:</span>
+                <span class="">Rendita netta annua:</span>
                 <span id="netAnnualIncome" class="fs-4">€ 00</span>
             </div>
         </div>
@@ -40,7 +40,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 mb-3">
         <div class="col">
             <div class="pai-card mb-3">
-                <div class="text-blue pai-title mb-3 fw-bold">Informazioni Cliente</div>
+                <div class="text-blue pai-title mb-3 fw-bold">Informazioni cliente</div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Cliente:</span>
                     <span id="customerName" class="text-end fw-semibold">Mario Rossi</span>
@@ -55,7 +55,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 </div>
             </div>
             <div class="pai-card mb-3">
-                <div class="text-blue pai-title mb-3 fw-bold">Informazioni Immobile</div>
+                <div class="text-blue pai-title mb-3 fw-bold">Informazioni immobile</div>
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <span>Indirizzo:</span>
                     <span id="propertyAddress" class="text-end fw-semibold">Via Roma 1, 10123 Torino</span>
@@ -76,7 +76,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
         </div>
         <div class="col">
             <div class="pai-card mb-3">
-                <h3 class="pai-title mb-3 fw-bold text-blue">Entrate Stimate</h3>
+                <h3 class="pai-title mb-3 fw-bold text-blue">Entrate stimate</h3>
                 <table class="table table-borderless mb-1">
                     <thead class="table-light">
                         <tr>
@@ -93,7 +93,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 </table>
             </div>
             <div id="divFixedCost" class="pai-card mb-3">
-                <h3 class="pai-title mb-3 fw-bold text-blue">Spese Fisse</h3>
+                <h3 class="pai-title mb-3 fw-bold text-blue">Spese fisse</h3>
                 <table class="table table-borderless mb-1">
                     <thead class="table-light">
                         <tr>
