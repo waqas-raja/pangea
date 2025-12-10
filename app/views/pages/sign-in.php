@@ -43,7 +43,7 @@
                 </div>
 
                 <div id="forgot-password-card" class="card shadow-lg p-4 m-4 d-none" style="width: 100%; max-width: 400px; border-radius: 15px;">
-                    <h3 class="text-center mb-4">Recupera Password</h3>
+                    <h3 class="text-center mb-4">Recupera password</h3>
                     <form>
                         <div class="mb-3">
                             <label for="txtRecoveryEmail" class="form-label">Indirizzo email</label>

@@ -7,7 +7,7 @@
         <div class="pai-card mb-3 d-flex justify-content-between align-items-center">
             <span class="pai-title">Valutazione immobiliare</span>
             <!-- <div class="bg-light p-3 mt-3"><i>Page under constructions</i></div> -->
-             <button type="button" class="btn btn-blue" onclick="showModalAddOpportunity(null, 'Aggiungi valutazione')"><i class="bi bi-plus-lg me-2"></i> Aggiungi Valutazione</button>
+             <button type="button" class="btn btn-blue" onclick="showModalAddOpportunity(null, 'Aggiungi valutazione')"><i class="bi bi-plus-lg me-2"></i> Aggiungi valutazione</button>
         </div>
         <div class="pai-card">
             <div id="opportunityGrid" class=""></div>

@@ -1,5 +1,5 @@
 <?php
-$title = 'Nuovo Preventivi';
+$title = 'Nuovo preventivi';
 ob_start();
 // require_once __DIR__ . "/../modals/confirm-delete.php";
 ?>
@@ -8,13 +8,13 @@ ob_start();
     <div class="pai-card mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <div class="pai-title fw-bold text-blue">Nuovo Preventivo Immobiliare</div>
+                <div class="pai-title fw-bold text-blue">Nuovo preventivo immobiliare</div>
                 <span class="text-muted text-small">Crea un nuovo preventivo per un cliente e un immobile.</span>
             </div>
             <div class="d-flex justify-content-between align-items-center gap-2">
                 <button type="button" id="btnCancel" class="btn btn-light border" onclick="">Annulla</button>
                 <button id="btnSaveNewEstimate" type="button" class="btn btn-blue" onclick="saveNewEstimate()" disabled>
-                    <i class="bi bi-check-lg"></i> Salva Preventivo
+                    <i class="bi bi-check-lg"></i> Salva preventivo
                     <div id="spinnerNewEstimate" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>
             </div>
@@ -28,14 +28,14 @@ ob_start();
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <div class="pai-card">
-                        <div class="pai-title mb-3 fw-bold">Dati Generali</div>
+                        <div class="pai-title mb-3 fw-bold">Dati generali</div>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="ddlSelectClient" class="form-label">Seleziona Cliente</label>
+                                <label for="ddlSelectClient" class="form-label">Seleziona cliente</label>
                                 <select id="ddlSelectClient" class="form-select"></select>
                             </div>
                             <div class="col-md-6">
-                                <label for="ddlSelectProperty" class="form-label">Seleziona Immobile</label>
+                                <label for="ddlSelectProperty" class="form-label">Seleziona immobile</label>
                                 <select id="ddlSelectProperty" class="form-select"></select>
                             </div>
                         </div>
@@ -45,7 +45,7 @@ ob_start();
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <div class="pai-card">
-                        <div class="pai-title mb-3 fw-bold">Stime di Affitto Mensili</div>
+                        <div class="pai-title mb-3 fw-bold">Stime di affitto mensili</div>
                         <div class="d-flex justify-content-between align-items-center fw-semibold gap-3 mb-3">
                             <span class="w-20">Mese</span>
                             <span class="w-40">Prezzo Medio Giornaliero (&euro;)</span>
@@ -128,7 +128,7 @@ ob_start();
             <div class="row mb-3">
                 <div class="col-sm-12">
                     <div class="pai-card">
-                        <div class="pai-title mb-3 fw-bold">Spese Fisse</div>
+                        <div class="pai-title mb-3 fw-bold">Spese fisse</div>
                         <div id="deductionFixedCost">
                             <div id="costSection_1" class="d-flex justify-content-between align-items-center gap-3 mb-3">
                                 <input type="text" id="txtCostDesc_1_1" class="form-control w-80" value="" placeholder="Es. TARI, SPESE Condominiali...">
@@ -142,7 +142,7 @@ ob_start();
                             </div>
                         </div>
                         <div class="text-blue fw-semibold" role="button" onclick="addCostVariant()">
-                            <i class="bi bi-plus-circle me-2"></i> Aggiungi Voce
+                            <i class="bi bi-plus-circle me-2"></i> Aggiungi voce
                         </div>
                     </div>
                 </div>
@@ -150,13 +150,13 @@ ob_start();
         </div>
         <div class="col-sm-4">
             <div class="pai-card">
-                <div class="pai-title mb-3 fw-bold">Dati Generali</div>
+                <div class="pai-title mb-3 fw-bold">Dati generali</div>
                 <div class="alert alert-primary text-center p-3">
-                    <span>Rendita Annu Lorda Stimata</span><br>
+                    <span>Rendita annu lorda stimata</span><br>
                     <span id="calculatedTotal" class="fs-3 fw-bold mt-3">0,00 &euro;</span>
                 </div>
                 <button id="btnCalculateEstimate" class="btn bg-green p-2 text-white w-100 mb-3" onclick="calculateEstimate()">
-                    <i class="bi bi-file-earmark-diff me-2"></i>Calcola Rendita
+                    <i class="bi bi-file-earmark-diff me-2"></i>Calcola rendita
                 </button>
                 <div class="text-center text-body-tertiary">
                     Clicca "Calcola Rendita" per aggiornare la stima. Il pulsante "Salva Preventivo" si attivera dopo il primo calcolo.

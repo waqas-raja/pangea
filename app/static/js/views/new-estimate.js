@@ -140,7 +140,7 @@ async function loadCustomers() {
     const r = await response.json();
     let ctrl = document.getElementById("ddlSelectClient");
     ctrl.innerHTML = '';
-    let opt = '<option value="" selected>Seleziona Cliente</option>';
+    let opt = '<option value="" selected>Seleziona cliente</option>';
     r.payload.forEach(customer => {
         if (customer.bizname !== "" && customer.bizname !== null) opt += `<option value="${customer.id}" class="text-capitalize">${customer.bizname}</option>`;
         else opt += `<option value="${customer.id}" class="text-capitalize">${customer.name} ${customer.surname}</option>`;
@@ -153,7 +153,7 @@ async function loadProperties() {
     const r = await response.json();
     let ctrl = document.getElementById("ddlSelectProperty");
     ctrl.innerHTML = '';
-    let opt = '<option value="" selected>Seleziona Immobile</option>';
+    let opt = '<option value="" selected>Seleziona immobile</option>';
     r.payload.forEach(p => {
         opt += `<option value="${p.id}" class="text-capitalize">${p.alias}</option>`;
     });

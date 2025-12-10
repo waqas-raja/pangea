@@ -57,7 +57,16 @@ async function loadCustomers() {
             {
                 dataField: "number_of_properties",
                 caption: "Proprietà",
+                width: 100,
+                alignment: "right",
                 // sortIndex: 4, sortOrder: "asc"
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const text = data.number_of_properties !== '' && data.number_of_properties !== undefined && data.number_of_properties !== null
+                        ? data.number_of_properties
+                        : 0;
+                    container.text(text);
+                }
             },
         ],
         sorting: { mode: "multiple" },

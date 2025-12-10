@@ -153,7 +153,7 @@
 <div id="projectProcessSec" class="row d-none mb-3">
     <div class="col-sm-12">
         <div class="pai-card">
-            <div class="pai-title mb-4">Progetto di Processo</div>
+            <div class="pai-title mb-4">Progetto di processo</div>
             <div class="row mb-3">
                 <label for="txtProjectProcessPrice" class="col-sm-5 col-form-label">Prezzo d'acquisto:<span class="text-danger ms-2">*</span></label>
                 <div class="col-sm-7">

@@ -42,7 +42,7 @@ async function loadProperties() {
             // },
             { dataField: "alias", caption: "Alias", sortIndex: 0, sortOrder: "asc" },
             { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
-            { dataField: "nation_name", caption: "Nation", sortIndex: 2, sortOrder: "asc" },
+            { dataField: "nation_name", caption: "Nazione", sortIndex: 2, sortOrder: "asc" },
             // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3, sortOrder: "asc" },
             { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4, sortOrder: "asc" },
             { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5, sortOrder: "asc" },
@@ -77,7 +77,7 @@ async function loadProperties() {
             columns: [
                 { dataField: "alias", caption: "Alias", sortIndex: 0 },
                 { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
-                { dataField: "nation_name", caption: "Nation", sortIndex: 2 },
+                { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
                 { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
                 { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4 },
                 { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5 },
@@ -113,7 +113,7 @@ async function loadProperties() {
             columns: [
                 { dataField: "alias", caption: "Alias", sortIndex: 0 },
                 { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
-                { dataField: "nation_name", caption: "Nation", sortIndex: 2 },
+                { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
                 { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3 },
                 { dataField: "acquisition_price", caption: "Costo di acquisizione", sortIndex: 4 },
                 { dataField: "renovation_price", caption: "Costo di ristrutturazione", sortIndex: 5 },
