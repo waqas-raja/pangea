@@ -19,28 +19,37 @@ async function loadOpportunities() {
         noDataText: "Non risultano immobili registrati per questa sede",
         rowAlternationEnabled: false,
         grouping: { autoExpandAll: false },
-        groupPanel: { visible: hasData, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
         filterRow: { visible: hasData, applyFilter: "auto" },
-        headerFilter: { visible: hasData },
+        headerFilter: { visible: false },
         columns: [
             {
                 dataField: "alias",
                 caption: "Alias",
                 allowFiltering: true,
-                sortIndex: 0,
-                sortOrder: "asc",
+                // sortIndex: 0,
+                // sortOrder: "asc",
                 // cellTemplate: function (container, options) {
                 //     const data = options.data;
                 //     data.bizname !== '' && data.bizname !== undefined && data.bizname !== null ? container.html('<i class="bi bi-buildings fs-5"></i>') : container.html('<i class="bi bi-person fs-5"></i>');
                 // }
             },
-            { dataField: "source", caption: "Fonte", allowFiltering: true, sortIndex: 2, sortOrder: "asc" },
-            { dataField: "property_type", caption: "Tipo di proprita", allowFiltering: true, sortIndex: 3, sortOrder: "asc" },
+            {
+                dataField: "source",
+                caption: "Fonte",
+                allowFiltering: true,
+                // sortIndex: 2, sortOrder: "asc"
+            },
+            {
+                dataField: "property_type", caption: "Tipo di proprita",
+                allowFiltering: true,
+                // sortIndex: 3, sortOrder: "asc"
+            },
             {
                 dataField: "status",
                 caption: "Stato",
                 allowFiltering: true,
-                sortIndex: 4, sortOrder: "asc",
+                // sortIndex: 4, sortOrder: "asc",
                 // cellTemplate: function (container, options) {
                 //     const data = options.data;
                 //     const text = data.bizname !== '' && data.bizname !== undefined && data.bizname !== null
@@ -49,10 +58,15 @@ async function loadOpportunities() {
                 //     container.text(text);
                 // }
             },
-            { dataField: "nation", caption: "Nazione", allowFiltering: true, sortIndex: 5, sortOrder: "asc" },
+            {
+                dataField: "nation",
+                caption: "Nazione",
+                allowFiltering: true,
+                // sortIndex: 5, sortOrder: "asc"
+            },
         ],
         sorting: { mode: "multiple" },
-        remoteOperations: { paging: true, filtering: true, sorting: true },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
         paging: { pageSize: 10 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
