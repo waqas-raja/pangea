@@ -17,13 +17,16 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="position-relative" style="width: 230px;">
                         <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="Modificare" onclick="editQuote(<?= $eid ?>)">
-                            <i class="bi bi-pencil-square"></i>
+                            <i class="bi bi-pencil-square fs-4"></i>
                         </span>
-                        <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="scarica il pdf" onclick="showQuoteDraftModal()">
-                            <i class="bi bi-download"></i>
+                        <span id="iconDownloadPdf" class="editIcon me-2" role="button" title="scarica il pdf" onclick="showQuoteDraftModal()">
+                            <i class="bi bi-download fs-4"></i>
                         </span>
-                        <span id="iconAllowEditGenericInfo" class="editIcon text-danger" role="button" title="Scartare" onclick="deleteQuote(<?= $eid ?>)">
-                            <i class="bi bi-trash"></i>
+                        <span id="iconSendQuoteToCustomer" class="editIcon me-2" role="button" title="Invia alla persona" onclick="showQuoteDraftModal('send')">
+                            <i class="bi bi-send fs-4"></i>
+                        </span>
+                        <span id="iconDeleteQuote" class="editIcon text-danger" role="button" title="Scartare" onclick="deleteQuote(<?= $eid ?>)">
+                            <i class="bi bi-trash fs-4"></i>
                         </span>
                     </div>
                 </div>

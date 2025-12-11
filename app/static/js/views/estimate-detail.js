@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    loadEstimateDetail();
+    await loadEstimateDetail();
+    loadCustomers();
 });
 
 async function loadEstimateDetail() {
@@ -79,6 +80,19 @@ async function loadEstimateDetail() {
     }
 }
 
+async function loadCustomers() {
+    const response = await fetch('/api/customers');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlCustomer");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona</option>';
+    r.payload.forEach(customer => {
+        if (customer.bizname !== "" && customer.bizname !== null) opt += `<option value="${customer.id}">${customer.bizname}</option>`;
+        else opt += `<option value="${customer.id}">${customer.name} ${customer.surname}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
+
 function editQuote(id) {
     localStorage.setItem('editEstimateId', id);
     window.location.href = '/estimate';
@@ -106,7 +120,16 @@ async function deleteQuote(id) {
     });
 }
 
-function showQuoteDraftModal() {
+function showQuoteDraftModal(tag = null) {
+    if (tag !== null) {
+        document.getElementById('selectCustomerSection').classList.remove('d-none');
+        document.getElementById('btnQuoteDraftDownload').classList.add('d-none');
+        document.getElementById('btnSendQuoteDraftToCustomer').classList.remove('d-none');
+    } else {
+        document.getElementById('selectCustomerSection').classList.add('d-none');
+        document.getElementById('btnQuoteDraftDownload').classList.remove('d-none');
+        document.getElementById('btnSendQuoteDraftToCustomer').classList.add('d-none');
+    }
     const modalElement = document.getElementById("modalQuoteDraftDownload");
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
@@ -147,4 +170,33 @@ function downloadQuoteDraft(fname) {
         res.textContent = 'Download del file non riuscito';
         res.classList.add('text-danger');
     }
+}
+
+async function shareQuoteToCustomer(fname) {
+    const customer = document.getElementById('ddlCustomer').value;
+    const btn = document.getElementById('btnQuoteDraftDownload');
+    let result = document.getElementById('resultDraft');
+    result.classList.add('d-none');
+    if (customer === '') {
+        result.innerText = "È richiesta la selezione di una persona";
+        result.classList.add("text-danger");
+        result.classList.remove("d-none");
+        return;
+    }
+    result.innerText = "La funzionalità è in fase di elaborazione...";
+    result.classList.remove("text-danger");
+    result.classList.add("text-success");
+    result.classList.remove("d-none");
+    return;
+    btn.lastElementChild.classList.remove('d-none');
+    const el = document.getElementById('quoteToDownloadDiv');
+    // pdf options tuned for A4
+    const opt = {
+        margin: 10,
+        filename: `${fname || 'quote'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    btn.disabled = true;
 }
