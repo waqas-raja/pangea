@@ -55,7 +55,7 @@ async function loadListEstimates() {
         headerFilter: { visible: false },
         columns: [
             {
-                dataField: "id", 
+                dataField: "id",
                 caption: "ID PREVENTIVO",
                 // allowFiltering: true,
                 // sortIndex: 0, sortOrder: "asc",
@@ -95,7 +95,7 @@ async function loadListEstimates() {
                 //     container.html(text);
                 // }
             },
-            { 
+            {
                 dataField: "dtcr",
                 caption: "DATA CREAZIONE",
                 allowFiltering: true,
@@ -155,10 +155,180 @@ async function loadListEstimates() {
                 "groupPanel",
             ]
         },
-        onRowClick: function (e) { 
+        onRowClick: function (e) {
             if (e.rowType === "data") { viewQuote(e.data.id); }
         },
     });
+    const underManagementEstimates = d.payload.filter(p => p.property_status_id === 3);
+    if (underManagementEstimates.length > 0) {
+        $("#estimateUnderManagemanetGrid").dxDataGrid({
+            dataSource: underManagementEstimates,
+            keyExpr: "id",
+            showBorders: true,
+            columnAutoWidth: true,
+            showBorders: true,
+            searchPanel: {
+                visible: true,
+                width: 450,
+                placeholder: "Cerca..."
+            },
+            noDataText: "Non risultano immobili registrati per questa sede",
+            rowAlternationEnabled: false,
+            grouping: { autoExpandAll: false },
+            groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+            filterRow: { visible: false, applyFilter: "auto" },
+            headerFilter: { visible: false },
+            columns: [
+                {
+                    dataField: "id",
+                    caption: "ID PREVENTIVO",
+                    alignment: "left",
+                    width: 150,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        const text = '#' + data.id;
+                        container.text(text);
+                    }
+                },
+                {
+                    dataField: "",
+                    caption: "CLIENTE",
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        const text = data.customer_name + ' ' + data.customer_surname;
+                        container.text(text);
+                    }
+                },
+                {
+                    dataField: "property_alias",
+                    caption: "IMMOBILE",
+                },
+                {
+                    dataField: "",
+                    caption: "RENDITA IPOTETICA",
+                    sortIndex: 4,
+                    alignment: "left",
+                    // cellTemplate: function (container, options) {
+                    //     const data = options.data;
+                    //     const text = '<div class="text-start">€' + (data.income) + '/mese</div>';
+                    //     container.html(text);
+                    // }
+                },
+                {
+                    dataField: "dtcr",
+                    caption: "DATA CREAZIONE",
+                    allowFiltering: true,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        let date = data.dtcr.split(' ')[0];
+                        date = date.split('-');
+                        container.text(date[2] + '/' + date[1] + '/' + date[0]);
+                    }
+                },
+            ],
+            sorting: { mode: "multiple" },
+            remoteOperations: { paging: true, filtering: true, sorting: false },
+            paging: { pageSize: 10 },
+            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+            toolbar: {
+                items: [
+                    {
+                        name: "searchPanel",
+                        location: "before"
+                    },
+                    "groupPanel",
+                ]
+            },
+            onRowClick: function (e) {
+                if (e.rowType === "data") { viewQuote(e.data.id); }
+            },
+        });
+    } else $("#estimateUnderManagemanetGrid").html("<p class='text-center p-4'>Non ci sono preventivo registrati per questa categoria</p>");
+    const acquiredEstimates = d.payload.filter(p => p.property_status_id === 2);
+    if (underManagementEstimates.length > 0) {
+        $("#estimateAcquiredGrid").dxDataGrid({
+            dataSource: acquiredEstimates,
+            keyExpr: "id",
+            showBorders: true,
+            columnAutoWidth: true,
+            showBorders: true,
+            searchPanel: {
+                visible: true,
+                width: 450,
+                placeholder: "Cerca..."
+            },
+            noDataText: "Non risultano immobili registrati per questa sede",
+            rowAlternationEnabled: false,
+            grouping: { autoExpandAll: false },
+            groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+            filterRow: { visible: false, applyFilter: "auto" },
+            headerFilter: { visible: false },
+            columns: [
+                {
+                    dataField: "id",
+                    caption: "ID PREVENTIVO",
+                    alignment: "left",
+                    width: 150,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        const text = '#' + data.id;
+                        container.text(text);
+                    }
+                },
+                {
+                    dataField: "",
+                    caption: "CLIENTE",
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        const text = data.customer_name + ' ' + data.customer_surname;
+                        container.text(text);
+                    }
+                },
+                {
+                    dataField: "property_alias",
+                    caption: "IMMOBILE",
+                },
+                {
+                    dataField: "",
+                    caption: "RENDITA IPOTETICA",
+                    sortIndex: 4,
+                    alignment: "left",
+                    // cellTemplate: function (container, options) {
+                    //     const data = options.data;
+                    //     const text = '<div class="text-start">€' + (data.income) + '/mese</div>';
+                    //     container.html(text);
+                    // }
+                },
+                {
+                    dataField: "dtcr",
+                    caption: "DATA CREAZIONE",
+                    allowFiltering: true,
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        let date = data.dtcr.split(' ')[0];
+                        date = date.split('-');
+                        container.text(date[2] + '/' + date[1] + '/' + date[0]);
+                    }
+                },
+            ],
+            sorting: { mode: "multiple" },
+            remoteOperations: { paging: true, filtering: true, sorting: false },
+            paging: { pageSize: 10 },
+            pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+            toolbar: {
+                items: [
+                    {
+                        name: "searchPanel",
+                        location: "before"
+                    },
+                    "groupPanel",
+                ]
+            },
+            onRowClick: function (e) {
+                if (e.rowType === "data") { viewQuote(e.data.id); }
+            },
+        });
+    } else $("#estimateUnderManagemanetGrid").html("<p class='text-center p-4'>Non ci sono preventivo registrati per questa categoria</p>");
 }
 
 function createNewEstimate() {
