@@ -26,7 +26,7 @@ async function loadProperties() {
         grouping: { autoExpandAll: false },
         groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
         filterRow: { visible: hasData, applyFilter: "auto" },
-        headerFilter: { visible: hasData },
+        headerFilter: { visible: false },
         columns: [
             // {
             //     caption: "Nome",
@@ -40,13 +40,15 @@ async function loadProperties() {
             //         container.text(text);
             //     }
             // },
-            { dataField: "alias", caption: "Alias", sortIndex: 0, sortOrder: "asc" },
+            { dataField: "alias", caption: "Alias", sortIndex: 0,
+                // sortOrder: "asc"
+            },
             { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
-            { dataField: "nation_name", caption: "Nazione", sortIndex: 2, sortOrder: "asc" },
+            { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
             {
                 dataField: "size",
                 caption: "Voltura",
-                sortIndex: 3, sortOrder: "asc",
+                sortIndex: 3,
                 cellTemplate: function (container, options) {
                     const data = options.data;
                     container.text(data.size + ' (mq)');
@@ -55,7 +57,7 @@ async function loadProperties() {
             {
                 dataField: "rooms",
                 caption: "Ipoteca",
-                sortIndex: 3, sortOrder: "asc",
+                sortIndex: 3,
                 cellTemplate: function (container, options) {
                     const data = options.data;
                     container.text(data.rooms);
@@ -65,7 +67,7 @@ async function loadProperties() {
             {
                 dataField: "acquisition_price",
                 caption: "Costo di acquisizione",
-                sortIndex: 4, sortOrder: "asc",
+                sortIndex: 4,
                 width: 200,
                 cellTemplate: function (container, options) {
                     const data = options.data;
@@ -75,7 +77,7 @@ async function loadProperties() {
             {
                 dataField: "renovation_price",
                 caption: "Costo di ristrutturazione",
-                sortIndex: 5, sortOrder: "asc",
+                sortIndex: 5,
                 width: 200,
                 cellTemplate: function (container, options) {
                     const data = options.data;
@@ -85,7 +87,7 @@ async function loadProperties() {
             {
                 dataField: "sell_price",
                 caption: "Prezzo vendita",
-                sortIndex: 6, sortOrder: "asc",
+                sortIndex: 6,
                 width: 200,
                 cellTemplate: function (container, options) {
                     const data = options.data;
@@ -118,7 +120,7 @@ async function loadProperties() {
             grouping: { autoExpandAll: false },
             groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
             filterRow: { visible: underManagementProperties.length > 0, applyFilter: "auto" },
-            headerFilter: { visible: underManagementProperties.length > 0 },
+            headerFilter: { visible: false },
             columns: [
                 { dataField: "alias", caption: "Alias", sortIndex: 0 },
                 { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
@@ -126,7 +128,7 @@ async function loadProperties() {
                 {
                     dataField: "size",
                     caption: "Voltura",
-                    sortIndex: 3, sortOrder: "asc",
+                    sortIndex: 3,
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         container.text(data.size + ' (mq)');
@@ -135,7 +137,7 @@ async function loadProperties() {
                 {
                     dataField: "rooms",
                     caption: "Ipoteca",
-                    sortIndex: 3, sortOrder: "asc",
+                    sortIndex: 3,
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         container.text(data.rooms);
@@ -193,7 +195,7 @@ async function loadProperties() {
             grouping: { autoExpandAll: false },
             groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
             filterRow: { visible: underEvaluationProperties.length > 0, applyFilter: "auto" },
-            headerFilter: { visible: underEvaluationProperties.length > 0 },
+            headerFilter: { visible: false },
             columns: [
                 { dataField: "alias", caption: "Alias", sortIndex: 0 },
                 { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
@@ -201,7 +203,7 @@ async function loadProperties() {
                 {
                     dataField: "size",
                     caption: "Voltura",
-                    sortIndex: 3, sortOrder: "asc",
+                    sortIndex: 3,
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         container.text(data.size + ' (mq)');
@@ -210,7 +212,7 @@ async function loadProperties() {
                 {
                     dataField: "rooms",
                     caption: "Ipoteca",
-                    sortIndex: 3, sortOrder: "asc",
+                    sortIndex: 3,
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         container.text(data.rooms);
