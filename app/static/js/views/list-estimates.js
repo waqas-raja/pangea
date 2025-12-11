@@ -127,20 +127,20 @@ async function loadListEstimates() {
                     container.html(div);
                 }
             },
-            {
-                dataField: "",
-                caption: "AZIONI",
-                sortIndex: 7,
-                width: 100,
-                cellTemplate: function (container, options) {
-                    container.html(`
-                        <div class="d-flex justify-content-between align-items-center">
-                            <i class="bi bi-eye text-primary" title="Visualizzazione" onclick="event.stopPropagation(); viewQuote(${options.data.id})"></i>
-                            <i class="bi bi-pencil" title="Modificare" onclick="event.stopPropagation(); editQuote(${options.data.id})"></i>
-                            <i class="bi bi-trash text-danger" title="Eliminare" onclick="event.stopPropagation(); deleteQuote(${options.data.id})"></i>
-                        </div>`);
-                }
-            },
+            // {
+            //     dataField: "",
+            //     caption: "AZIONI",
+            //     sortIndex: 7,
+            //     width: 100,
+            //     cellTemplate: function (container, options) {
+            //         container.html(`
+            //             <div class="d-flex justify-content-between align-items-center">
+            //                 <i class="bi bi-eye text-primary" title="Visualizzazione" onclick="event.stopPropagation(); viewQuote(${options.data.id})"></i>
+            //                 <i class="bi bi-pencil" title="Modificare" onclick="event.stopPropagation(); editQuote(${options.data.id})"></i>
+            //                 <i class="bi bi-trash text-danger" title="Eliminare" onclick="event.stopPropagation(); deleteQuote(${options.data.id})"></i>
+            //             </div>`);
+            //     }
+            // },
         ],
         sorting: { mode: "multiple" },
         remoteOperations: { paging: true, filtering: true, sorting: false },
