@@ -41,7 +41,7 @@ async function loadOpportunities() {
                 // sortIndex: 2, sortOrder: "asc"
             },
             {
-                dataField: "property_type", caption: "Tipo di proprita",
+                dataField: "property_type", caption: "Tipo di proprietà",
                 allowFiltering: true,
                 // sortIndex: 3, sortOrder: "asc"
             },

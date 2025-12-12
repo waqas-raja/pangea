@@ -51,7 +51,7 @@ async function loadCustomers() {
             },
             {
                 dataField: "phone",
-                caption: "Telephono",
+                caption: "Telefono",
                 // sortIndex: 3, sortOrder: "asc"
             },
             {

@@ -97,7 +97,7 @@ async function loadListEstimates() {
             },
             {
                 dataField: "dtcr",
-                caption: "Data creasione",
+                caption: "Data creazione",
                 allowFiltering: true,
                 // sortIndex: 5, sortOrder: "asc",
                 cellTemplate: function (container, options) {
