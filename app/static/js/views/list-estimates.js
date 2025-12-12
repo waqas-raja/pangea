@@ -56,7 +56,7 @@ async function loadListEstimates() {
         columns: [
             {
                 dataField: "id",
-                caption: "ID PREVENTIVO",
+                caption: "Id preventivo",
                 // allowFiltering: true,
                 // sortIndex: 0, sortOrder: "asc",
                 alignment: "left",
@@ -69,7 +69,7 @@ async function loadListEstimates() {
             },
             {
                 dataField: "",
-                caption: "CLIENTE",
+                caption: "Cliente",
                 // sortIndex: 2,sortOrder: "asc",
                 cellTemplate: function (container, options) {
                     const data = options.data;
@@ -79,12 +79,12 @@ async function loadListEstimates() {
             },
             {
                 dataField: "property_alias",
-                caption: "IMMOBILE",
+                caption: "Immobile",
                 // sortIndex: 3, sortOrder: "asc"
             },
             {
                 dataField: "",
-                caption: "RENDITA IPOTETICA",
+                caption: "Rendita ipotetica",
                 // allowFiltering: true,
                 sortIndex: 4,
                 // sortOrder: "asc",
@@ -97,7 +97,7 @@ async function loadListEstimates() {
             },
             {
                 dataField: "dtcr",
-                caption: "DATA CREAZIONE",
+                caption: "Data creasione",
                 allowFiltering: true,
                 // sortIndex: 5, sortOrder: "asc",
                 cellTemplate: function (container, options) {
@@ -109,7 +109,7 @@ async function loadListEstimates() {
             },
             {
                 dataField: "property_status_id",
-                caption: "STATO",
+                caption: "Stato",
                 // allowFiltering: true,
                 // sortIndex: 6, sortOrder: "asc",
                 alignment: 'center',
@@ -129,7 +129,7 @@ async function loadListEstimates() {
             },
             // {
             //     dataField: "",
-            //     caption: "AZIONI",
+            //     caption: "Azioni",
             //     sortIndex: 7,
             //     width: 100,
             //     cellTemplate: function (container, options) {
@@ -181,7 +181,7 @@ async function loadListEstimates() {
             columns: [
                 {
                     dataField: "id",
-                    caption: "ID PREVENTIVO",
+                    caption: "Id preventivo",
                     alignment: "left",
                     width: 150,
                     cellTemplate: function (container, options) {
@@ -192,7 +192,7 @@ async function loadListEstimates() {
                 },
                 {
                     dataField: "",
-                    caption: "CLIENTE",
+                    caption: "Cliente",
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         const text = data.customer_name + ' ' + data.customer_surname;
@@ -201,11 +201,11 @@ async function loadListEstimates() {
                 },
                 {
                     dataField: "property_alias",
-                    caption: "IMMOBILE",
+                    caption: "Immobile",
                 },
                 {
                     dataField: "",
-                    caption: "RENDITA IPOTETICA",
+                    caption: "Rendita ipotetica",
                     sortIndex: 4,
                     alignment: "left",
                     // cellTemplate: function (container, options) {
@@ -216,7 +216,7 @@ async function loadListEstimates() {
                 },
                 {
                     dataField: "dtcr",
-                    caption: "DATA CREAZIONE",
+                    caption: "Data creazione",
                     allowFiltering: true,
                     cellTemplate: function (container, options) {
                         const data = options.data;
@@ -266,7 +266,7 @@ async function loadListEstimates() {
             columns: [
                 {
                     dataField: "id",
-                    caption: "ID PREVENTIVO",
+                    caption: "Id preventivo",
                     alignment: "left",
                     width: 150,
                     cellTemplate: function (container, options) {
@@ -277,7 +277,7 @@ async function loadListEstimates() {
                 },
                 {
                     dataField: "",
-                    caption: "CLIENTE",
+                    caption: "Cliente",
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         const text = data.customer_name + ' ' + data.customer_surname;
@@ -286,11 +286,11 @@ async function loadListEstimates() {
                 },
                 {
                     dataField: "property_alias",
-                    caption: "IMMOBILE",
+                    caption: "Immobile",
                 },
                 {
                     dataField: "",
-                    caption: "RENDITA IPOTETICA",
+                    caption: "Rendita ipotetica",
                     sortIndex: 4,
                     alignment: "left",
                     // cellTemplate: function (container, options) {
@@ -301,7 +301,7 @@ async function loadListEstimates() {
                 },
                 {
                     dataField: "dtcr",
-                    caption: "DATA CREAZIONE",
+                    caption: "Data creazione",
                     allowFiltering: true,
                     cellTemplate: function (container, options) {
                         const data = options.data;
