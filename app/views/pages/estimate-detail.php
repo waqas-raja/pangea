@@ -16,16 +16,16 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 <!-- <span class="text-muted text-small">Visualizza i dettagli del preventivo per l'immobile e il cliente.</span> -->
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="position-relative" style="width: 230px;">
-                        <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="Modificare" onclick="editQuote(<?= $eid ?>)">
+                        <span id="iconAllowEditGenericInfo" class="editIcon me-2" role="button" title="Modifica" onclick="editQuote(<?= $eid ?>)">
                             <i class="bi bi-pencil-square fs-4"></i>
                         </span>
-                        <span id="iconDownloadPdf" class="editIcon me-2" role="button" title="scarica il pdf" onclick="showQuoteDraftModal()">
+                        <span id="iconDownloadPdf" class="editIcon me-2" role="button" title="Scarica il pdf" onclick="showQuoteDraftModal()">
                             <i class="bi bi-download fs-4"></i>
                         </span>
-                        <span id="iconSendQuoteToCustomer" class="editIcon me-2" role="button" title="Invia alla persona" onclick="showQuoteDraftModal('send')">
+                        <span id="iconSendQuoteToCustomer" class="editIcon me-2" role="button" title="Invia" onclick="showQuoteDraftModal('send')">
                             <i class="bi bi-send fs-4"></i>
                         </span>
-                        <span id="iconDeleteQuote" class="editIcon text-danger" role="button" title="Scartare" onclick="deleteQuote(<?= $eid ?>)">
+                        <span id="iconDeleteQuote" class="editIcon text-danger" role="button" title="Scarta" onclick="deleteQuote(<?= $eid ?>)">
                             <i class="bi bi-trash fs-4"></i>
                         </span>
                     </div>

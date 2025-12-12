@@ -13,7 +13,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
             <span class="pai-title">Dettaglio persona</span>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="position-relative me-2" style="width: 230px;">
-                    <span id="iconAllowEditGenericInfo" class="position-absolute editIcon" role="button" style="right:0px;top:-20px;" title="Modificare" onclick="allowEditGeneralInfo()">
+                    <span id="iconAllowEditGenericInfo" class="position-absolute editIcon" role="button" style="right:0px;top:-20px;" title="Modifica" onclick="allowEditGeneralInfo()">
                         <i class="bi bi-pencil-square fs-3"></i>
                     </span>
                     <button id="iconSaveEditGenericInfo" class="btn btn-blue-inverted position-absolute saveIcon d-none px-2" role="button" style="right:0px;top:-18px;" title="Save" onclick="updateGenericInfo()">

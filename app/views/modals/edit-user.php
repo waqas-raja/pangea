@@ -42,7 +42,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Annulla</button>
                 <button id="btnDisableUser" type="button" class="btn btn-outline-secondary" onclick="disableUser()"><i class="bi bi-x"></i> Disabilita utente</button>
                 <button id="btnUpdateUser" type="button" class="btn btn-blue" onclick="updateUser()">
-                    <i class="bi bi-check-lg"></i> Modificare
+                    <i class="bi bi-check-lg"></i> Modifica
                     <div id="spinnerEditUser" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>
             </div>
