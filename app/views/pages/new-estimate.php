@@ -1,5 +1,5 @@
 <?php
-$title = 'Nuovo preventivi';
+$title = 'Nuovo preventivo';
 ob_start();
 // require_once __DIR__ . "/../modals/confirm-delete.php";
 ?>

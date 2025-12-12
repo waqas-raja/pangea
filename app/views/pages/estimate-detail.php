@@ -1,5 +1,5 @@
 <?php
-$title = 'Dettaglio Preventivi';
+$title = 'Dettaglio Preventivo';
 ob_start();
 $eid = htmlspecialchars($id, ENT_QUOTES, 'UTF-8');
 require_once __DIR__ . "/../modals/draft-quote.php";
@@ -12,7 +12,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
     <div class="pai-card mb-3">
         <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="pai-title fw-bold text-blue me-2">Preventivi <span id="estimateId">#P2024-<?php echo $eid; ?></span></div>
+                <div class="pai-title fw-bold text-blue me-2">Preventivo <span id="estimateId">#P2024-<?php echo $eid; ?></span></div>
                 <!-- <span class="text-muted text-small">Visualizza i dettagli del preventivo per l'immobile e il cliente.</span> -->
                 <div class="d-flex justify-content-start align-items-center">
                     <div class="position-relative" style="width: 230px;">

@@ -107,11 +107,11 @@
             <div class="modal-footer">
                 <span id="resultDraft"></span>
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"><i class="bi bi-x"></i> Annulla</button>
-                <button id="btnQuoteDraftDownload" type="button" class="btn btn-blue" onclick="downloadQuoteDraft('Dettaglio Preventivi #P2024-<?= $eid; ?>')">
+                <button id="btnQuoteDraftDownload" type="button" class="btn btn-blue" onclick="downloadQuoteDraft('Dettaglio Preventivo #P2024-<?= $eid; ?>')">
                     <i class="bi bi-check-lg"></i> Scarica il PDF
                     <div id="spinnerNewProperty" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>
-                <button id="btnSendQuoteDraftToCustomer" type="button" class="btn btn-blue d-none" onclick="shareQuoteToCustomer('Dettaglio Preventivi #P2024-<?= $eid; ?>')">
+                <button id="btnSendQuoteDraftToCustomer" type="button" class="btn btn-blue d-none" onclick="shareQuoteToCustomer('Dettaglio Preventivo #P2024-<?= $eid; ?>')">
                     <i class="bi bi-check-lg"></i> Inviare
                     <div id="spinnerNewProperty" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>

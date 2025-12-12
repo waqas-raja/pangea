@@ -127,13 +127,13 @@
 <div class="row mb-3">
     <div class="col-12 col-sm-12 col-md-6 col-lg-6">
         <div class="pai-card position-relative cardHeight">
-            <h3 class="pai-title">Immobili associate</h3>
+            <h3 class="pai-title">Immobili associati</h3>
             <div id="associatedPropertiesGrid" class=""></div>
         </div>
     </div>
     <div class="col-12 col-sm-12 col-md-6 col-lg-6">
         <div class="pai-card position-relative cardHeight">
-            <h3 class="pai-title">Preventivi associate</h3>
+            <h3 class="pai-title">Preventivi associati</h3>
             <div id="associatedQuoteGrid" class=""></div>
         </div>
     </div>

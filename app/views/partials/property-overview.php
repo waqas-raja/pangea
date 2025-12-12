@@ -172,7 +172,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="pai-card">
-            <h3 class="pai-title mb-3">Preventivi associate</h3>
+            <h3 class="pai-title mb-3">Preventivi associato</h3>
             <div id="associatedQuotesList"></div>
         </div>
     </div>

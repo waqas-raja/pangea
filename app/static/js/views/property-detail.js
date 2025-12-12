@@ -22,7 +22,7 @@ async function loadAssocaitedQuotes() {
             width: 450,
             placeholder: "Cerca..."
         },
-        noDataText: "Non ci sono preventivi associati registrati per questa immobile.",
+        noDataText: "Non ci sono preventivi associati registrati per questo immobile.",
         rowAlternationEnabled: false,
         grouping: { autoExpandAll: false },
         groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
