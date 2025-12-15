@@ -92,6 +92,18 @@ async function loadAssociatedProperties() {
                     container.text(formatNumber(parseFloat(data.sell_price)));
                 }
             },
+            {
+                dataField: "", caption: "Profitto", width: 80, sortIndex: 6,
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    const acqCost = parseFloat(data.acquisition_price) || 0;
+                    const renCost = parseFloat(data.renovation_price) || 0;
+                    const extraCost = parseFloat(data.extra_price) || 0;
+                    const sellPrice = parseFloat(data.sell_price) || 0;
+                    const margin = (((sellPrice - (acqCost + renCost + extraCost)) / (acqCost + renCost + extraCost)) * 100);
+                    container.text(parseFloat(margin).toFixed(2) + ' %');
+                }
+            },
         ],
         sorting: { mode: "multiple" },
         remoteOperations: { paging: true, filtering: true, sorting: true },
@@ -133,7 +145,7 @@ async function loadAssociatedQuotes() {
         columns: [
             {
                 dataField: "id",
-                caption: "ID PREVENTIVO",
+                caption: "Id preventivo",
                 // allowFiltering: true,
                 // sortIndex: 0, sortOrder: "asc",
                 alignment: "left",
@@ -146,12 +158,12 @@ async function loadAssociatedQuotes() {
             },
             {
                 dataField: "property_alias",
-                caption: "IMMOBILE",
+                caption: "Immobile",
                 // sortIndex: 3, sortOrder: "asc"
             },
             {
                 dataField: "dtcr",
-                caption: "DATA CREAZIONE",
+                caption: "Data creazione",
                 allowFiltering: true,
                 width: 130,
                 // sortIndex: 5, sortOrder: "asc",
@@ -164,7 +176,7 @@ async function loadAssociatedQuotes() {
             },
             {
                 dataField: "property_status_id",
-                caption: "STATO",
+                caption: "Stato",
                 // allowFiltering: true,
                 // sortIndex: 6, sortOrder: "asc",
                 alignment: 'center',
