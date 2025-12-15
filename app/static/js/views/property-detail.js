@@ -31,7 +31,7 @@ async function loadAssocaitedQuotes() {
         columns: [
             {
                 dataField: "id", 
-                caption: "ID PREVENTIVO",
+                caption: "Id preventivo",
                 alignment: "left",
                 width: 150,
                 cellTemplate: function (container, options) {
@@ -42,7 +42,7 @@ async function loadAssocaitedQuotes() {
             },
             {
                 dataField: "",
-                caption: "CLIENTE",
+                caption: "Cliente",
                 cellTemplate: function (container, options) {
                     const data = options.data;
                     const text = data.customer_name + ' ' + data.customer_surname;
@@ -51,7 +51,7 @@ async function loadAssocaitedQuotes() {
             },
             { 
                 dataField: "dtcr",
-                caption: "DATA CREAZIONE",
+                caption: "Data creazione",
                 allowFiltering: true,
                 // sortIndex: 5, sortOrder: "asc",
                 cellTemplate: function (container, options) {
