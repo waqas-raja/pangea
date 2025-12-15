@@ -417,7 +417,6 @@ function calculateMarginalPercentage() {
     const renCost = parseFloat(document.getElementById('txtRenPrice').value) || 0;
     const extraCost = parseFloat(document.getElementById('txtExtraPrice').value) || 0;
     const sellPrice = parseFloat(document.getElementById('txtSellPrice').value) || 0;
-    const n = ((0 - 0) / 0) * 100;
     _marginalPercentage = (((sellPrice - (acqCost + renCost + extraCost)) / (acqCost + renCost + extraCost)) * 100);
     if (isNaN(_marginalPercentage)) _marginalPercentage = 0;
     document.getElementById('txtMarginalPercentage').value = _marginalPercentage.toFixed(2);

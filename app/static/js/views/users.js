@@ -20,7 +20,7 @@ function loadList(data) {
         filterRow: { visible: true, applyFilter: "auto" },
         headerFilter: { visible: true },
         columns: [
-            { dataField: "full_name", caption: "Nome Cognome", allowFiltering: true },
+            { dataField: "full_name", caption: "Nome cognome", allowFiltering: true },
             { dataField: "email", caption: "Email", allowFiltering: true },
             { dataField: "role_name", caption: "Ruolo", allowFiltering: true }
         ],
@@ -35,7 +35,7 @@ function loadList(data) {
                     widget: "dxButton",
                     options: {
                         icon: "add",
-                        text: "Aggiungi Utente",
+                        text: "Crea un nuovo utente",
                         onClick: function () {
                             const modalElement = document.getElementById("modalAddUser");
                             const modal = new bootstrap.Modal(modalElement);
