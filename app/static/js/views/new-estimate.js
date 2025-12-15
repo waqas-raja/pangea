@@ -31,7 +31,7 @@ async function loadEstimateDetail(id) {
                 totalDeduct += parseInt(element.fixed_cost_amount);
                 strCost += `<div id="costSection_${i}" class="d-flex justify-content-between align-items-center gap-3 mb-3">
                                 <input type="text" id="txtCostDesc_${i}_1" class="form-control w-80" value="${element.fixed_cost_label}" placeholder="Es. TARI, SPESE Condominiali...">
-                                <input type="number" id="txtCost_${i}_1" class="form-control w-15 costToDeduct" maxlength="5" value="${parseInt(element.fixed_cost_amount)}" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                                <input type="number" id="txtCost_${i}_1" class="form-control w-15 costToDeduct" maxlength="5" value="${parseInt(element.fixed_cost_amount)}" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); calculateEstimate()">
                                 <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>
                             </div>`;
             });
@@ -125,7 +125,7 @@ function addCostVariant() {
     div.id = `costSection_${ctrl_id}`;
     div.classList.add('d-flex', 'justify-content-between', 'align-items-center', 'gap-3', 'mb-3');
     const str = `<input type="text" id="txtCostDesc_${ctrl_id}_1" class="form-control w-80" value="" placeholder="Es. Tipo">
-                <input type="number" id="txtCost_${ctrl_id}_1" class="form-control w-15 costToDeduct" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                <input type="number" id="txtCost_${ctrl_id}_1" class="form-control w-15 costToDeduct" maxlength="5" value="" placeholder="€" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); calculateEstimate()">
                 <span class="w-5 text-center" role="button" onclick="removeCostSection(this)"><i class="bi bi-trash"></i></span>`;
     div.innerHTML = str;
     parent.append(div);
