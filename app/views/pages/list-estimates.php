@@ -13,21 +13,21 @@ require_once __DIR__ . '/../modals/confirm-delete.php';
     </div>
     <div class="pai-card">
         <ul class="nav nav-tabs" id="estimatesTabs" role="tablist">
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="estimates-tab" data-bs-toggle="tab" data-bs-target="#estimates-tab-content" type="button" role="tab" aria-controls="estimates-tab" aria-selected="true">Preventivi</button>
-            </li>
+            </li> -->
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="under-managemanet-tab" data-bs-toggle="tab" data-bs-target="#under-managemanet-content" type="button" role="tab" aria-controls="under-managemanet" aria-selected="false">In gestione</button>
+                <button class="nav-link active" id="under-managemanet-tab" data-bs-toggle="tab" data-bs-target="#under-managemanet-content" type="button" role="tab" aria-controls="under-managemanet" aria-selected="false">In gestione</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="acquired-tab" data-bs-toggle="tab" data-bs-target="#acquired-tab-content" type="button" role="tab" aria-controls="acquired-tab" aria-selected="false">Acquisito</button>
             </li>
         </ul>
         <div class="tab-content" id="estimatesTabsContent">
-            <div class="tab-pane fade border border-top-0 p-3 show active" id="estimates-tab-content" role="tabpanel" aria-labelledby="estimates-tab">
+            <!-- <div class="tab-pane fade border border-top-0 p-3 show active" id="estimates-tab-content" role="tabpanel" aria-labelledby="estimates-tab">
                 <div id="listEstimatesGrid" class=""></div>
-            </div>
-            <div class="tab-pane fade border border-top-0 p-3" id="under-managemanet-content" role="tabpanel" aria-labelledby="under-managemanet">
+            </div> -->
+            <div class="tab-pane fade border border-top-0 p-3 show active" id="under-managemanet-content" role="tabpanel" aria-labelledby="under-managemanet">
                 <div id="estimateUnderManagemanetGrid" class=""></div>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="acquired-tab-content" role="tabpanel" aria-labelledby="acquired-tab">
