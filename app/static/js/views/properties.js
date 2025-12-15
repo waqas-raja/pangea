@@ -28,18 +28,6 @@ async function loadProperties() {
         filterRow: { visible: hasData, applyFilter: "auto" },
         headerFilter: { visible: false },
         columns: [
-            // {
-            //     caption: "Nome",
-            //     allowFiltering: true,
-            //     sortIndex: 1, sortOrder: "asc",
-            //     cellTemplate: function (container, options) {
-            //         const data = options.data;
-            //         const text = data.bizname !== '' && data.bizname !== undefined && data.bizname !== null
-            //             ? data.bizname
-            //             : `${data.surname} ${data.name}`;
-            //         container.text(text);
-            //     }
-            // },
             { dataField: "alias", caption: "Alias", sortIndex: 0,
                 // sortOrder: "asc"
             },
