@@ -82,6 +82,8 @@ final class Property {
                 c.name as customer_name,
                 c.surname as customer_surname,
                 c.bizname as customer_bizname,
+                c.email as customer_email,
+                c.phone as customer_phone,
                 n.name as nation_name,
                 ps. name as property_status_name
             from property as p

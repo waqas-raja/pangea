@@ -21,7 +21,7 @@ final class Estimate
     {
         $q = <<<query
             select 
-                q.*,
+                e.*,
                 c.name as customer_name,
                 c.surname as customer_surname,
                 c.bizname as customer_bizname,
@@ -31,11 +31,27 @@ final class Estimate
                 p.cap as property_cap,
                 p.nation as property_nation,
                 p.property_status as property_status_id,
-                ps.name as property_status_label
-            from estimate as q
-            left join customer as c on q.customer = c.id
-            left join property as p on q.property = p.id
+                ps.name as property_status_label,
+                COALESCE(fc.fixed_cost, 0) AS fixed_cost,
+                COALESCE(m.total_amount, 0) AS total_amount
+            from estimate as e
+            left join customer as c on e.customer = c.id
+            left join property as p on e.property = p.id
             left join td_property_status as ps on p.property_status = ps.id
+            LEFT JOIN (
+                SELECT 
+                    estimate_id,
+                    SUM(amount) AS fixed_cost
+                FROM estimate_fixed_costs
+                GROUP BY estimate_id
+            ) fc ON fc.estimate_id = e.id
+            LEFT JOIN (
+                SELECT 
+                    estimate_id,
+                    SUM(avge_daily_price * rented_days) AS total_amount
+                FROM estimate_monthly
+                GROUP BY estimate_id
+            ) m ON m.estimate_id = e.id
             order by c.name
         query;
         $estimates = DB::Query($q);

@@ -208,11 +208,11 @@ async function loadListEstimates() {
                     caption: "Rendita ipotetica",
                     sortIndex: 4,
                     alignment: "left",
-                    // cellTemplate: function (container, options) {
-                    //     const data = options.data;
-                    //     const text = '<div class="text-start">€' + (data.income) + '/mese</div>';
-                    //     container.html(text);
-                    // }
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        const text = formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
+                        container.html(text);
+                    }
                 },
                 {
                     dataField: "dtcr",
@@ -293,11 +293,11 @@ async function loadListEstimates() {
                     caption: "Rendita ipotetica",
                     sortIndex: 4,
                     alignment: "left",
-                    // cellTemplate: function (container, options) {
-                    //     const data = options.data;
-                    //     const text = '<div class="text-start">€' + (data.income) + '/mese</div>';
-                    //     container.html(text);
-                    // }
+                    cellTemplate: function (container, options) {
+                        const data = options.data;
+                        const text = formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
+                        container.html(text);
+                    }
                 },
                 {
                     dataField: "dtcr",
