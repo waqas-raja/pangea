@@ -12,26 +12,26 @@ require_once __DIR__ . '/../modals/add-property.php';
     </div>
     <div class="pai-card">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="property-tab" data-bs-toggle="tab" data-bs-target="#property" type="button" role="tab" aria-controls="property" aria-selected="true">Immobili</button>
-            </li>
+            </li> -->
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="under-managemanet-tab" data-bs-toggle="tab" data-bs-target="#under-managemanet" type="button" role="tab" aria-controls="under-managemanet" aria-selected="false">In gestione</button>
+                <button class="nav-link active" id="under-managemanet-tab" data-bs-toggle="tab" data-bs-target="#under-managemanet" type="button" role="tab" aria-controls="under-managemanet" aria-selected="false">In gestione</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <!-- <li class="nav-item" role="presentation">
                 <button class="nav-link" id="under-evaluation-tab" data-bs-toggle="tab" data-bs-target="#under-evaluation" type="button" role="tab" aria-controls="under-evaluation" aria-selected="false">In valutazione</button>
-            </li>
+            </li> -->
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade border border-top-0 p-3 show active" id="property" role="tabpanel" aria-labelledby="property-tab">
+            <!-- <div class="tab-pane fade border border-top-0 p-3 show active" id="property" role="tabpanel" aria-labelledby="property-tab">
                 <div id="propertyGrid" class=""></div>
-            </div>
-            <div class="tab-pane fade border border-top-0 p-3" id="under-managemanet" role="tabpanel" aria-labelledby="under-managemanet-tab">
+            </div> -->
+            <div class="tab-pane fade border border-top-0 p-3 show active" id="under-managemanet" role="tabpanel" aria-labelledby="under-managemanet-tab">
                 <div id="propertyUnderManagemanetGrid" class=""></div>
             </div>
-            <div class="tab-pane fade border border-top-0 p-3" id="under-evaluation" role="tabpanel" aria-labelledby="under-evaluation-tab">
+            <!-- <div class="tab-pane fade border border-top-0 p-3" id="under-evaluation" role="tabpanel" aria-labelledby="under-evaluation-tab">
                 <div id="propertyUnderEvaluationGrid" class=""></div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

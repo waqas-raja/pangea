@@ -140,8 +140,24 @@ async function loadPropertyDetail() {
     document.getElementById("spElevator").innerText = r.payload.elevator ? "Yes" : "No";
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price)) ?? formatNumber(0);
     document.getElementById("spRenPrice").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
-    document.getElementById("spExtraPrice").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
+    document.getElementById("spExtraPrice").innerText = formatNumber(parseInt(r.payload.extra_price)) ?? formatNumber(0);
     document.getElementById("spSellPrice").innerText = formatNumber(parseInt(r.payload.sell_price)) ?? formatNumber(0);
+
+    document.getElementById("customerNameNotary").innerText = (r.payload.customer_bizname !== null ? r.payload.customer_bizname : r.payload.customer_name + ' ' + r.payload.customer_surname) ?? 'n.d.';
+    document.getElementById("customerEmailNotary").innerText = r.payload.customer_email ?? 'n.d.';
+    document.getElementById("customerPhoneNotary").innerText = r.payload.customer_phone ?? 'n.d.';
+    document.getElementById("propertyAddressNotary").innerText = r.payload.address + ', ' + r.payload.city + ', '+ r.payload.nation_name;
+    document.getElementById("propertySizeNotary").innerText = r.payload.size !== '' ? r.payload.size + ' (mq)' : 'n.d.';
+    document.getElementById("notaryAcqCost").innerText = formatNumber(parseInt(r.payload.acquisition_price)) ?? formatNumber(0);
+    document.getElementById("notaryRenCost").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
+    document.getElementById("notaryExtCost").innerText = formatNumber(parseInt(r.payload.extra_price)) ?? formatNumber(0);
+    document.getElementById("notarySellPrice").innerText = formatNumber(parseInt(r.payload.sell_price)) ?? formatNumber(0);
+    const acqCost = parseFloat(r.payload.acquisition_price) || 0;
+    const renCost = parseFloat(r.payload.renovation_price) || 0;
+    const extraCost = parseFloat(r.payload.extra_price) || 0;
+    const sellPrice = parseFloat(r.payload.sell_price) || 0;
+    const marginalPercentage = (((sellPrice - (acqCost + renCost + extraCost)) / (acqCost + renCost + extraCost)) * 100);
+    document.getElementById('notaryProfit').innerText = marginalPercentage.toFixed(2) + ' %';
 
     document.getElementById("ddlCustomer").value = r.payload.customer ?? '';
     // document.getElementById("ddlOpportunity").value = r.payload.opportunity ?? ''
@@ -162,6 +178,8 @@ async function loadPropertyDetail() {
     document.getElementById("txtRenPrice").value = r.payload.renovation_price ?? '';
     document.getElementById("txtExtraPrice").value = r.payload.renovation_price ?? '';
     document.getElementById("txtSellPrice").value = r.payload.sell_price ?? '';
+    const d = new Date();
+    document.getElementById('propertyDateNotry').textContent = 'Data: ' + d.toLocaleDateString();
 }
 
 function allowEditGeneralInfo() {
@@ -382,6 +400,49 @@ async function updateGenericInfo() {
     } catch (error) {
         result.innerText = "Si sono verificati degli errori";
         console.error(error.message !== undefined ? error.message : error);
+    }
+}
+
+function showNotarySheetModal() {
+    const modalElement = document.getElementById("modalNotarySheetDownload");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function downloadPropertyNotary(fname) {
+    const btn = document.getElementById('btnNotaryDownload');
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    const el = document.getElementById('notaryToDownloadDiv');
+    // pdf options tuned for A4
+    const opt = {
+        margin: 10,
+        filename: `${fname || 'notary'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    let res = document.getElementById('resultNotary');
+    try {
+        if (typeof html2pdf === 'undefined') {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js';
+            s.onload = () => html2pdf().set(opt).from(el).save();
+            document.body.appendChild(s);
+        } else html2pdf().set(opt).from(el).save();
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        res.textContent = 'File scaricato correttamente';
+        res.classList.add('text-success');
+        setTimeout(() => {
+            res.textContent = '';
+            $('#modalNotarySheetDownload').modal('hide');
+        }, 3000);
+    } catch (error) {
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        res.textContent = 'Download del file non riuscito';
+        res.classList.add('text-danger');
     }
 }
 

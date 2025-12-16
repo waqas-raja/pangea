@@ -15,86 +15,86 @@ async function loadProperties() {
     const response = await fetch('/api/properties');
     const r = await response.json();
     const hasData = r.payload.length > 0;
-    $("#propertyGrid").dxDataGrid({
-        dataSource: r.payload,
-        keyExpr: "id",
-        showBorders: true,
-        columnAutoWidth: true,
-        showBorders: true,
-        noDataText: "Non ci sono proprietà registrate",
-        rowAlternationEnabled: false,
-        grouping: { autoExpandAll: false },
-        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
-        filterRow: { visible: hasData, applyFilter: "auto" },
-        headerFilter: { visible: false },
-        columns: [
-            { dataField: "alias", caption: "Alias", sortIndex: 0,
-                // sortOrder: "asc"
-            },
-            { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
-            { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
-            {
-                dataField: "size",
-                caption: "Voltura",
-                sortIndex: 3,
-                cellTemplate: function (container, options) {
-                    const data = options.data;
-                    container.text(data.size + ' (mq)');
-                }
-            },
-            {
-                dataField: "rooms",
-                caption: "Ipoteca",
-                sortIndex: 3,
-                cellTemplate: function (container, options) {
-                    const data = options.data;
-                    container.text(data.rooms);
-                }
-            },
-            // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3, sortOrder: "asc" },
-            {
-                dataField: "acquisition_price",
-                caption: "Costo di acquisizione",
-                sortIndex: 4,
-                width: 200,
-                cellTemplate: function (container, options) {
-                    const data = options.data;
-                    container.text(formatNumber(parseFloat(data.acquisition_price)));
-                }
-            },
-            {
-                dataField: "renovation_price",
-                caption: "Costo di ristrutturazione",
-                sortIndex: 5,
-                width: 200,
-                cellTemplate: function (container, options) {
-                    const data = options.data;
-                    container.text(formatNumber(parseFloat(data.renovation_price)));
-                }
-            },
-            {
-                dataField: "sell_price",
-                caption: "Prezzo vendita",
-                sortIndex: 6,
-                width: 200,
-                cellTemplate: function (container, options) {
-                    const data = options.data;
-                    container.text(formatNumber(parseFloat(data.sell_price)));
-                }
-            },
-        ],
-        sorting: { mode: "multiple" },
-        remoteOperations: { paging: true, filtering: true, sorting: false },
-        paging: { pageSize: 10 },
-        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
-        toolbar: {
-            // items: [
-            //     "groupPanel",
-            //     "searchPanel",
-            // ]
-        },
-        onRowClick: function (e) { if (e.rowType === "data") { window.location = `/property/${e.data.id}`; } },
-    });
+    // $("#propertyGrid").dxDataGrid({
+    //     dataSource: r.payload,
+    //     keyExpr: "id",
+    //     showBorders: true,
+    //     columnAutoWidth: true,
+    //     showBorders: true,
+    //     noDataText: "Non ci sono proprietà registrate",
+    //     rowAlternationEnabled: false,
+    //     grouping: { autoExpandAll: false },
+    //     groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+    //     filterRow: { visible: hasData, applyFilter: "auto" },
+    //     headerFilter: { visible: false },
+    //     columns: [
+    //         { dataField: "alias", caption: "Alias", sortIndex: 0,
+    //             // sortOrder: "asc"
+    //         },
+    //         { dataField: "", caption: "Tipo di immobile", sortIndex: 1 },
+    //         { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
+    //         {
+    //             dataField: "size",
+    //             caption: "Voltura",
+    //             sortIndex: 3,
+    //             cellTemplate: function (container, options) {
+    //                 const data = options.data;
+    //                 container.text(data.size + ' (mq)');
+    //             }
+    //         },
+    //         {
+    //             dataField: "rooms",
+    //             caption: "Ipoteca",
+    //             sortIndex: 3,
+    //             cellTemplate: function (container, options) {
+    //                 const data = options.data;
+    //                 container.text(data.rooms);
+    //             }
+    //         },
+    //         // { dataField: "property_status_name", caption: "Stato di proprietà", sortIndex: 3, sortOrder: "asc" },
+    //         {
+    //             dataField: "acquisition_price",
+    //             caption: "Costo di acquisizione",
+    //             sortIndex: 4,
+    //             width: 200,
+    //             cellTemplate: function (container, options) {
+    //                 const data = options.data;
+    //                 container.text(formatNumber(parseFloat(data.acquisition_price)));
+    //             }
+    //         },
+    //         {
+    //             dataField: "renovation_price",
+    //             caption: "Costo di ristrutturazione",
+    //             sortIndex: 5,
+    //             width: 200,
+    //             cellTemplate: function (container, options) {
+    //                 const data = options.data;
+    //                 container.text(formatNumber(parseFloat(data.renovation_price)));
+    //             }
+    //         },
+    //         {
+    //             dataField: "sell_price",
+    //             caption: "Prezzo vendita",
+    //             sortIndex: 6,
+    //             width: 200,
+    //             cellTemplate: function (container, options) {
+    //                 const data = options.data;
+    //                 container.text(formatNumber(parseFloat(data.sell_price)));
+    //             }
+    //         },
+    //     ],
+    //     sorting: { mode: "multiple" },
+    //     remoteOperations: { paging: true, filtering: true, sorting: false },
+    //     paging: { pageSize: 10 },
+    //     pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+    //     toolbar: {
+    //         // items: [
+    //         //     "groupPanel",
+    //         //     "searchPanel",
+    //         // ]
+    //     },
+    //     onRowClick: function (e) { if (e.rowType === "data") { window.location = `/property/${e.data.id}`; } },
+    // });
     const underManagementProperties = r.payload.filter(p => p.property_status === 3);
     if (underManagementProperties.length > 0) {
         $("#propertyUnderManagemanetGrid").dxDataGrid({
@@ -170,6 +170,7 @@ async function loadProperties() {
             onRowClick: function (e) { if (e.rowType === "data") { window.location = `/property/${e.data.id}`; } },
         });
     } else $("#propertyUnderManagemanetGrid").html("<p class='text-center p-4'>Non ci sono proprietà registrate per questa categoria</p>");
+    return;
     const underEvaluationProperties = r.payload.filter(p => p.property_status === 1);
     if (underEvaluationProperties.length > 0) {
         $("#propertyUnderEvaluationGrid").dxDataGrid({
