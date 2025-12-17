@@ -43,7 +43,13 @@ class ApiRoutes {
             ->add($this->jwtMiddleware);
 
             $group->post('/reset-psw', function ($request, $response) {
-                return User::ResetPassword($request, $response);
+                return User::GeneratePin($request, $response);
+            })
+            ->add($this->authMiddleware)
+            ->add($this->jwtMiddleware);
+            
+            $group->patch('/reset-new-psw/{id}', function ($request, $response) {
+                return User::ResetNewPassword($request, $response);
             })
             ->add($this->authMiddleware)
             ->add($this->jwtMiddleware);
