@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Framework\Models;
 
 use App\Framework\Tools\DB;
@@ -9,15 +10,19 @@ use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Random\RandomException;
+use PHPMailer\PHPMailer\PHPMailer;
+use App\Framework\Tools\BrevoManager;
 
-final class User {
+final class User
+{
     /**
      * @throws Exception
      */
-    public static function GetTokenInfo($request): array  {
+    public static function GetTokenInfo($request): array
+    {
         $jwtSecret = getenv('JWT_SECRET');
         $tokenCookie = $_COOKIE['token'] ?? '';
-        if(empty($tokenCookie)) throw new Exception('Token not found', 401);
+        if (empty($tokenCookie)) throw new Exception('Token not found', 401);
         $decoded = JWT::decode($tokenCookie, new Key($jwtSecret, 'HS256'));
         return (array)$decoded;
     }
@@ -26,7 +31,8 @@ final class User {
      * @throws RandomException
      * @throws Exception
      */
-    public static function SignIn($request, $response) {
+    public static function SignIn($request, $response)
+    {
         $body = $request->getBody()->getContents();
         $data = json_decode($body, true);
         $email = $data['email'] ?? '';
@@ -34,11 +40,11 @@ final class User {
         $ip = $data['ip'] ?? '';
         $mobile = $data['mobile'] ?? '';
         $os = $data['os'] ?? '';
-        if(empty($email) || empty($psw)) throw new Exception('Email and password are required', 400);
+        if (empty($email) || empty($psw)) throw new Exception('Email and password are required', 400);
         $q = "SELECT u.id, u.name, u.role_id FROM user as u WHERE u.email = ? AND u.psw = ?";
         $rows = DB::Query($q, [$email, sha1($psw)]);
-        if(count($rows) == 0) throw new Exception('Invalid email or password', 401);
-        if(count($rows) > 1) throw new Exception("Invalid number of users with the same email", 500);
+        if (count($rows) == 0) throw new Exception('Invalid email or password', 401);
+        if (count($rows) > 1) throw new Exception("Invalid number of users with the same email", 500);
         $u = $rows[0];
         $payload = [
             'id' => $u['id'],
@@ -65,14 +71,15 @@ final class User {
     /**
      * @throws Exception
      */
-    public static function AuthRenew($request, $response) {
+    public static function AuthRenew($request, $response)
+    {
         $body = $request->getBody()->getContents();
         $data = json_decode($body, true);
         $refresh_token = $data['refresh_token'] ?? '';
         $q = "select token from user_session where token = ?";
         $rows = DB::Query($q, [$refresh_token]);
-        if(count($rows) == 0) throw new Exception('Invalid refresh token', 401);
-        if(count($rows) > 1) throw new Exception("Invalid number of users with the same refresh token", 500);
+        if (count($rows) == 0) throw new Exception('Invalid refresh token', 401);
+        if (count($rows) > 1) throw new Exception("Invalid number of users with the same refresh token", 500);
         $token_info = self::GetTokenInfo($request);
         $jwtSecret = getenv('JWT_SECRET');
         $payload = [
@@ -89,7 +96,8 @@ final class User {
     /**
      * @throws Exception
      */
-    public static function AuthValidate($request, $response) {
+    public static function AuthValidate($request, $response)
+    {
         $token_info = self::GetTokenInfo($request);
         $response->getBody()->write(json_encode(["is_valid" => !empty($token_info)]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
@@ -99,25 +107,76 @@ final class User {
      * @throws RandomException
      * @throws Exception
      */
-    public static function ResetPassword($request, $response) {
-        $token_info = self::GetTokenInfo($request);
-        $user_id = $token_info['id'];
-        $rnd_psw = bin2hex(random_bytes(16));
-        $q = "update user set psw = sha1(?), force_change_psw = 1 where id = ?";
-        $params = [$rnd_psw, $user_id];
-        $row_affected = DB::Execute($q, $params);
-        if($row_affected == 0) throw new Exception("Error updating user password", 500);
-        $response->getBody()->write(json_encode(['result' => true]));
-        //TODO Inviare mail transazionale con la nuova password
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    public static function GeneratePin($request, $response)
+    {
+        try {
+            $token_info = self::GetTokenInfo($request);
+            $user_id = $token_info['id'];
+            $parsedBody = json_decode($request->getBody()->getContents(), true);
+            $email = $parsedBody['email'] ?? "";
+            error_log($email);
+            if ($email === "") throw new Exception("L'e-mail è obbligatoria", 400);
+            $query = 'SELECT id FROM user WHERE email = ?';
+            $row = DB::Query($query, [$email]);
+            if (count($row) == 0) throw new Exception("E-mail non trovata", 404);
+            $email = 'waqasraja9@gmail.com';
+            $pin = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host       = getenv('BREVO_SMTP');
+            $mail->SMTPAuth   = true;
+            $mail->Username   = getenv('BREVO_USER');
+            $mail->Password   = getenv('BREVO_PSW');
+            $mail->Port       = (int)getenv('BREVO_PORT');
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->setFrom(getenv('DEFAULT_MAIL_FROM'), getenv('APPLICATION_NAME'));
+            $mail->addAddress($email);
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Your Verification PIN';
+            $mail->Body    = "
+            <p>Hello,</p>
+            <p>Your verification PIN is:</p>
+            <h2>$pin</h2>
+            <p>This PIN will expire in 3 minutes.</p>";
+            $mailRes = $mail->send();
+            $response->getBody()->write(json_encode(['result' => true, 'pin' => $pin, 'userId' => $row[0]['id']]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws RandomException
+     * @throws Exception
+     */
+    public static function ResetNewPassword($request, $response)
+    {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $parsedBody = json_decode($request->getBody()->getContents(), true);
+            $newPsw = $parsedBody['newPsw'] ?? "";
+            $q = "update user set psw = sha1(?), force_change_psw = 1 where id = ?";
+            $params = [$newPsw, $id];
+            $row_affected = DB::Execute($q, $params);
+            if($row_affected == 0) throw new Exception("Errore durante l'aggiornamento della nuova password dell'utente", 500);
+            $response->getBody()->write(json_encode(['result' => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
     }
 
     /**
      * @throws Exception
      */
-    public static function GetAll($request, $response) {
+    public static function GetAll($request, $response)
+    {
         $token_info = self::GetTokenInfo($request);
-        if($token_info['role'] < Role::STAFF) throw new Exception('Unauthorized request', 401);
+        if ($token_info['role'] < Role::STAFF) throw new Exception('Unauthorized request', 401);
         $q = <<<query
             select u.id, u.name, u.surname, concat(u.name, ' ', u.surname) as full_name, u.email, r.id as role_id, r.name as role_name 
             from user as u 
@@ -132,7 +191,8 @@ final class User {
     /**
      * @throws Exception
      */
-    public static function Dashboard($request, $response) {
+    public static function Dashboard($request, $response)
+    {
         $token_info = self::GetTokenInfo($request);
         $user_id = $token_info['id'];
         $user_role = $token_info['role'];
@@ -147,25 +207,26 @@ final class User {
     /**
      * @throws Exception
      */
-    public static function Add($request, $response) {
+    public static function Add($request, $response)
+    {
         $token_info = self::GetTokenInfo($request);
         $user_id = $token_info['id'];
         $user_role = $token_info['role'];
-        if($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
+        if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
         $parsedBody = json_decode($request->getBody()->getContents(), true);
         $name = $parsedBody['name'] ?? "";
         $surname = $parsedBody['surname'] ?? "";
         $email = $parsedBody['email'] ?? "";
         $role_id = (int)$parsedBody['role'] ?? null;
-        if(empty($name) || empty($surname) || empty($email))
+        if (empty($name) || empty($surname) || empty($email))
             throw new Exception('Name, surname and email are required', 400);
-        if(!in_array($role_id, Role::ToList()))
+        if (!in_array($role_id, Role::ToList()))
             throw new Exception('Role id is not allowed', 400);
         $rnd_psw = bin2hex(random_bytes(16));
         $q = "insert into user (name, surname, email, role_id, psw, force_change_psw, ucr, ule) values (?, ?, ?, ?, sha1(?), 1, ?, ?)";
         $params = [$name, $surname, $email, $role_id, $rnd_psw, $user_id, $user_id];
         $row_affected = DB::Execute($q, $params);
-        if($row_affected == 0) throw new Exception("Error inserting user", 500);
+        if ($row_affected == 0) throw new Exception("Error inserting user", 500);
         $response->getBody()->write(json_encode(["result" => true, "psw" => $rnd_psw]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
@@ -173,10 +234,11 @@ final class User {
     /**
      * @throws Exception
      */
-    public static function Delete($request, $response) {
+    public static function Delete($request, $response)
+    {
         $token_info = self::GetTokenInfo($request);
         $user_role = $token_info['role'];
-        if($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
+        if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
         $id = (int)$request->getAttribute('id');
         $q = "delete from user where id = ?";
         $params = [$id];
@@ -189,7 +251,8 @@ final class User {
     /**
      * @throws Exception
      */
-    public static function GetItem($request, $response) {
+    public static function GetItem($request, $response)
+    {
         $token_info = self::GetTokenInfo($request);
         $user_role = $token_info['role'];
         if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
@@ -205,7 +268,8 @@ final class User {
     /**
      * @throws Exception
      */
-    public static function Update($request, $response) {
+    public static function Update($request, $response)
+    {
         $token_info = self::GetTokenInfo($request);
         $user_id = $token_info['id'];
         $user_role = $token_info['role'];
@@ -224,12 +288,13 @@ final class User {
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
-    
+
     /**
      * @throws Exception
      */
-    public static function UpdateProfileData($request, $response) {
-        try{
+    public static function UpdateProfileData($request, $response)
+    {
+        try {
             $token_info = self::GetTokenInfo($request);
             $user_id = $token_info['id'];
             $user_role = $token_info['role'];
@@ -246,16 +311,17 @@ final class User {
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (\Exception $e) {
-        $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
-    
+
     /**
      * @throws Exception
      */
-    public static function UpdateProfilePsw($request, $response) {
-        try{
+    public static function UpdateProfilePsw($request, $response)
+    {
+        try {
             $token_info = self::GetTokenInfo($request);
             $user_role = $token_info['role'];
             if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
@@ -274,8 +340,8 @@ final class User {
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (\Exception $e) {
-        $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
 }

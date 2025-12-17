@@ -1,3 +1,5 @@
+let _pin = '';
+let _userId = '';
 document.addEventListener("DOMContentLoaded", () => {
     enterToClick("#txtLoginEmail, #txtLoginPsw", "btnLogin");
     enterToClick("#txtRecoveryEmail", "btnRecovery");
@@ -15,9 +17,9 @@ function showLogin() {
     document.getElementById('txtLoginEmail').focus();
 }
 
-function togglePassword() {
-    const txt = document.getElementById('txtLoginPsw');
-    const icon = document.querySelector("#togglePassword > i");
+function togglePassword(el) {
+    const txt = el.previousElementSibling;
+    const icon = el.firstElementChild;
     if (txt.type === 'password') {
         txt.type = 'text';
         icon.classList.remove('bi-eye');
@@ -50,7 +52,7 @@ async function signIn() {
     try {
         const response = await fetch('/api/sign-in', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 "email": email,
                 "psw": psw,
@@ -89,7 +91,7 @@ async function recoverPassword() {
     try {
         const response = await fetch('/api/reset-psw', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email }),
         });
         if (!response.ok) {
@@ -99,15 +101,93 @@ async function recoverPassword() {
             return;
         }
         const data = await response.json();
+        if (data.result) {
+            _pin = data.pin;
+            _userId = data.userId;
+            document.getElementById('forgot-password-card').classList.add('d-none');
+            document.getElementById('insert-pin-card').classList.remove('d-none');
+            let timeLeft = 3 * 60;
+            const timerEl = document.getElementById('timerCountdown');
+            const timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerEl.textContent =
+                    String(minutes).padStart(2, '0') + ':' +
+                    String(seconds).padStart(2, '0');
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    _pin = '';
+                    timerEl.textContent = 'Il tuo tempo è scaduto.';
+                }
+                timeLeft--;
+            }, 1000);
+        } else {
+            msg.textContent = 'Email di recupero inviata con successo! Controlla la tua casella di posta.';
+            msg.classList.remove('text-danger');
+            msg.classList.add('text-success');
+        }
 
-        //TODO
-
-        msg.textContent = 'Email di recupero inviata con successo! Controlla la tua casella di posta.';
-        msg.classList.remove('text-danger');
-        msg.classList.add('text-success');
     } catch (error) {
         msg.textContent = 'Si è verificato un errore. Riprova più tardi.';
         msg.classList.add('text-danger');
         console.error('Errore durante il recupero password:', error);
+    }
+}
+
+function checkPin() {
+    const inputPin = document.getElementById('txtSecretPin').value.trim();
+    let result = document.getElementById('spPinResult');
+    result.textContent = '';
+    if (inputPin === '') {
+        result.textContent = 'Il campo PIN è obbligatorio.';
+        result.classList.add('text-danger');
+        return;
+    }
+    if (_pin !== inputPin) {
+        result.textContent = 'Il codice PIN non corrisponde.';
+        result.classList.add('text-danger');
+        return;
+    }
+    document.getElementById('insert-pin-card').classList.add('d-none');
+    document.getElementById('change-password-card').classList.remove('d-none');
+}
+
+async function changePassword() {
+    const newPsw = document.getElementById('txtNewPsw').value.trim();
+    const confNewPsw = document.getElementById('txtConfirmNewPsw').value.trim();
+    let result = document.getElementById('spChangePswResult');
+    result.textContent = '';
+    result.classList.remove('text-danger');
+    if (newPsw === '' || confNewPsw === '') {
+        if (newPsw === '') result.textContent = 'Il campo nuova password è obbligatorio.';
+        if (confNewPsw === '') result.textContent = 'Il campo conferma nuova password è obbligatorio.';
+        result.classList.add('text-danger');
+        return;
+    }
+    if (newPsw !== confNewPsw) {
+        result.textContent = 'Le password non corrispondono.';
+        result.classList.add('text-danger');
+        return;
+    }
+    try {
+        const response = await fetch('/api/reset-new-psw/' + _userId, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ newPsw: newPsw }),
+        });
+        const data = await response.json();
+        if (data.result) {
+            result.textContent = 'La nuova password è stata aggiornata con successo.';
+            result.classList.add('text-success');
+            setTimeout(() => {
+                result.textContent = '';
+                result.classList.remove('text-success');
+                document.getElementById('change-password-card').classList.add('d-none');
+                document.getElementById('login-card').classList.remove('d-none');
+            }, 3000);
+        } else throw new Error(`Si è verificato un errore durante l'aggiornamento della nuova password`);
+    } catch (error) {
+        result.textContent = error.message;
+        result.classList.add('text-danger');
     }
 }
