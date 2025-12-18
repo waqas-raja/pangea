@@ -1,10 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    loadAssocaitedQuotes();
-    loadNations();
-    loadPropertyStatus();
     loadCustomers();
-    // await loadOpportunities();
+    loadPropertyTypes()
+    loadNations();
+    loadAssocaitedQuotes();
+    loadPropertyStatus();
     await loadPropertyDetail();
+    // await loadOpportunities();
 });
 
 async function loadAssocaitedQuotes() {
@@ -81,6 +82,18 @@ async function loadAssocaitedQuotes() {
     });
 }
 
+async function loadPropertyTypes() {
+    const response = await fetch('/api/property-types');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlPropertyType");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona id tipo</option>';
+    r.payload.forEach(t => {
+        opt += `<option value="${t.id}">${t.name}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
+
 async function loadPropertyStatus() {
     const response = await fetch('/api/property-status');
     const r = await response.json();
@@ -121,9 +134,11 @@ async function loadOpportunities() {
 async function loadPropertyDetail() {
     const response = await fetch('/api/property/' + propertyId);
     const r = await response.json();
+    if (!response.ok) return;
     document.getElementById("spCustomer").innerText = (r.payload.customer_bizname !== null ? r.payload.customer_bizname : r.payload.customer_name + ' ' + r.payload.customer_surname) ?? 'n.d.';
     // document.getElementById("spOpportunity").innerText = r.payload.opportunity ?? 'n.d.';
     document.getElementById("spAlias").innerText = r.payload.alias ?? 'n.d.';
+    document.getElementById("spPropertyType").innerText = r.payload.property_type ?? 'n.d.';
     document.getElementById("spState").innerText = r.payload.nation_name ?? 'n.d.';
     document.getElementById("spCity").innerText = r.payload.city ?? 'n.d.';
     document.getElementById("spAddress").innerText = r.payload.address ?? 'n.d.';
@@ -160,6 +175,7 @@ async function loadPropertyDetail() {
     document.getElementById('notaryProfit').innerText = marginalPercentage.toFixed(2) + ' %';
 
     document.getElementById("ddlCustomer").value = r.payload.customer ?? '';
+    document.getElementById("ddlPropertyType").value = r.payload.property_type ?? '';
     // document.getElementById("ddlOpportunity").value = r.payload.opportunity ?? ''
     document.getElementById("txtAlias").value = r.payload.alias ?? '';
     document.getElementById("ddlState").value = r.payload.nation ?? '';
@@ -256,6 +272,7 @@ async function updateGenericInfo() {
     let result = document.getElementById('errMessage');
     result.innerText = '';
     const customer = document.getElementById("ddlCustomer").value;
+    const propertyType = document.getElementById("ddlPropertyType").value;
     // const opportunity = document.getElementById("ddlOpportunity").value;
     const alias = document.getElementById("txtAlias").value.trim();
     const nation = document.getElementById("ddlState").value;
@@ -276,7 +293,7 @@ async function updateGenericInfo() {
     const renPrice = document.getElementById("txtRenPrice").value.trim();
     const extraPrice = document.getElementById("txtExtraPrice").value.trim();
     const sellPrice = document.getElementById("txtSellPrice").value.trim();
-    if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === '' || sellPrice === '' || street === '' || district === '') {
+    if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === '' || sellPrice === '' || street === '' || district === '' || propertyType === '') {
         btn.disabled = false;
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
         if (nation === '') { result.innerText = "La nazione è obbligatoria"; return; }
@@ -286,6 +303,7 @@ async function updateGenericInfo() {
         if (street === '') { result.innerText = "La strada è obbligatoria"; return; }
         if (district === '') { result.innerText = "È necessario il distretto"; return; }
         if (propertyStatus === '') { result.innerText = "Lo stato della proprietà è obbligatorio"; return; }
+        if (propertyType === '') { result.innerText = "Il tipo di proprietà è obbligatorio"; return; }
         if (size === '') { result.innerText = "La Taglia è obbligatoria con un numero valido"; return; }
         if (floor === '') { result.innerText = "Il pavimento è obbligatorio con un numero valido"; return; }
         if (acqPrice === '') { result.innerText = "Il prezzo di acquisizione è richiesto con un numero valido"; return; }
@@ -378,6 +396,7 @@ async function updateGenericInfo() {
                 street: street,
                 district: district,
                 propertyStatus: parseInt(propertyStatus),
+                propertyType: parseInt(propertyType),
                 size: size,
                 floor: floor,
                 room: room,

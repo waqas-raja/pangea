@@ -23,6 +23,13 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <label for="ddlPropertyType" class="col-sm-4 col-form-label">Tipo<span class="text-danger ms-2">*</span></label>
+                                <div class="col-sm-8">
+                                    <select id="ddlPropertyType" class="form-select">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <label for="ddlState" class="col-sm-4 col-form-label">Stato<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
                                     <select id="ddlState" class="form-select">

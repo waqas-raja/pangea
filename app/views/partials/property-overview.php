@@ -18,6 +18,15 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
+                    <label for="ddlPropertyType" class="col-sm-5 col-form-label">Tipo:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <div class="col-sm-7">
+                        <span id="spPropertyType" class="valueControl"></span>
+                        <select id="ddlPropertyType" class="form-select editControl d-none mb-1">
+                            <option value="" selected>Seleziona il tipo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-0 align-items-center">
                     <label for="ddlState" class="col-sm-5 col-form-label">Stato:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spState" class="valueControl"></span>

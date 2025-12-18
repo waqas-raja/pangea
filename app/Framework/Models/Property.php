@@ -20,10 +20,12 @@ final class Property {
             select 
                 p.*,
                 n.name as nation_name,
-                ps. name as property_status_name
+                ps.name as property_status_name,
+                pt.name as property_type
             from property as p
             left join td_nation as n on p.nation = n.code
             left join td_property_status as ps on p.property_status = ps.id
+            left join td_property_type as pt on p.property_type = pt.id
             order by p.id
         query;
         $properties = DB::Query($q);
@@ -42,6 +44,7 @@ final class Property {
             $data = json_decode($request->getBody()->getContents(), true);
             $alias = $data['alias'] ?? "";
             $customer = (int)$data['customer'] ?? null;
+            $propertyType = $data['propertyType'] !== '' ? (int)$data['propertyType'] : null;
             $nation = $data['nation'] ?? "";
             $city = $data['city'] ?? "";
             $address = $data['address'] ?? "";
@@ -59,8 +62,8 @@ final class Property {
             $extraPrice = (int)$data['extraPrice'] ?? 0;
             $sellPrice = (int)$data['sellPrice'] ?? 0;
             
-            $q = "INSERT INTO property (alias, customer, nation, city, address, cap, property_status, size, floor, rooms, bathrooms, garden, box, elevator, acquisition_price, renovation_price, extra_price, sell_price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            $params = [$alias, $customer, $nation, $city, $address, $zip, $status, $size, $floor, $room, $bath, $garden, $box, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice];
+            $q = "INSERT INTO property (alias, customer, nation, city, address, cap, property_status, property_type, size, floor, rooms, bathrooms, garden, box, elevator, acquisition_price, renovation_price, extra_price, sell_price) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $params = [$alias, $customer, $nation, $city, $address, $zip, $status, $propertyType, $size, $floor, $room, $bath, $garden, $box, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert property", 500);
             $last_inserted_id = DB::$LastId;
@@ -85,11 +88,13 @@ final class Property {
                 c.email as customer_email,
                 c.phone as customer_phone,
                 n.name as nation_name,
-                ps. name as property_status_name
+                ps.name as property_status_name,
+                pt.name as property_type
             from property as p
             left join customer as c on p.customer = c.id
             left join td_nation as n on p.nation = n.code
             left join td_property_status as ps on p.property_status = ps.id
+            left join td_property_type as pt on p.property_type = pt.id
             where p.id = ?
         query;
         $rows = DB::Query($q, [$agent_id]);
@@ -105,7 +110,7 @@ final class Property {
         $id = (int)$request->getAttribute('id');
         $data = json_decode($request->getBody()->getContents(), true);
         $customer = $data['customer'] !== '' ? $data['customer'] : null;
-        // $opportunity = $data['opportunity'] !== '' ? $data['opportunity'] : null;
+        $propertyType = $data['propertyType'] !== '' ? $data['propertyType'] : null;
         $alias = $data['alias'] ?? "";
         $nation = $data['nation'] ?? "";
         $city = $data['city'] ?? null;
@@ -126,8 +131,8 @@ final class Property {
         $extraPrice = (int)$data['extraPrice'] ?? 0;
         $sellPrice = (int)$data['sellPrice'] ?? 0;
         
-        $q = 'UPDATE property SET customer = ?, alias = ?, nation = ?, city = ?, address = ?, cap = ?, property_status = ?, size = ?, rooms = ?, bathrooms = ?, garden = ?, box = ?, floor= ?, elevator = ?, acquisition_price = ?, renovation_price = ?, extra_price = ?, sell_price = ? WHERE id = ?';
-        $params = [$customer, $alias, $nation, $city, $address, $zip, $propertyStatus, $size, $room, $bathroom, $garden, $box, $floor, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice, $id];
+        $q = 'UPDATE property SET customer = ?, alias = ?, nation = ?, city = ?, address = ?, cap = ?, property_status = ?, property_type = ?, size = ?, rooms = ?, bathrooms = ?, garden = ?, box = ?, floor= ?, elevator = ?, acquisition_price = ?, renovation_price = ?, extra_price = ?, sell_price = ? WHERE id = ?';
+        $params = [$customer, $alias, $nation, $city, $address, $zip, $propertyStatus, $propertyType, $size, $room, $bathroom, $garden, $box, $floor, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice, $id];
         $row_affected = DB::Execute($q, $params);
         if ($row_affected == 0) throw new Exception("Error while updating property", 500);
         $response->getBody()->write(json_encode(["result" => true]));
@@ -150,7 +155,7 @@ final class Property {
      */
     public static function GetPropertyTypes($request, $response) {
         $q = <<<query
-            select * from td_property_type
+            select * from td_property_type order by name
         query;
         $types = DB::Query($q);
         $response->getBody()->write(json_encode(["payload" => $types]));
