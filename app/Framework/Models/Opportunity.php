@@ -65,7 +65,7 @@ final class Opportunity {
      */
     public static function GetNations($request, $response) {
         $q = <<<query
-            select * from td_nation
+            select * from td_nation order by name
         query;
         $types = DB::Query($q);
         $response->getBody()->write(json_encode(["payload" => $types]));
