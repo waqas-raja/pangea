@@ -89,6 +89,7 @@ final class Property {
                 c.phone as customer_phone,
                 n.name as nation_name,
                 ps.name as property_status_name,
+                pt.id as property_type_id,
                 pt.name as property_type
             from property as p
             left join customer as c on p.customer = c.id

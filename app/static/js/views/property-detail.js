@@ -82,18 +82,6 @@ async function loadAssocaitedQuotes() {
     });
 }
 
-async function loadPropertyTypes() {
-    const response = await fetch('/api/property-types');
-    const r = await response.json();
-    let ctrl = document.getElementById("ddlPropertyType");
-    ctrl.innerHTML = '';
-    let opt = '<option value="" selected>Seleziona id tipo</option>';
-    r.payload.forEach(t => {
-        opt += `<option value="${t.id}">${t.name}</option>`;
-    });
-    ctrl.innerHTML = opt;
-}
-
 async function loadPropertyStatus() {
     const response = await fetch('/api/property-status');
     const r = await response.json();
@@ -175,7 +163,7 @@ async function loadPropertyDetail() {
     document.getElementById('notaryProfit').innerText = marginalPercentage.toFixed(2) + ' %';
 
     document.getElementById("ddlCustomer").value = r.payload.customer ?? '';
-    document.getElementById("ddlPropertyType").value = r.payload.property_type ?? '';
+    document.getElementById("ddlPropertyType").value = r.payload.property_type_id ?? '';
     // document.getElementById("ddlOpportunity").value = r.payload.opportunity ?? ''
     document.getElementById("txtAlias").value = r.payload.alias ?? '';
     document.getElementById("ddlState").value = r.payload.nation ?? '';
@@ -474,7 +462,7 @@ async function deleteModal() {
                 if (res.result) {
                     $("#modalConfirmDelete").modal('hide');
                     window.location = `/properties`;
-                } else throw new Error("Error while deleting Property!");
+                } else throw new Error("Errore durante l'eliminazione della immobile!");
             } catch (error) {
                 document.getElementById("deleteErrorMessage").innerText = error.message !== undefined ? error.message : error;
             }
