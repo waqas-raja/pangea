@@ -111,3 +111,4 @@ body { font-family:"Lato", serif; font-size: 16px; }
 #estimateAcquiredGrid .dx-datagrid-search-panel {margin: 0px !important;}
 #page-properties .nav-item .nav-link, #page-list-estimates .nav-item .nav-link { color: #212529 !important; }
 #page-properties .nav-item .nav-link.active, #page-list-estimates .nav-item .nav-link.active { color: var(--primary-blue) !important; }
+#propertyDocumentList .docSection:hover .delDocument { display: block !important; }

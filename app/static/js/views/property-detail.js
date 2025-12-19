@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadAssocaitedQuotes();
     loadPropertyStatus();
     await loadPropertyDetail();
-    // await loadOpportunities();
+    await loadPropertyDocuments();
 });
 
 async function loadAssocaitedQuotes() {
@@ -31,7 +31,7 @@ async function loadAssocaitedQuotes() {
         headerFilter: { visible: false },
         columns: [
             {
-                dataField: "id", 
+                dataField: "id",
                 caption: "Id preventivo",
                 alignment: "left",
                 width: 150,
@@ -50,7 +50,7 @@ async function loadAssocaitedQuotes() {
                     container.text(text);
                 }
             },
-            { 
+            {
                 dataField: "dtcr",
                 caption: "Data creazione",
                 allowFiltering: true,
@@ -76,7 +76,7 @@ async function loadAssocaitedQuotes() {
                 "groupPanel",
             ]
         },
-        onRowClick: function (e) { 
+        onRowClick: function (e) {
             if (e.rowType === "data") { window.location.href = `/estimate/${e.data.id}`; }
         },
     });
@@ -149,7 +149,7 @@ async function loadPropertyDetail() {
     document.getElementById("customerNameNotary").innerText = (r.payload.customer_bizname !== null ? r.payload.customer_bizname : r.payload.customer_name + ' ' + r.payload.customer_surname) ?? 'n.d.';
     document.getElementById("customerEmailNotary").innerText = r.payload.customer_email ?? 'n.d.';
     document.getElementById("customerPhoneNotary").innerText = r.payload.customer_phone ?? 'n.d.';
-    document.getElementById("propertyAddressNotary").innerText = r.payload.address + ', ' + r.payload.city + ', '+ r.payload.nation_name;
+    document.getElementById("propertyAddressNotary").innerText = r.payload.address + ', ' + r.payload.city + ', ' + r.payload.nation_name;
     document.getElementById("propertySizeNotary").innerText = r.payload.size !== '' ? r.payload.size + ' (mq)' : 'n.d.';
     document.getElementById("notaryAcqCost").innerText = formatNumber(parseInt(r.payload.acquisition_price)) ?? formatNumber(0);
     document.getElementById("notaryRenCost").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
@@ -451,6 +451,97 @@ function downloadPropertyNotary(fname) {
         res.textContent = 'Download del file non riuscito';
         res.classList.add('text-danger');
     }
+}
+
+async function loadPropertyDocuments() {
+    try {
+        const div = document.getElementById('propertyDocumentList');
+        div.innerHTML = '';
+        const response = await fetch(`/api/property/get-document/${propertyId}`);
+        const res = await response.json();
+        if (res.result) {
+            if (res.payload.length === 0) {
+                div.innerHTML = '<p class="w-100 text-black-50 text-center">Nessun documento trovato per questa proprietà</p>';
+                return;
+            }
+            let str = '';
+            for (let file of res.payload) {
+                str += `<div class="col mb-3">
+                            <div class="docSection d-flex justify-content-center align-items-center border rounded-3 position-relative" style="height: 130px;">
+                                <span class="position-absolute delDocument rounded-3 p-2" role="button" onclick="deleteDocument(this)" style="display:none; right: 5px;top:5px;background-color: #ff000010;">
+                                    <i class="bi bi-trash3 fs-5 text-danger"></i>
+                                </span>
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-richtext fs-3"></i>
+                                    <p class="card-text">${file.name}</p>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+            div.insertAdjacentHTML("beforeend", str);
+        } else throw new Error(res.error);
+    } catch (error) {
+        showMessage(error.message, 'resultDocumentUpload', 'text-danger')
+    }
+}
+
+async function uploadSelectedDocs() {
+    const files = document.getElementById("filePropertyDocument").files;
+    const spinner = document.getElementById("spinnerUploadDocs");
+    let result = document.getElementById("resultDocumentUpload");
+    result.classList.add('d-none');
+    result.classList.remove('text-danger', 'text-success');
+    result.textContent = '';
+    const allowedExtensions = ['pdf', 'docx', 'jpg', 'jpeg', 'png'];
+    for (let file of files) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            showMessage(`Tipo di file non consentito: ${file.name}`, 'resultDocumentUpload', 'text-danger')
+            return;
+        }
+    }
+    spinner.classList.remove('d-none');
+    const formData = new FormData();
+    formData.append("property_id", propertyId);
+    for (let file of files) formData.append("documents[]", file);
+    try {
+        const response = await fetch("/api/property/upload-document", {
+            method: "POST",
+            body: formData
+        });
+        const res = await response.json();
+        if (res.result) {
+            await loadPropertyDocuments();
+            spinner.classList.add('d-none');
+            showMessage('Documenti caricati con successo', 'resultDocumentUpload', 'text-success')
+        } else throw new Error("Errore durante il caricamento dei documenti immobiliari.");
+    } catch (error) {
+        spinner.classList.add('d-none');
+        showMessage(error.message, 'resultDocumentUpload', 'text-danger');
+    }
+}
+
+async function deleteDocument(el) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            const fname = el.nextElementSibling.lastElementChild.innerText;
+            const spinner = document.getElementById("spinnerUploadDocs");
+            spinner.classList.remove('d-none');
+            try {
+                const response = await fetch(`/api/property/delete-document/${propertyId}/${fname}` , {method: "DELETE"});
+                const res = await response.json();
+                if (res.result) {
+                    $("#modalConfirmDelete").modal('hide');
+                    el.parentNode.parentNode.remove();
+                    spinner.classList.add('d-none');
+                    showMessage('Documento eliminato con successo', 'resultDocumentUpload', 'text-success')
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo documento.");
+            } catch (error) {
+                spinner.classList.add('d-none');
+                showMessage(error.message, 'resultDocumentUpload', 'text-danger');
+            }
+        }
+    });
 }
 
 async function deleteModal() {

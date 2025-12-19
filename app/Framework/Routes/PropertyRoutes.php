@@ -48,6 +48,24 @@ class PropertyRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/get-document/{id}', function (Request $request, Response $response) {
+            return Property::GetPropertyDocuments($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->post('/upload-document', function (Request $request, Response $response) {
+            return Property::UploadPropertyDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->delete('/delete-document/{id}/{name}', function (Request $request, Response $response) {
+            return Property::DeletePropertyDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 
