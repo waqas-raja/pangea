@@ -179,8 +179,27 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12">
-        <div class="pai-card">
+    <div class="col-sm-6">
+        <div class="pai-card cardHeight">
+            <div class="d-none">
+                <input class="form-control" type="file" id="filePropertyDocument" onchange="uploadSelectedDocs()" multiple>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="pai-title mb-3">Documenti di immobile
+                    <span id="spinnerUploadDocs" class="spinner-border spinner-border-sm d-none ms-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>
+                </div>
+                <button type="button" class="btn btn-blue" onclick="document.getElementById('filePropertyDocument').click();">
+                    <i class="bi bi-file-earmark-plus me-2"></i> Caricare documenti
+                </button>
+            </div>
+            <div id="propertyDocumentList" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mb-3"></div>
+            <div id="resultDocumentUpload" class="d-none"></div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="pai-card cardHeight">
             <h3 class="pai-title mb-3">Preventivi associato</h3>
             <div id="associatedQuotesList"></div>
         </div>
