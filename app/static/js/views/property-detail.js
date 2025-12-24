@@ -455,6 +455,7 @@ function downloadPropertyNotary(fname) {
 
 async function loadPropertyDocuments() {
     try {
+        const icons = ['bi-file-earmark-pdf', 'bi-filetype-doc', 'bi-filetype-docx', 'bi-file-earmark-image'];
         const div = document.getElementById('propertyDocumentList');
         div.innerHTML = '';
         const response = await fetch(`/api/property/get-document/${propertyId}`);
@@ -466,13 +467,28 @@ async function loadPropertyDocuments() {
             }
             let str = '';
             for (let file of res.payload) {
+                const ext = file.name.split('.').pop().toLowerCase();
+                let icon = '';
+                switch (ext) {
+                    case 'png':
+                    case 'jpg':
+                    case 'jpeg': icon = icons[3]; break;
+                    case 'pdf': icon = icons[0]; break;
+                    case 'doc': icon = icons[1]; break;
+                    case 'docx': icon = icons[2]; break;
+                }
                 str += `<div class="col mb-3">
                             <div class="docSection d-flex justify-content-center align-items-center border rounded-3 position-relative" style="height: 130px;">
-                                <span class="position-absolute delDocument rounded-3 p-2" role="button" onclick="deleteDocument(this)" style="display:none; right: 5px;top:5px;background-color: #ff000010;">
-                                    <i class="bi bi-trash3 fs-5 text-danger"></i>
-                                </span>
+                                <div class="position-absolute delDocument" style="display:none; right: 5px;top:5px;">
+                                    <span class="rounded-3 p-2 me-2" role="button" onclick="deleteDocument(this)" title="Visualizzazione" style="background-color: #0dcaf020;">
+                                        <i class="bi bi-eye fs-5 text-info"></i>
+                                    </span>
+                                    <span class="rounded-3 p-2" role="button" onclick="deleteDocument(this)" title="Eliminare" style="background-color: #ff000010;">
+                                        <i class="bi bi-trash3 fs-5 text-danger"></i>
+                                    </span>
+                                </div>
                                 <div class="card-body text-center">
-                                    <i class="bi bi-file-earmark-richtext fs-3"></i>
+                                    <i class="bi ${icon} fs-3"></i>
                                     <p class="card-text">${file.name}</p>
                                 </div>
                             </div>
