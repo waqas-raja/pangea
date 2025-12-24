@@ -66,6 +66,12 @@ class PropertyRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/download-document/{id}/{name}', function (Request $request, Response $response) {
+            return Property::DownloadPropertyDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 

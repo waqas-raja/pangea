@@ -480,8 +480,8 @@ async function loadPropertyDocuments() {
                 str += `<div class="col mb-3">
                             <div class="docSection d-flex justify-content-center align-items-center border rounded-3 position-relative" style="height: 130px;">
                                 <div class="position-absolute delDocument" style="display:none; right: 5px;top:5px;">
-                                    <span class="rounded-3 p-2 me-2" role="button" onclick="deleteDocument(this)" title="Visualizzazione" style="background-color: #0dcaf020;">
-                                        <i class="bi bi-eye fs-5 text-info"></i>
+                                    <span class="rounded-3 p-2 me-2" role="button" onclick="downloadDocument('${file.name}')" title="Visualizzazione" style="background-color: #0dcaf020;">
+                                        <i class="bi bi-download fs-5 text-info"></i>
                                     </span>
                                     <span class="rounded-3 p-2" role="button" onclick="deleteDocument(this)" title="Eliminare" style="background-color: #ff000010;">
                                         <i class="bi bi-trash3 fs-5 text-danger"></i>
@@ -537,6 +537,30 @@ async function uploadSelectedDocs() {
     }
 }
 
+async function downloadDocument(filename) {
+    const spinner = document.getElementById("spinnerUploadDocs");
+    spinner.classList.remove('d-none');
+    try {
+        const encoded = encodeURIComponent(filename);
+        const response = await fetch(`/api/property/download-document/${propertyId}/${encoded}`);
+        if (!response.ok) throw new Error("Download failed");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        spinner.classList.add('d-none');
+    } catch (error) {
+        spinner.classList.add('d-none');
+        showMessage(error.message, 'resultDocumentUpload', 'text-danger');
+    }
+}
+
 async function deleteDocument(el) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
@@ -544,7 +568,7 @@ async function deleteDocument(el) {
             const spinner = document.getElementById("spinnerUploadDocs");
             spinner.classList.remove('d-none');
             try {
-                const response = await fetch(`/api/property/delete-document/${propertyId}/${fname}` , {method: "DELETE"});
+                const response = await fetch(`/api/property/delete-document/${propertyId}/${fname}`, { method: "DELETE" });
                 const res = await response.json();
                 if (res.result) {
                     $("#modalConfirmDelete").modal('hide');
