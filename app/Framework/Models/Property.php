@@ -264,5 +264,38 @@ final class Property {
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public static function DownloadPropertyDocument($request, $response) {
+        $id = (int) $request->getAttribute('id');
+        $fname = urldecode($request->getAttribute('name'));
+        $basePath = __DIR__ . '../../../static/imgs';
+        $baseDir  = realpath($basePath);
+        if ($baseDir === false || $baseDir === '') throw new Exception('Directory di base non trovata');
+        $filePath = $baseDir . "/property_$id/" . basename($fname);
+        if (!file_exists($filePath)) {
+            $response->getBody()->write(json_encode([
+                'result' => false,
+                'error'  => 'Documento non trovato'
+            ]));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(404);
+        }
+
+        $mime = mime_content_type($filePath);
+        $stream = new \Slim\Psr7\Stream(fopen($filePath, 'rb'));
+        return $response
+            ->withHeader('Content-Type', $mime)
+            ->withHeader(
+                'Content-Disposition',
+                'attachment; filename="' . basename($fname) . '"'
+            )
+            ->withHeader('Content-Length', (string) filesize($filePath))
+            ->withHeader('Cache-Control', 'no-cache')
+            ->withBody($stream);
+    }
 
 }
