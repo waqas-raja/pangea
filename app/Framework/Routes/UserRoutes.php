@@ -54,6 +54,24 @@ class UserRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/user-profile/profile-photo', function (Request $request, Response $response) {
+            return User::UserProfilePhoto($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->post('/upload-profile-photo', function (Request $request, Response $response) {
+            return User::UploadUserProfilePhoto($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->delete('/user-profile/delete-profile-photo', function (Request $request, Response $response) {
+            return User::DeleteUserProfilePhoto($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 

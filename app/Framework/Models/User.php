@@ -344,4 +344,79 @@ final class User
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function UploadUserProfilePhoto($request, $response)
+    {
+        try {
+            $token_info = self::GetTokenInfo($request);
+            $user_role = $token_info['role'];
+            if ($user_role < Role::STAFF) throw new Exception('Unauthorized request', 401);
+            $user_id = $token_info['id'];
+            $destinationDir = __DIR__ . "../../../static/imgs/users";
+            if(!is_dir($destinationDir)) mkdir($destinationDir, 0755, true);
+            $destinationDir = __DIR__ . "../../../static/imgs/users/user_".$user_id."/";
+            if(!is_dir($destinationDir)) mkdir($destinationDir, 0755, true);
+            $file = $_FILES['profilePhoto'];
+            $tmpPath = $file['tmp_name'];
+            $newFileName = $user_id . '_profile_photo.jpg';
+            $destinationPath = $destinationDir . $newFileName;
+            if (file_exists($destinationPath)) unlink($destinationPath);
+            $imageInfo = getimagesize($tmpPath);
+            $mime = $imageInfo['mime'];
+            switch ($mime) {
+                case 'image/jpeg': $image = imagecreatefromjpeg($tmpPath); break;
+                case 'image/png': $image = imagecreatefrompng($tmpPath); break;
+                case 'image/webp': $image = imagecreatefromwebp($tmpPath); break;
+                case 'image/gif': $image = imagecreatefromgif($tmpPath); break;
+                default: $image = false;
+            }
+            if ($image) {
+                imagejpeg($image, $destinationPath, 80);
+                imagedestroy($image);
+            }
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function UserProfilePhoto($request, $response) {
+        try {
+            $token_info = self::GetTokenInfo($request);
+            $user_id = $token_info['id'];
+            $imgPath = __DIR__ . "../../../static/imgs/users/user_" . $user_id . '/' . $user_id . '_profile_photo.jpg';
+            $response->getBody()->write(json_encode([
+                'result' => file_exists($imgPath)
+            ]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(['result' => false, 'Error' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function DeleteUserProfilePhoto($request, $response) {
+        try {
+            $token_info = self::GetTokenInfo($request);
+            $user_id = $token_info['id'];
+            $imgPath = __DIR__ . "../../../static/imgs/users/user_" . $user_id . '/' . $user_id . '_profile_photo.jpg';
+            if (file_exists($imgPath)) unlink($imgPath);
+            $response->getBody()->write(json_encode(['result' => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(['result' => false, 'Error' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        }
+    }
 }

@@ -117,8 +117,6 @@ async function updatePassword() {
     const btn = document.getElementById('btnUpdatePassword');
     btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
-    // showResult('resultPersonalData', 'Funzione non ancora attiva.', false);
-    // return;
     try {
         const response = await fetch(`api/user/profile/psw/${_id}`,{
                 method: "PATCH",
@@ -127,7 +125,6 @@ async function updatePassword() {
             }
         );
         const data = await response.json();
-        debugger
         if (data.result) {
             document.getElementById('txtOldPassword').value = '';
             document.getElementById('txtNewPassword').value = '';
