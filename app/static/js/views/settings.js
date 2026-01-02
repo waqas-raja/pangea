@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
     _userId = parseInt(localStorage.getItem('uid')) || 0;
     loadUserProfilePhoto();
     loadPersonalData();
+    loadPropertyTypes();
+    loadPropertyStatus();
 });
 
 async function loadUserProfilePhoto() {
@@ -234,4 +236,28 @@ async function updatePassword() {
         showMessage('Si sono verificati degli errori durante la chiamata.', 'resultChangePsw', 'text-danger');
         console.error("Errore durante la chiamata:", error);
     }
+}
+
+async function loadPropertyTypes() {
+    const response = await fetch('/api/property-types');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlPropertyType");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona id tipo</option>';
+    r.payload.forEach(t => {
+        opt += `<option value="${t.id}">${t.name}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
+
+async function loadPropertyStatus() {
+    const response = await fetch('/api/property-status');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlPropertyStatus");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona</option>';
+    r.payload.forEach(p => {
+        opt += `<option value="${p.id}">${p.name}</option>`;
+    });
+    ctrl.innerHTML = opt;
 }
