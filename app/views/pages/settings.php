@@ -37,13 +37,13 @@ require_once __DIR__ . '/../modals/confirm-delete.php';
                 <?php require_once __DIR__ . "/../partials/user-profile-setting.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="preferences" role="tabpanel" aria-labelledby="preferences-tab">
-                <div id="" class="">preferences</div>
+                <?php require_once __DIR__ . "/../partials/preferences-setting.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="property-management" role="tabpanel" aria-labelledby="property-management-tab">
-                <div id="" class="">property management</div>
+                <?php require_once __DIR__ . "/../partials/property-management-setting.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="contact-management" role="tabpanel" aria-labelledby="contact-management-tab">
-                <div id="" class="">contact</div>
+                <?php require_once __DIR__ . "/../partials/contact-management-setting.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="integration" role="tabpanel" aria-labelledby="integration-tab">
                 <div id="" class="">integration</div>
