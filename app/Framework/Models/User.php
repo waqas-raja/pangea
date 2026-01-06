@@ -419,4 +419,47 @@ final class User
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public static function DatabaseBackup($request, $response) {
+        try {
+            error_log('in user model file...');
+            $dbHost = getenv('DB_HOST');
+            $dbUser = getenv('DB_USER');
+            $dbPass = getenv('DB_PASS');
+            $dbName = getenv('DB_NAME');
+            $fileName = 'db_backup_' . date('Y-m-d_H-i-s') . '.sql';
+            $tmpFile  = sys_get_temp_dir() . '/' . $fileName;
+            $command = sprintf(
+                'mysqldump --user=%s --password=%s --host=%s %s > %s',
+                escapeshellarg($dbUser),
+                escapeshellarg($dbPass),
+                escapeshellarg($dbHost),
+                escapeshellarg($dbName),
+                escapeshellarg($tmpFile)
+            );
+            exec($command, $output, $result);
+            if ($result !== 0 || !file_exists($tmpFile)) {
+                $response->getBody()->write(json_encode(['result' => false, 'error'  => 'Database backup failed']));
+                return $response->withHeader('Content-Type', 'application/json')->withStatus(500);
+            }
+            $stream = new \Slim\Psr7\Stream(fopen($tmpFile, 'rb'));
+            return $response
+                ->withHeader('Content-Type', 'application/sql')
+                ->withHeader(
+                    'Content-Disposition',
+                    'attachment; filename="' . $fileName . '"'
+                )
+                ->withHeader('Content-Length', (string) filesize($tmpFile))
+                ->withBody($stream);
+            // $response->getBody()->write(json_encode(['result' => true]));
+            // return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            error_log('in catch...');
+            $response->getBody()->write(json_encode(['result' => false, 'error' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        }
+    }
 }

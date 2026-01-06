@@ -261,3 +261,66 @@ async function loadPropertyStatus() {
     });
     ctrl.innerHTML = opt;
 }
+
+async function GenerateDatabaseBackup() {
+    const progressBar = document.getElementById('backupProgress');
+    const statusText = document.getElementById('backupStatus');
+
+    progressBar.style.display = 'block';
+    progressBar.value = 0;
+    statusText.textContent = 'Starting backup...';
+    debugger;
+
+    try {
+        const response = await fetch('/api/database/backup');
+        debugger;
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error || 'Backup failed');
+        }
+
+        const contentLength = response.headers.get('Content-Length');
+        if (!contentLength) {
+            throw new Error('Unable to track download progress');
+        }
+
+        const total = parseInt(contentLength, 10);
+        let loaded = 0;
+
+        const reader = response.body.getReader();
+        const chunks = [];
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            chunks.push(value);
+            loaded += value.length;
+
+            const percent = Math.round((loaded / total) * 100);
+            progressBar.value = percent;
+            statusText.textContent = `Downloading backup... ${percent}%`;
+        }
+
+        const blob = new Blob(chunks, { type: 'application/sql' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `db_backup_${new Date().toISOString().slice(0,19)}.sql`;
+        document.body.appendChild(a);
+        a.click();
+
+        a.remove();
+        URL.revokeObjectURL(url);
+
+        statusText.textContent = 'Backup completed successfully ✔';
+        progressBar.value = 100;
+
+    } catch (err) {
+        debugger;
+        progressBar.style.display = 'none';
+        statusText.textContent = `❌ ${err.message}`;
+        console.error(err);
+    }
+}

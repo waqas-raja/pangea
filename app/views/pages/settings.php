@@ -46,13 +46,13 @@ require_once __DIR__ . '/../modals/confirm-delete.php';
                 <?php require_once __DIR__ . "/../partials/contact-management-setting.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="integration" role="tabpanel" aria-labelledby="integration-tab">
-                <div id="" class="">integration</div>
+                <?php require_once __DIR__ . "/../partials/integration-setting.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="safety" role="tabpanel" aria-labelledby="safety-tab">
-                <div id="" class="">safety</div>
+                <?php require_once __DIR__ . "/../partials/safety-setting.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="backup-data" role="tabpanel" aria-labelledby="backup-data-tab">
-                <div id="" class="">backup-data</div>
+                <?php require_once __DIR__ . "/../partials/data-backup-setting.php"; ?>
             </div>
         </div>
     </div>
