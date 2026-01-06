@@ -54,6 +54,13 @@ class ApiRoutes {
             ->add($this->authMiddleware)
             ->add($this->jwtMiddleware);
 
+            $group->get('/database/backup', function ($request, $response) {
+                error_log('in route file...');
+                return User::DatabaseBackup($request, $response);
+            })
+            ->add($this->authMiddleware)
+            ->add($this->jwtMiddleware);
+
             // Entity's list routes
 
             $group->get('/users', function ($request, $response) {
