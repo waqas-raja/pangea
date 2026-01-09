@@ -181,7 +181,7 @@ async function loadListEstimates() {
             columns: [
                 {
                     dataField: "id",
-                    caption: "Id preventivo",
+                    caption: "ID preventivo",
                     alignment: "left",
                     width: 150,
                     cellTemplate: function (container, options) {
@@ -267,7 +267,7 @@ async function loadListEstimates() {
             columns: [
                 {
                     dataField: "id",
-                    caption: "Id preventivo",
+                    caption: "ID preventivo",
                     alignment: "left",
                     width: 150,
                     cellTemplate: function (container, options) {

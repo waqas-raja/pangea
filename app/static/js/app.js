@@ -99,7 +99,8 @@ function isValidEmail(email) {
 }
 
 function isValidPhone(phone) {
-    const regx = /^(?:\+\d{2}|0|\d{2})\d{10,12}$/;
+    // const regx = /^(?:\+\d{2}|0|\d{2})\d{10,12}$/;
+    const regx = /^(?:\+\d{2}|0)\s?\d(?:[\d\s]*\d){9,13}$/;
     return regx.test(phone);
 }
 
