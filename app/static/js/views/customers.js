@@ -138,6 +138,11 @@ async function saveCustomer() {
         result.classList.remove("d-none");
         return;
     }
+    if (isValidPhone(phone) === false) {
+        result.innerText = "Il numero di telefono non è valido";
+        result.classList.remove("d-none");
+        return;
+    }
     btn.disabled = true;
     spinner.classList.remove("d-none");
     result.classList.add("d-none");

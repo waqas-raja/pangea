@@ -288,7 +288,7 @@ async function updateGenericInfo() {
         btn.disabled = false;
         return;
     }
-    if (phone !== "" && !isValidateNumber(phone)) {
+    if (phone !== "" && !isValidPhone(phone)) {
         err.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;
         return;
