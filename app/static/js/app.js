@@ -99,13 +99,13 @@ function isValidEmail(email) {
 }
 
 function isValidPhone(phone) {
-  const regx = /^[0-9]\d{10}$/ ;
-  return regx.test(phone);
+    const regx = /^(?:\+\d{2}|0|\d{2})\d{10,12}$/;
+    return regx.test(phone);
 }
 
 function isValidZip(zip) {
-  const regx = /^[0-9]\d{4}$/ ;
-  return regx.test(zip);
+    const regx = /^\d{4,6}$/;
+    return regx.test(zip);
 }
 
 function isValidateNumber(number) {

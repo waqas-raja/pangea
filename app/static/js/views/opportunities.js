@@ -177,7 +177,7 @@ async function saveOpportunity() {
         btn.disabled = false;
         return;
     }
-    if (refPhone !== "" && !isValidateNumber(refPhone)) {
+    if (refPhone !== "" && !isValidPhone(refPhone)) {
         result.classList.remove("d-none");
         result.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;

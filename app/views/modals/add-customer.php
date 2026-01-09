@@ -28,7 +28,7 @@
                     <div class="row mb-3">
                         <label for="txtPhone" class="col-sm-4 col-form-label">Telefono<span class="text-danger ms-2">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtPhone" required>
+                            <input type="text" class="form-control" id="txtPhone" placeholder="Con o senza prefisso internazionale" required>
                         </div>
                     </div>
                     <div class="row mb-3">
