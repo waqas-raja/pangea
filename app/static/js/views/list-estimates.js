@@ -207,10 +207,11 @@ async function loadListEstimates() {
                     dataField: "",
                     caption: "Rendita ipotetica",
                     sortIndex: 4,
-                    alignment: "left",
+                    width: 150,
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         const text = formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
+                        container.css('text-align', 'right');
                         container.html(text);
                     }
                 },
@@ -292,10 +293,11 @@ async function loadListEstimates() {
                     dataField: "",
                     caption: "Rendita ipotetica",
                     sortIndex: 4,
-                    alignment: "left",
+                    width: 150,
                     cellTemplate: function (container, options) {
                         const data = options.data;
                         const text = formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
+                        container.css('text-align', 'right');
                         container.html(text);
                     }
                 },
