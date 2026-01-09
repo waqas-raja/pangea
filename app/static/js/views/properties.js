@@ -111,7 +111,7 @@ async function loadProperties() {
             filterRow: { visible: underManagementProperties.length > 0, applyFilter: "auto" },
             headerFilter: { visible: false },
             columns: [
-                { dataField: "alias", caption: "Alias", sortIndex: 0 },
+                { dataField: "alias", caption: "Alias", width: 150, sortIndex: 0 },
                 { dataField: "property_type", caption: "Tipo di immobile", sortIndex: 1 },
                 { dataField: "nation_name", caption: "Nazione", sortIndex: 2 },
                 {
