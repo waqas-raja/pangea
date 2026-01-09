@@ -145,7 +145,7 @@ async function loadAssociatedQuotes() {
         columns: [
             {
                 dataField: "id",
-                caption: "Id preventivo",
+                caption: "ID preventivo",
                 // allowFiltering: true,
                 // sortIndex: 0, sortOrder: "asc",
                 alignment: "left",
@@ -179,7 +179,6 @@ async function loadAssociatedQuotes() {
                 caption: "Stato",
                 // allowFiltering: true,
                 // sortIndex: 6, sortOrder: "asc",
-                alignment: 'center',
                 width: 150,
                 cellTemplate: function (container, options) {
                     const data = options.data;
