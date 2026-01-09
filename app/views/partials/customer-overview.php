@@ -27,7 +27,7 @@
                     <label for="txtPhone" class="col-sm-5 col-form-label">Telefono:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spPhone" class="valueControl"></span>
-                        <input type="tell" id="txtPhone" class="form-control editControl d-none mb-1" maxlength="11" value="">
+                        <input type="tell" id="txtPhone" class="form-control editControl d-none mb-1" maxlength="16" value="">
                     </div>
                 </div>
 
