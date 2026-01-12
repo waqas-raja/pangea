@@ -24,10 +24,10 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                     </button>
                 </div>
                 <div>
-                    <button id="btnProjectProcess" type="button" class="btn btn-blue" onclick="togglePageSections(0)">
+                    <button id="btnProjectProcess" type="button" class="btn btn-blue" onclick="togglePageSections(0, this)">
                         <i class="bi bi-flask me-2"></i> Progetto di processo
                     </button>
-                    <button id="btnBack" type="button" class="btn btn-blue d-none" onclick="togglePageSections(1)">
+                    <button id="btnBack" type="button" class="btn btn-blue d-none" onclick="togglePageSections(1, this)">
                         Indietro
                     </button>
                     <button type="button" class="btn btn-link text-danger border" onclick="deleteModal()">

@@ -12,7 +12,7 @@ async function loadOpportunityDetail() {
     document.getElementById("spAlias").innerText = r.payload.alias ?? 'n.d.';
     document.getElementById("spSource").innerText = r.payload.source_name ?? 'n.d.';
     document.getElementById("spPropertyType").innerText = r.payload.property_type_name ?? 'n.d.';
-    document.getElementById("spSize").innerText = r.payload.size ?? 'n.d.';
+    document.getElementById("spSize").innerText = r.payload.size ? formatNumber(parseFloat(r.payload.size)).slice(0, -2) : 'n.d.';
     document.getElementById("spPropertyStatus").innerText = r.payload.opportunity_status_name ?? 'n.d.';
     document.getElementById("spPrice").innerText = formatNumber(parseInt(r.payload.price)) ?? formatNumber(0);
     document.getElementById("spTaxes").innerText = formatNumber(parseInt(r.payload.taxes)) ?? formatNumber(0);
@@ -203,14 +203,17 @@ async function updateGenericInfo() {
     }
 }
 
-function togglePageSections(t) {
+function togglePageSections(t, el) {
+    const sec = el.parentElement.previousElementSibling;
     if (t === 0) {
+        sec.classList.add('d-none');
         document.getElementById('btnProjectProcess').classList.add('d-none');
         document.getElementById('iconAllowEditGenericInfo').classList.add('d-none');
         document.getElementById('btnBack').classList.remove('d-none');
         document.getElementById('opportunityDetailSec').classList.add('d-none');
         document.getElementById('projectProcessSec').classList.remove('d-none');
     } else {
+        sec.classList.remove('d-none');
         document.getElementById('btnProjectProcess').classList.remove('d-none');
         document.getElementById('iconAllowEditGenericInfo').classList.remove('d-none');
         document.getElementById('btnBack').classList.add('d-none');
@@ -255,10 +258,11 @@ function startProjectProcess() {
         result.textContent = 'Un costo aggiuntivo non è un numero valido';
         return;
     }
-    result.classList.remove('text-danger');
-    result.classList.add('text-success');
-    result.textContent = "L'elaborazione è in costruzione...";
-    return;
+    const newPrice = parseInt(price) + parseInt(renCost) + parseInt(extCost);
+    document.getElementById('spAcqPrice').textContent = formatNumber(newPrice);
+    document.getElementById('txtAcqPrice').value = newPrice;
+    document.getElementById('btnBack').click();
+    
 }
 
 async function deleteModal() {
