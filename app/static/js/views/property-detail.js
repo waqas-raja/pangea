@@ -483,6 +483,7 @@ async function loadPropertyDocuments() {
                     case 'doc': icon = icons[1]; break;
                     case 'docx': icon = icons[2]; break;
                 }
+                const fname = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
                 str += `<div class="col mb-3">
                             <div class="docSection d-flex justify-content-center align-items-center border rounded-3 position-relative" style="height: 130px;">
                                 <div class="position-absolute delDocument" style="display:none; right: 5px;top:5px;">
@@ -495,7 +496,7 @@ async function loadPropertyDocuments() {
                                 </div>
                                 <div class="card-body text-center">
                                     <i class="bi ${icon} fs-3"></i>
-                                    <p class="card-text">${file.name}</p>
+                                    <p class="card-text px-2" data-fileName="${file.name}" style="overflow-wrap: anywhere;">${fname}</p>
                                 </div>
                             </div>
                         </div>`;
@@ -570,7 +571,7 @@ async function downloadDocument(filename) {
 async function deleteDocument(el) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
-            const fname = el.parentElement.nextElementSibling.lastElementChild.innerText;
+            const fname = el.parentElement.nextElementSibling.lastElementChild.dataset.fileName;
             const spinner = document.getElementById("spinnerUploadDocs");
             spinner.classList.remove('d-none');
             try {
