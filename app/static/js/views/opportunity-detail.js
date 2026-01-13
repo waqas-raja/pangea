@@ -28,7 +28,7 @@ async function loadOpportunityDetail() {
     document.getElementById("spRefPhone").innerText = r.payload.reference_phone ?? 'n.d.';
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price !== null ? r.payload.acquisition_price : 0));
     document.getElementById("spEstimatedSellPrice").innerText = formatNumber(0);
-    document.getElementById("spNote").innerText = r.payload.note ?? 'n.d.';
+    document.getElementById("spNote").innerHTML = r.payload.note ?? 'n.d.';
 
     document.getElementById("txtAlias").value = r.payload.alias ?? '';
     document.getElementById("ddlSource").value = r.payload.source;
@@ -36,7 +36,6 @@ async function loadOpportunityDetail() {
     document.getElementById("txtSize").value = r.payload.size ?? '';
     document.getElementById("ddlOpportunityStatus").value = r.payload.opportunity_status ?? '';
     document.getElementById("txtPrice").value = r.payload.price ?? '';
-    document.getElementById("txtProjectProcessPrice").value = r.payload.price ?? '';
     document.getElementById("txtTaxes").value = r.payload.taxes ?? '';
     document.getElementById("txtAddress").value = r.payload.address ?? '';
     document.getElementById("txtCity").value = r.payload.city ?? '';
@@ -222,68 +221,6 @@ async function updateGenericInfo() {
         result.innerText = "Si sono verificati degli errori";
         console.error(error.message !== undefined ? error.message : error);
     }
-}
-
-function togglePageSections(t, el) {
-    const sec = el.parentElement.previousElementSibling;
-    if (t === 0) {
-        sec.classList.add('d-none');
-        document.getElementById('btnProjectProcess').classList.add('d-none');
-        document.getElementById('iconAllowEditGenericInfo').classList.add('d-none');
-        document.getElementById('btnBack').classList.remove('d-none');
-        document.getElementById('opportunityDetailSec').classList.add('d-none');
-        document.getElementById('projectProcessSec').classList.remove('d-none');
-    } else {
-        sec.classList.remove('d-none');
-        document.getElementById('btnProjectProcess').classList.remove('d-none');
-        document.getElementById('iconAllowEditGenericInfo').classList.remove('d-none');
-        document.getElementById('btnBack').classList.add('d-none');
-        document.getElementById('opportunityDetailSec').classList.remove('d-none');
-        document.getElementById('projectProcessSec').classList.add('d-none');
-    }
-}
-
-function startProjectProcess() {
-    const price = document.getElementById('txtProjectProcessPrice').value.trim();
-    const renCost = document.getElementById('txtProjectProcessRenCost').value.trim();
-    const extCost = document.getElementById('txtProjectProcessExtraCost').value.trim();
-    let result = document.getElementById('projectProcessResult');
-    result.textContent = '';
-    if (price === '' || renCost === '' || extCost === '') {
-        result.classList.add('text-danger');
-        if (price === '') {
-            result.textContent = 'Il prezzo di acquisto è obbligatorio';
-            return;
-        }
-        if (renCost === '') {
-            result.textContent = 'Sono richiesti costi di ristrutturazione';
-            return;
-        }
-        if (extCost === '') {
-            result.textContent = 'È richiesto un costo aggiuntivo';
-            return;
-        }
-    }
-    if ((price !== '' && !isValidateNumber(parseInt(price))) || parseInt(price) < 1) {
-        result.classList.add('text-danger');
-        result.textContent = 'Il prezzo di acquisto non è un numero valido';
-        return;
-    }
-    if ((renCost !== '' && !isValidateNumber(parseInt(renCost))) || parseInt(renCost) < 0) {
-        result.classList.add('text-danger');
-        result.textContent = 'Il costo della ristrutturazione non è un numero valido';
-        return;
-    }
-    if ((extCost !== '' && !isValidateNumber(parseInt(extCost))) || parseInt(extCost) < 0) {
-        result.classList.add('text-danger');
-        result.textContent = 'Un costo aggiuntivo non è un numero valido';
-        return;
-    }
-    const newPrice = parseInt(price) + parseInt(renCost) + parseInt(extCost);
-    document.getElementById('spAcqPrice').textContent = formatNumber(newPrice);
-    document.getElementById('txtAcqPrice').value = newPrice;
-    document.getElementById('btnBack').click();
-    
 }
 
 async function deleteModal() {
