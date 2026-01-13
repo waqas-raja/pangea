@@ -138,7 +138,22 @@ function initHtmlEditor(idEditor) {
         height: 300,
         valueType: 'html',
         imageUpload: { tabs: ['file', 'url'], fileUploadMode: 'base64' },
-        toolbar: { "items": ["bold", "italic", "underline", "separator", "orderedList", "bulletList", "link"] },
+        toolbar: {
+            "items": [
+                // "undo", "redo", "separator",
+                "bold", "italic", "underline", "separator",
+                {
+                    name: "size",
+                    acceptedValues: ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt"]
+                },
+                {
+                    name: "font",
+                    acceptedValues: ["Arial", "Courier New", "Georgia", "Tahoma", "Verdana"]
+                },
+                "separator",
+                "orderedList", "bulletList", "link",
+            ]
+        },
         mediaResizing: { enabled: true }
     }).dxHtmlEditor('instance');
 }
@@ -189,7 +204,6 @@ function showMessage(msg, id, cls) {
         result.classList.remove(cls);
         result.classList.add('d-none');
     }, 3000);
-
 }
 
 function showDeleteConfirmationModal(callback) {
