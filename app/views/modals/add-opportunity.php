@@ -95,7 +95,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-6">
+                        <!-- <div class="col-sm-12 col-md-12 col-lg-6">
                             <div class="row">
                                 <label for="ddlProServices" class="col-sm-4 col-form-label">Servizi professionali:</label>
                                 <div class="col-sm-8">
@@ -105,7 +105,7 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <hr>
                     <div class="row">
