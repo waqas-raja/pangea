@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadOpportunityStatus();
     await loadPropertyTypes();
     await loadPropertyStatus();
+    initHtmlEditor('txtNote');
     await loadOpportunityDetail();
 });
 
@@ -48,6 +49,7 @@ async function loadOpportunityDetail() {
     document.getElementById("txtRefPhone").value = r.payload.reference_phone ?? '';
     document.getElementById("txtAcqPrice").value = r.payload.acquisition_price ?? '';
     document.getElementById("txtEstimatedSellPrice").value = 0;
+    $("#txtNote").dxHtmlEditor('instance').option('value', r.payload.note ?? '');
     document.getElementById("txtNote").value = r.payload.note ?? '';
 }
 
@@ -147,7 +149,7 @@ async function updateGenericInfo() {
     const city = document.getElementById("txtCity").value.trim();
     const nation = document.getElementById("ddlState").value;
     const tax = document.getElementById("txtTaxes").value.trim();
-    const note = document.getElementById("txtNote").value.trim();
+    const note = $("#txtNote").dxHtmlEditor('instance').option('value');
     const url = document.getElementById("txtUrl").value.trim();
     const refName = document.getElementById("txtRefName").value.trim();
     const refSurname = document.getElementById("txtRefSurname").value.trim();
