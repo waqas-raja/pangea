@@ -35,10 +35,10 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
-                    <label for="ddlPropertyStatus" class="col-sm-5 col-form-label">Stato di opportunità:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <label for="ddlOpportunityStatus" class="col-sm-5 col-form-label">Stato di opportunità:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
-                        <span id="spPropertyStatus" class="valueControl"></span>
-                        <select id="ddlPropertyStatus" class="form-select editControl d-none mb-1">
+                        <span id="spOpportunityStatus" class="valueControl"></span>
+                        <select id="ddlOpportunityStatus" class="form-select editControl d-none mb-1">
                             <option value="" selected>Seleziona</option>
                         </select>
                     </div>
@@ -81,45 +81,105 @@
                         </select>
                     </div>
                 </div>
+                <hr>
+                <div class="row mb-0 align-items-center">
+                    <label for="txtUrl" class="col-sm-5 col-form-label">URL:</label>
+                    <div class="col-sm-7">
+                        <span id="spUrl" class="valueControl"></span>
+                        <input type="text" id="txtUrl" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
+                <hr>
+                <div class="row mb-0 align-items-center">
+                    <label for="txtRefName" class="col-sm-5 col-form-label">Nome di riferimento:</label>
+                    <div class="col-sm-7">
+                        <span id="spRefName" class="valueControl"></span>
+                        <input type="text" id="txtRefName" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
+                <div class="row mb-0 align-items-center">
+                    <label for="txtRefSurname" class="col-sm-5 col-form-label">Cognome di riferimento:</label>
+                    <div class="col-sm-7">
+                        <span id="spRefSurname" class="valueControl"></span>
+                        <input type="text" id="txtRefSurname" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
+                <div class="row mb-0 align-items-center">
+                    <label for="txtRefEmail" class="col-sm-5 col-form-label">Email di riferimento:</label>
+                    <div class="col-sm-7">
+                        <span id="spRefEmail" class="valueControl"></span>
+                        <input type="text" id="txtRefEmail" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
+                <div class="row mb-0 align-items-center">
+                    <label for="txtRefPhone" class="col-sm-5 col-form-label">Telefono di riferimento:</label>
+                    <div class="col-sm-7">
+                        <span id="spRefPhone" class="valueControl"></span>
+                        <input type="text" id="txtRefPhone" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
             <div class="row mb-0 align-items-center">
-                <label for="txtUrl" class="col-sm-5 col-form-label">URL:</label>
+                <label for="ddlPropertyStatus" class="col-sm-5 col-form-label">Stato di proprietà:<span class="text-danger ms-2 editControl d-none">*</span></label>
                 <div class="col-sm-7">
-                    <span id="spUrl" class="valueControl"></span>
-                    <input type="text" id="txtUrl" class="form-control editControl d-none mb-1" value="">
-                </div>
-            </div>
-            <hr>
-            <div class="row mb-0 align-items-center">
-                <label for="txtRefName" class="col-sm-5 col-form-label">Nome di riferimento:</label>
-                <div class="col-sm-7">
-                    <span id="spRefName" class="valueControl"></span>
-                    <input type="text" id="txtRefName" class="form-control editControl d-none mb-1" value="">
+                    <span id="spPropertyStatus" class="valueControl"></span>
+                    <select id="ddlPropertyStatus" class="form-select editControl d-none mb-1">
+                        <option value="" selected>Seleziona</option>
+                    </select>
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
-                <label for="txtRefSurname" class="col-sm-5 col-form-label">Cognome di riferimento:</label>
+                <label for="txtFloor" class="col-sm-5 col-form-label">Piano:<span class="text-danger ms-2 editControl d-none">*</span></label>
                 <div class="col-sm-7">
-                    <span id="spRefSurname" class="valueControl"></span>
-                    <input type="text" id="txtRefSurname" class="form-control editControl d-none mb-1" value="">
+                    <span id="spFloor" class="valueControl"></span>
+                    <input type="number" id="txtFloor" class="form-control editControl d-none mb-1" min="0" value="0">
+                </div>
+            </div>
+            <div class="row mb-1 align-items-center">
+                <label for="txtRoom" class="col-sm-5 col-form-label">Stanze:</label>
+                <div class="col-sm-7">
+                    <span id="spRoom" class="valueControl"></span>
+                    <input id="txtRoom" type="number" class="form-control editControl d-none" value="1" min="1" required>
+                </div>
+            </div>
+            <div class="row mb-1 align-items-center">
+                <label for="txtBathroom" class="col-sm-5 col-form-label">Bagno:</label>
+                <div class="col-sm-7">
+                    <span id="spBathroom" class="valueControl"></span>
+                    <input id="txtBathroom" type="number" class="form-control editControl d-none" value="1" min="1" required>
+                </div>
+            </div>
+            <div class="row mb-1 align-items-center">
+                <label for="txtGarden" class="col-sm-5 col-form-label">Giardino:</label>
+                <div class="col-sm-7">
+                    <span id="spGarden" class="valueControl"></span>
+                    <div class="input-group editControl d-none">
+                        <input id="txtGarden" type="number" class="form-control" value="0" min="0" required>
+                        <span class="input-group-text">(mq)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-1 align-items-center">
+                <label for="txtBox" class="col-sm-5 col-form-label">Box:</label>
+                <div class="col-sm-7">
+                    <span id="spBox" class="valueControl"></span>
+                    <div class="input-group editControl d-none">
+                        <input id="txtBox" type="number" class="form-control" value="0" min="0" required>
+                        <span class="input-group-text">(mq)</span>
+                    </div>
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
-                <label for="txtRefEmail" class="col-sm-5 col-form-label">Email di riferimento:</label>
+                <label for="txtElevator" class="col-sm-5 col-form-label">Ascensore:</label>
                 <div class="col-sm-7">
-                    <span id="spRefEmail" class="valueControl"></span>
-                    <input type="text" id="txtRefEmail" class="form-control editControl d-none mb-1" value="">
-                </div>
-            </div>
-            <div class="row mb-0 align-items-center">
-                <label for="txtRefPhone" class="col-sm-5 col-form-label">Telefono di riferimento:</label>
-                <div class="col-sm-7">
-                    <span id="spRefPhone" class="valueControl"></span>
-                    <input type="text" id="txtRefPhone" class="form-control editControl d-none mb-1" value="">
+                    <span id="spElevator" class="valueControl"></span>
+                    <div class="form-check form-switch editControl d-none">
+                        <input id="txtElevator" class="form-check-input" type="checkbox" role="switch">
+                    </div>
                 </div>
             </div>
             <hr>
@@ -127,17 +187,14 @@
                 <label for="txtAcqPrice" class="col-sm-5 col-form-label">Prezzo acquisizione:</label>
                 <div class="col-sm-7">
                     <span id="spAcqPrice" class="valueControl"></span>
-                    <input type="number" id="txtAcqPrice" class="form-control editControl d-none mb-1" value="">
+                    <input type="number" id="txtAcqPrice" class="form-control editControl d-none mb-1" min="0" value="">
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
-                <label for="ddlProServices" class="col-sm-5 col-form-label">Servizi professionali:</label>
+                <label for="txtEstimatedSellPrice" class="col-sm-5 col-form-label">Prezzo stima vendita:</label>
                 <div class="col-sm-7">
-                    <span id="spProServices" class="valueControl"></span>
-                    <select id="ddlProServices" class="form-select editControl d-none mb-1">
-                        <option value="" selected>Seleziona</option>
-                        <option value="1">Development</option>
-                    </select>
+                    <span id="spEstimatedSellPrice" class="valueControl"></span>
+                    <input type="number" id="txtEstimatedSellPrice" class="form-control editControl d-none mb-1" min="0" value="">
                 </div>
             </div>
             <div class="row mb-0 align-items-center">

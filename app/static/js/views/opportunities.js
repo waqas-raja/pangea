@@ -148,7 +148,7 @@ async function saveOpportunity() {
     const tax = document.getElementById("txtTaxes").value.trim();
     const note = document.getElementById("txtNote").value.trim();
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
-    const proService = document.getElementById("ddlProServices").value;
+    // const proService = document.getElementById("ddlProServices").value;
     const url = document.getElementById("txtUrl").value.trim();
     const refName = document.getElementById("txtRefName").value.trim();
     const refSurname = document.getElementById("txtRefSurname").value.trim();
@@ -197,7 +197,7 @@ async function saveOpportunity() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note,
                 "acuisitionPrice": acqPrice,
-                "professionalService": proService,
+                // "professionalService": proService,
                 "url": url,
                 "referenceName": refName,
                 "referenceSurname": refSurname,

@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadSources();
     await loadOpportunityStatus();
     await loadPropertyTypes();
+    await loadPropertyStatus();
     await loadOpportunityDetail();
 });
 
@@ -13,7 +14,7 @@ async function loadOpportunityDetail() {
     document.getElementById("spSource").innerText = r.payload.source_name ?? 'n.d.';
     document.getElementById("spPropertyType").innerText = r.payload.property_type_name ?? 'n.d.';
     document.getElementById("spSize").innerText = r.payload.size ? formatNumber(parseFloat(r.payload.size)).slice(0, -2) : 'n.d.';
-    document.getElementById("spPropertyStatus").innerText = r.payload.opportunity_status_name ?? 'n.d.';
+    document.getElementById("spOpportunityStatus").innerText = r.payload.opportunity_status_name ?? 'n.d.';
     document.getElementById("spPrice").innerText = formatNumber(parseInt(r.payload.price)) ?? formatNumber(0);
     document.getElementById("spTaxes").innerText = formatNumber(parseInt(r.payload.taxes)) ?? formatNumber(0);
     document.getElementById("spAddress").innerText = r.payload.address ?? 'n.d.';
@@ -25,14 +26,14 @@ async function loadOpportunityDetail() {
     document.getElementById("spRefEmail").innerText = r.payload.reference_email ?? 'n.d.';
     document.getElementById("spRefPhone").innerText = r.payload.reference_phone ?? 'n.d.';
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price !== null ? r.payload.acquisition_price : 0));
-    document.getElementById("spProServices").innerText = r.payload.professional_services ?? 'n.d.';
+    document.getElementById("spEstimatedSellPrice").innerText = formatNumber(0);
     document.getElementById("spNote").innerText = r.payload.note ?? 'n.d.';
 
     document.getElementById("txtAlias").value = r.payload.alias ?? '';
     document.getElementById("ddlSource").value = r.payload.source;
     document.getElementById("ddlPropertyType").value = r.payload.property_type ?? '';
     document.getElementById("txtSize").value = r.payload.size ?? '';
-    document.getElementById("ddlPropertyStatus").value = r.payload.opportunity_status ?? '';
+    document.getElementById("ddlOpportunityStatus").value = r.payload.opportunity_status ?? '';
     document.getElementById("txtPrice").value = r.payload.price ?? '';
     document.getElementById("txtProjectProcessPrice").value = r.payload.price ?? '';
     document.getElementById("txtTaxes").value = r.payload.taxes ?? '';
@@ -46,7 +47,7 @@ async function loadOpportunityDetail() {
     document.getElementById("txtRefEmail").value = r.payload.reference_email ?? '';
     document.getElementById("txtRefPhone").value = r.payload.reference_phone ?? '';
     document.getElementById("txtAcqPrice").value = r.payload.acquisition_price ?? '';
-    document.getElementById("ddlProServices").value = r.payload.professional_services ?? '';
+    document.getElementById("txtEstimatedSellPrice").value = 0;
     document.getElementById("txtNote").value = r.payload.note ?? '';
 }
 
@@ -107,12 +108,24 @@ async function loadPropertyTypes() {
     ctrl.innerHTML = opt;
 }
 
-async function loadOpportunityStatus() {
-    const response = await fetch('/api/opportunity-status');
+async function loadPropertyStatus() {
+    const response = await fetch('/api/property-status');
     const r = await response.json();
     let ctrl = document.getElementById("ddlPropertyStatus");
     ctrl.innerHTML = '';
-    let opt = '<option value="" selected>Seleziona lo stato della proprietà</option>';
+    let opt = '<option value="" selected>Seleziona</option>';
+    r.payload.forEach(p => {
+        opt += `<option value="${p.id}">${p.name}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
+
+async function loadOpportunityStatus() {
+    const response = await fetch('/api/opportunity-status');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlOpportunityStatus");
+    ctrl.innerHTML = '';
+    let opt = `<option value="" selected>Seleziona lo stato dell'opportunità</option>`;
     r.payload.forEach(type => {
         opt += `<option value="${type.id}">${type.name}</option>`;
     });
@@ -140,8 +153,15 @@ async function updateGenericInfo() {
     const refSurname = document.getElementById("txtRefSurname").value.trim();
     const refEmail = document.getElementById("txtRefEmail").value.trim();
     const refPhone = document.getElementById("txtRefPhone").value.trim();
+    const propertyStatus = document.getElementById("ddlPropertyStatus").value;
+    const floor = document.getElementById("txtFloor").value.trim();
+    const room = parseInt(document.getElementById("txtRoom").value.trim());
+    const bathroom = parseInt(document.getElementById("txtBathroom").value.trim());
+    const garden = parseInt(document.getElementById("txtGarden").value.trim());
+    const box = parseInt(document.getElementById("txtBox").value.trim());
+    const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
-    const proService = document.getElementById("ddlProServices").value;
+    const estimatedSellPrice = document.getElementById("txtEstimatedSellPrice").value.trim();
     if (alias === '' || source === '' || propertyType === '' || opportunityStatus === '' || size === '' || price === '' || address === '' || city === '' || nation === '' || tax === '' || note === '') {
         btn.disabled = false;
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
@@ -187,7 +207,6 @@ async function updateGenericInfo() {
                 referenceEmail: refEmail,
                 referencePhone: refPhone,
                 acqPrice: parseInt(acqPrice),
-                professionalService: proService,
                 note: note
             })
         });

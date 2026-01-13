@@ -94,7 +94,7 @@ final class Opportunity {
             $note = $data['note'] ?? "";
             $url = $data['url'] ?? null;
             $acqPrice = (int)$data['acuisitionPrice'] ?? null;
-            $professionalService = (int)$data['professionalService'] ?? null;
+            $professionalService = null;
             $referenceName = $data['referenceName'] ?? null;
             $referenceSurname = $data['referenceSurname'] ?? null;
             $referenceEmail = $data['referenceEmail'] ?? null;
@@ -163,7 +163,7 @@ final class Opportunity {
             $referenceEmail = $data['referenceEmail'] ?? null;
             $referencePhone = $data['referencePhone'] ?? null;
             $acqPrice = (int)$data['acqPrice'] ?? 0;
-            $professionalService = (int)$data['professionalService'] ?? null;
+            $professionalService = null;
             $q = "UPDATE opportunity SET alias = ?, url = ?, source = ?, nation = ?, city = ?, address = ?, property_type = ?, size = ?, reference_name = ?, reference_surname = ?, reference_email = ?, reference_phone = ?, opportunity_status = ?, price = ?, acquisition_price = ?, professional_services = ?, taxes = ?, note = ? WHERE id = ?";
             $params = [$alias, $url, $source, $nation, $city, $address, $type, $size, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $status, $price, $acqPrice, $professionalService, $taxes, $note, $id];
             $row_affected = DB::Execute($q, $params);
