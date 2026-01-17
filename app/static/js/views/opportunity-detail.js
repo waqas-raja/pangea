@@ -223,6 +223,20 @@ async function updateGenericInfo() {
     }
 }
 
+function allowNoteModification(el) {
+    el.classList.add('d-none');
+    el.nextElementSibling.classList.remove('d-none');
+    document.getElementById('spNote').classList.add('d-none');
+    document.getElementById('txtNote').classList.remove('d-none');
+}
+
+function cancelNoteModification(el) {
+    el.parentNode.classList.add('d-none');
+    el.parentNode.previousElementSibling.classList.remove('d-none');
+    document.getElementById('spNote').classList.remove('d-none');
+    document.getElementById('txtNote').classList.add('d-none');
+}
+
 async function deleteModal() {
     const div = `<div id="reasonDiv" class="mb-3">
                     <label for="txtDelReason" class="form-label">Spiega la tua motivazione</label>

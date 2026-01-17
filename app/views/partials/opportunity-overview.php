@@ -1,4 +1,4 @@
-<div id="opportunityDetailSec" class="row mb-3">
+<div id="opportunityDetailSec" class="row">
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
@@ -195,13 +195,6 @@
                 <div class="col-sm-8">
                     <span id="spEstimatedSellPrice" class="valueControl"></span>
                     <input type="number" id="txtEstimatedSellPrice" class="form-control editControl d-none mb-1" min="0" value="">
-                </div>
-            </div>
-            <div class="row mb-0 align-items-center">
-                <label for="txtNote" class="col-sm-4 col-form-label">Note:<span class="text-danger ms-2 editControl d-none">*</span></label>
-                <div class="col-sm-8">
-                    <span id="spNote" class="valueControl"></span>
-                    <div id="txtNote" class="form-control editControl d-none mb-1"></div>
                 </div>
             </div>
         </div>
