@@ -148,7 +148,6 @@ async function updateGenericInfo() {
     const city = document.getElementById("txtCity").value.trim();
     const nation = document.getElementById("ddlState").value;
     const tax = document.getElementById("txtTaxes").value.trim();
-    const note = $("#txtNote").dxHtmlEditor('instance').option('value');
     const url = document.getElementById("txtUrl").value.trim();
     const refName = document.getElementById("txtRefName").value.trim();
     const refSurname = document.getElementById("txtRefSurname").value.trim();
@@ -163,7 +162,7 @@ async function updateGenericInfo() {
     const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const estimatedSellPrice = document.getElementById("txtEstimatedSellPrice").value.trim();
-    if (alias === '' || source === '' || propertyType === '' || opportunityStatus === '' || size === '' || price === '' || address === '' || city === '' || nation === '' || tax === '' || note === '') {
+    if (alias === '' || source === '' || propertyType === '' || opportunityStatus === '' || size === '' || price === '' || address === '' || city === '' || nation === '' || tax === '') {
         btn.disabled = false;
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
         if (source === '') { result.innerText = "La fonte è obbligatoria"; return; }
@@ -175,7 +174,6 @@ async function updateGenericInfo() {
         if (opportunityStatus === '') { result.innerText = "È richiesto lo stato dell'opportunità"; return; }
         if (price === '') { result.innerText = "Il prezzo è richiesto con un numero valido"; return; }
         if (tax === '') { result.innerText = "La tassa è richiesta con un numero valido"; return; }
-        if (note === '') { result.innerText = "La nota è obbligatoria"; return; }
     }
     if (refEmail !== "" && !isValidEmail(refEmail)) {
         result.textContent = "L'email fornita non risulta valida";
@@ -208,7 +206,6 @@ async function updateGenericInfo() {
                 referenceEmail: refEmail,
                 referencePhone: refPhone,
                 acqPrice: parseInt(acqPrice),
-                note: note
             })
         });
         const res = await response.json();
@@ -235,6 +232,37 @@ function cancelNoteModification(el) {
     el.parentNode.previousElementSibling.classList.remove('d-none');
     document.getElementById('spNote').classList.remove('d-none');
     document.getElementById('txtNote').classList.add('d-none');
+}
+
+async function updateNote(btn) {
+    btn.disabled = true;
+    let result = document.getElementById('resultNote');
+    result.innerText = '';
+    const note = $("#txtNote").dxHtmlEditor('instance').option('value');
+    if (note === '') {
+        btn.disabled = false;
+        result.innerText = "La nota è obbligatoria";
+        return;
+    }
+    try {
+        const response = await fetch("/api/opportunity/" + opportunityId + "/note", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                note: note
+            })
+        });
+        if (response.ok) {
+            const res = await response.json();
+            btn.disabled = false;
+            await loadOpportunityDetail();
+            btn.previousElementSibling.click();
+            showMessage('Dati aggiornati con successo.', 'resultNote', 'text-success');
+        } else throw new Error(`Errore durante l'aggiornamento della nota`);
+    } catch (error) {
+        btn.disabled = false;
+        showMessage(error.message !== undefined ? error.message : error, 'resultNote', 'text-danger');
+    }
 }
 
 async function deleteModal() {

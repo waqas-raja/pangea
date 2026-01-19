@@ -67,7 +67,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                             <button class="btn btn-outline-secondary px-2 me-2" role="button" title="Cancel" onclick="cancelNoteModification(this)">
                                 <i class="bi bi-x-circle"></i> Annulla
                             </button>
-                            <button class="btn btn-blue-inverted px-2" role="button" title="Save" onclick="updateNote()">
+                            <button class="btn btn-blue-inverted px-2" role="button" title="Save" onclick="updateNote(this)">
                                 <i class="bi bi-floppy"></i> Salva
                             </button>
                         </div>
@@ -76,7 +76,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row mb-0 align-items-center">
-                            <label for="txtNote" class="col-sm-3 col-form-label">Note:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                            <label for="txtNote" class="col-sm-3 col-form-label">Nota:<span class="text-danger ms-2 editControl d-none">*</span></label>
                             <div class="col-sm-9">
                                 <span id="spNote" class="valueControl"></span>
                                 <div id="txtNote" class="form-control editControl d-none mb-1"></div>

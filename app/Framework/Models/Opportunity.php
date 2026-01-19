@@ -91,7 +91,6 @@ final class Opportunity {
             $price = (int)$data['price'] ?? 0;
             $taxes = (int)$data['taxes'] ?? 0;
             $status = (int)$data['status'] ?? 0;
-            $note = $data['note'] ?? "";
             $url = $data['url'] ?? null;
             $acqPrice = (int)$data['acuisitionPrice'] ?? null;
             $professionalService = null;
@@ -99,8 +98,8 @@ final class Opportunity {
             $referenceSurname = $data['referenceSurname'] ?? null;
             $referenceEmail = $data['referenceEmail'] ?? null;
             $referencePhone = $data['referencePhone'] ?? null;
-            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, note, url, reference_name, reference_surname, reference_email, reference_phone, acquisition_price, professional_services) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $note, $url, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $acqPrice, $professionalService];
+            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, url, reference_name, reference_surname, reference_email, reference_phone, acquisition_price, professional_services) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $url, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $acqPrice, $professionalService];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert Opportunity", 500);
             $last_inserted_id = DB::$LastId;
@@ -199,6 +198,28 @@ final class Opportunity {
         if ($row_affected == 0) throw new Exception("Error while deleting the customer", 500);
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function UpdateNote($request, $response) {
+        try {
+            $token_info = User::GetTokenInfo($request);
+            $user_id = $token_info['id'];
+            $user_role = $token_info['role'];
+            $id = (int)$request->getAttribute('id');
+            $data = json_decode($request->getBody()->getContents(), true);
+            $note = $data['note'] ?? "";
+            $q = "UPDATE opportunity SET note = ? WHERE id = ?";
+            $params = [$note, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento della nota", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            throw new Exception('Errore: ' . $e->getMessage());
+        }
     }
 
 }
