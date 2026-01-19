@@ -1,3 +1,19 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <div id="resultGenericInfo"></div>
+    </div>
+    <div>
+        <button class="btn btn-blue" onclick="allowEditGeneralInfo(this)">Modificare</button>
+        <div id="noteModifySection" class="d-none">
+            <button class="btn btn-outline-secondary px-2 me-2" role="button" title="Cancel" onclick="cancelEditGeneralInfo(this)">
+                <i class="bi bi-x-circle"></i> Annulla
+            </button>
+            <button id="iconSaveEditGenericInfo" class="btn btn-blue-inverted px-2" role="button" title="Save" onclick="updateGenericInfo(this)">
+                <i class="bi bi-floppy"></i> Salva
+            </button>
+        </div>
+    </div>
+</div>
 <div id="opportunityDetailSec" class="row">
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
@@ -80,6 +96,10 @@
                             <option value="" selected>Seleziona</option>
                         </select>
                     </div>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label">Mappa:</label>
+                    <div id="mapContainer"></div>
                 </div>
                 <hr>
                 <div class="row mb-0 align-items-center">
