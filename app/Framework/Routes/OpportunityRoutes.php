@@ -48,6 +48,12 @@ class OpportunityRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->patch('/{id}/note', function (Request $request, Response $response) {
+            return Opportunity::UpdateNote($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 
