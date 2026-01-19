@@ -1,4 +1,106 @@
+const documentCheckList = {
+    "1": {
+        "sale": [
+            "ID document",
+            "Tax code",
+            "Marital status (including property regime, if applicable)",
+            "Deed of ownership(sale deed, inheritance, donation)",
+            "Updated cadastral extract",
+            "Compliant cadastral floor plan",
+            "Building permit / license",
+            "Any amnesty or regularization documents",
+            "Certificate of occupancy",
+            "EPC(Energy Performance Certificate)",
+            "Utility systems compliance certificates",
+            "Urban and cadastral compliance verification",
+            "Any mortgages, foreclosures, or legal restrictions",
+            "Condominium regulations",
+            "Latest assembly meeting minutes",
+            "Statement of paid condominium fees",
+            "Administrator’s certification"
+        ],
+        "purchase": [
+            "ID document and tax code",
+            "Preliminary agreement (if available)",
+            "All seller’s documents",
+            "Mortgage documentation (if applicable)",
+            "Preliminary notarial report",
+            "EPC"
+        ],
+        "rent": {
+            "Owner": [
+                "ID document",
+                "Tax code",
+                "Proof of ownership",
+                "EPC"
+            ],
+            "Tenant": [
+                "ID document",
+                "Tax code",
+                "Lease contract",
+                "Lease registration (Tax Authority)",
+                "Optional flat tax regime (cedolare secca)",
+            ]
+        },
+    },
+    "2": {
+        "sale": [
+            "ID document and tax code",
+            "Deed of ownership",
+            "Cadastral extract",
+            "Cadastral map",
+            "Urban Planning Certificate (CDU – mandatory)",
+            "Any landscape or hydrogeological restrictions",
+            "Any easements"
+        ],
+        "purchase": [
+            "ID document and tax code",
+            "CDU",
+            "Cadastral extract and map",
+            "Deed of ownership",
+            "Urban planning and restrictions verification"
+        ],
+        "rent": [
+            "ID documents of owner and tenant",
+            "Deed of ownership",
+            "Cadastral extract",
+            "Registered lease agreement",
+            "Declared agricultural or commercial use (if applicable)"
+        ],
+    },
+    "3": {
+        "sale": [
+            "ID document and tax code",
+            "Deed of ownership",
+            "Cadastral extract",
+            "Cadastral floor plan",
+            "Building permit",
+            "Certificate of occupancy",
+            "EPC",
+            "Utility systems compliance certificates",
+            "Any legal restrictions or mortgages",
+            "Condominium regulations (if applicable)"],
+        "purchase": [
+            "ID document and tax code",
+            "All seller’s documents",
+            "Preliminary agreement (if available)",
+            "Mortgage documentation (if applicable)",
+            "EPC"
+        ],
+        "rent": [
+            "ID documents of owner and tenant",
+            "Deed of ownership",
+            "Cadastral extract and floor plan",
+            "EPC",
+            "Utility systems certifications",
+            "Commercial lease contract",
+            "Lease registration (Tax Authority)",
+            "Business authorization (SCIA), if required"
+        ],
+    },
+};
 document.addEventListener("DOMContentLoaded", async () => {
+    loadChecklistDocuments();
     await loadNations();
     await loadSources();
     await loadOpportunityStatus();
@@ -12,6 +114,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
     document.getElementById("ddlState").addEventListener("change", loadMap);
 });
+
+function loadChecklistDocuments() {
+    const propertyType = document.querySelector('input[name="rbPropertyType"]:checked').value;
+    const transectionType = document.querySelector('input[name="rbTransectionType"]:checked').value;
+    const arr = documentCheckList[propertyType][transectionType];
+    debugger;
+    let grid = document.getElementById('documentChecklistGrid');
+    let str = '';
+    arr.forEach(name => {
+        str += `<div class="col">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="${name}">
+                            <label class="form-check-label">
+                                ${name}
+                            </label>
+                        </div>
+                    </div>`;
+    });
+    grid.innerHTML = str;
+}
 
 async function loadOpportunityDetail() {
     const response = await fetch('/api/opportunity/' + opportunityId);
