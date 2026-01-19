@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadPropertyStatus();
     initHtmlEditor('txtNote');
     await loadOpportunityDetail();
+    loadMap();
+
+    document.getElementById("txtAddress").addEventListener("focusout", loadMap);
+    document.getElementById("txtCity").addEventListener("focusout", loadMap);
+    document.getElementById("ddlState").addEventListener("change", loadMap);
 });
 
 async function loadOpportunityDetail() {
@@ -52,25 +57,23 @@ async function loadOpportunityDetail() {
     document.getElementById("txtNote").value = r.payload.note ?? '';
 }
 
-function allowEditGeneralInfo() {
+function allowEditGeneralInfo(btn) {
     const valueControls = document.querySelectorAll('.valueControl');
     const editControls = document.querySelectorAll('.editControl');
     valueControls.forEach(valueControl => valueControl.classList.add('d-none'));
     editControls.forEach(editControl => editControl.classList.remove('d-none'));
-    document.getElementById("iconSaveEditGenericInfo").classList.remove('d-none');
-    document.getElementById("iconCancelEditGenericInfo").classList.remove('d-none');
-    document.getElementById("iconAllowEditGenericInfo").classList.add('d-none');
+    btn.classList.add('d-none');
+    btn.nextElementSibling.classList.remove('d-none');
 }
 
-function cancelEditGeneralInfo() {
+function cancelEditGeneralInfo(btn) {
     const valueControls = document.querySelectorAll('.valueControl');
     const editControls = document.querySelectorAll('.editControl');
     valueControls.forEach(valueControl => valueControl.classList.remove('d-none'));
     editControls.forEach(editControl => editControl.classList.add('d-none'));
-    document.getElementById("iconSaveEditGenericInfo").classList.add('d-none');
-    document.getElementById("iconCancelEditGenericInfo").classList.add('d-none');
-    document.getElementById("iconAllowEditGenericInfo").classList.remove('d-none');
-    document.getElementById('errMessage').innerHTML = '';
+    btn.parentNode.classList.add('d-none');
+    btn.parentNode.previousElementSibling.classList.remove('d-none');
+    document.getElementById('resultGenericInfo').innerHTML = '';
 }
 
 async function loadSources() {
@@ -133,15 +136,14 @@ async function loadOpportunityStatus() {
     ctrl.innerHTML = opt;
 }
 
-async function updateGenericInfo() {
-    const btn = document.getElementById("iconSaveEditGenericInfo");
+async function updateGenericInfo(btn) {
     btn.disabled = true;
-    let result = document.getElementById('errMessage');
+    let result = document.getElementById('resultGenericInfo');
     result.innerText = '';
     const alias = document.getElementById("txtAlias").value.trim();
     const source = document.getElementById("ddlSource").value;
     const propertyType = document.getElementById("ddlPropertyType").value;
-    const opportunityStatus = document.getElementById("ddlPropertyStatus").value;
+    const opportunityStatus = document.getElementById("ddlOpportunityStatus").value;
     const size = document.getElementById("txtSize").value.trim();
     const price = document.getElementById("txtPrice").value.trim();
     const address = document.getElementById("txtAddress").value.trim();
@@ -212,10 +214,11 @@ async function updateGenericInfo() {
         btn.disabled = false;
         if (res.result) {
             await loadOpportunityDetail();
-            cancelEditGeneralInfo();
-        } else result.innerText = "Si sono verificati degli errori";
+            btn.previousElementSibling.click();
+            showMessage('Dati aggiornati con successo.', 'resultGenericInfo', 'text-success');
+        } else throw new Error("Si sono verificati degli errori");
     } catch (error) {
-        result.innerText = "Si sono verificati degli errori";
+        showMessage(`Errore durante l'aggiornamento dei dati.`, 'resultGenericInfo', 'text-danger');
         console.error(error.message !== undefined ? error.message : error);
     }
 }
@@ -298,4 +301,23 @@ async function deleteModal() {
             }
         }
     });
+}
+
+function loadMap() {
+    const address = document.getElementById("txtAddress").value.trim();
+    const city = document.getElementById("txtCity").value.trim();
+    const state = $("#ddlState option:selected").text();
+    const addressCombined = address + ' ' + city + ' ' + state;
+    if (!addressCombined) return;
+    const url = "https://www.google.com/maps?q=" + encodeURIComponent(addressCombined) + "&output=embed";
+    document.getElementById("mapContainer").innerHTML = `
+        <iframe
+            width="100%"
+            height="350"
+            frameborder="0"
+            style="border:0"
+            src="${url}"
+            allowfullscreen>
+        </iframe>
+    `;
 }
