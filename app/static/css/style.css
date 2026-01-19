@@ -121,3 +121,4 @@ body { font-family:"Lato", serif; font-size: 16px; }
 #previewProfilePhoto:hover div { display: block !important; cursor: pointer; }
 .dx-datagrid-headers .dx-header-row > td { text-align: left !important; }
 .dx-datagrid-rowsview .dx-data-row td[data-type="number"] { text-align: right; }
+#spNote p { margin-bottom: 0px !important; }

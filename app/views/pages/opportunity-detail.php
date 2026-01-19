@@ -41,8 +41,60 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 <?php require_once __DIR__ . "/../partials/opportunity-overview.php"; ?>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="document-valuation" role="tabpanel" aria-labelledby="document-valuation-tab">
-                document valuation content
-                <div id="" class=""></div>
+                <div id="" class="row mb-3">
+                    <div class="col-sm-6">
+                        <fieldset class="row mb-3">
+                            <legend class="col-form-label col-sm-4 pt-0">Tipo di immobile</legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbPropertyType" id="rbHouseApartment" value="1" checked>
+                                    <label class="form-check-label" for="rbHouseApartment">
+                                        Casa/Appartamento
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbPropertyType" id="rbLand" value="2">
+                                    <label class="form-check-label" for="rbLand">
+                                        Terra
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbPropertyType" id="rbCommercial" value="3">
+                                    <label class="form-check-label" for="rbCommercial">
+                                        Commerciale Immobile
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-sm-6">
+                        <fieldset class="row mb-3">
+                            <legend class="col-form-label col-sm-4 pt-0">Tipo di transazione</legend>
+                            <div class="col-sm-8">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbTransectionType" id="rbSale" value="sale" checked>
+                                    <label class="form-check-label" for="rbSale">
+                                        Vendita
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbTransectionType" id="rbPurchase" value="purchase">
+                                    <label class="form-check-label" for="rbPurchase">
+                                        Acquisto
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="rbTransectionType" id="rbRent" value="rent">
+                                    <label class="form-check-label" for="rbRent">
+                                        Affitto
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div id="documentChecklistGrid" class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                </div>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="note-valuation" role="tabpanel" aria-labelledby="note-valuation-tab">
                 <div class="d-flex justify-content-between align-items-center mb-3">
