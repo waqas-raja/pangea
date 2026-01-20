@@ -100,7 +100,6 @@ const documentCheckList = {
     },
 };
 document.addEventListener("DOMContentLoaded", async () => {
-    loadChecklistDocuments();
     await loadNations();
     await loadSources();
     await loadOpportunityStatus();
@@ -108,30 +107,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadPropertyStatus();
     initHtmlEditor('txtNote');
     await loadOpportunityDetail();
+    loadChecklistDocuments();
+    loadPropertyValuationDocuments();
     loadMap();
 
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
     document.getElementById("ddlState").addEventListener("change", loadMap);
+    document.querySelectorAll('input[name="rbPropertyType"]').forEach(radio => {
+        radio.addEventListener("change", loadChecklistDocuments);
+    });
+    document.querySelectorAll('input[name="rbTransectionType"]').forEach(radio => {
+        radio.addEventListener("change", loadChecklistDocuments);
+    });
 });
 
 function loadChecklistDocuments() {
     const propertyType = document.querySelector('input[name="rbPropertyType"]:checked').value;
     const transectionType = document.querySelector('input[name="rbTransectionType"]:checked').value;
     const arr = documentCheckList[propertyType][transectionType];
-    debugger;
     let grid = document.getElementById('documentChecklistGrid');
     let str = '';
-    arr.forEach(name => {
-        str += `<div class="col">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="${name}">
-                            <label class="form-check-label">
-                                ${name}
-                            </label>
-                        </div>
+    if (Array.isArray(arr)) {
+        arr.forEach(name => {
+            str += `<div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="${name}">
+                                <label class="form-check-label">
+                                    ${name}
+                                </label>
+                            </div>
+                        </div>`;
+        });
+    } else {
+        Object.keys(arr).forEach(role => {
+            str += `<div class="col-12 col-sm-12 col-lg-12 mb-2">
+                        <div class="pai-title">${role}</div>
                     </div>`;
-    });
+            arr[role].forEach(name => {
+                str += `<div class="col-12 col-sm-6 col-md-6 col-lg-6 mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="${name}">
+                                <label class="form-check-label">
+                                    ${name}
+                                </label>
+                            </div>
+                        </div>`;
+            });
+        });
+    }
     grid.innerHTML = str;
 }
 
@@ -442,4 +466,133 @@ function loadMap() {
             allowfullscreen>
         </iframe>
     `;
+}
+
+async function uploadPropertyRelevantDocument(ctrl) {
+    const files = ctrl.files;
+    const spinner = document.getElementById("spinnerPropertyChecklistDocs");
+    const allowedExtensions = ['pdf', 'docx', 'jpg', 'jpeg', 'png'];
+    for (let file of files) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            showMessage(`Tipo di file non consentito: ${file.name}`, 'resultPropertyChecklistDocs', 'text-danger')
+            return;
+        }
+    }
+    spinner.classList.remove('d-none');
+    const formData = new FormData();
+    formData.append("opportunity_id", opportunityId);
+    for (let file of files) formData.append("documents[]", file);
+    try {
+        const response = await fetch("/api/opportunity/upload-valuation-document", {
+            method: "POST",
+            body: formData
+        });
+        const res = await response.json();
+        if (res.result) {
+            await loadPropertyValuationDocuments();
+            spinner.classList.add('d-none');
+            showMessage('Documenti caricati con successo', 'resultPropertyChecklistDocs', 'text-success')
+        } else throw new Error("Errore durante il caricamento dei documenti immobiliari.");
+    } catch (error) {
+        spinner.classList.add('d-none');
+        showMessage(error.message, 'resultPropertyChecklistDocs', 'text-danger');
+    }
+}
+
+async function loadPropertyValuationDocuments() {
+    try {
+        const icons = ['bi-file-earmark-pdf', 'bi-filetype-doc', 'bi-filetype-docx', 'bi-file-earmark-image'];
+        const div = document.getElementById('propertyValuationDocumentList');
+        div.innerHTML = '';
+        const response = await fetch(`/api/opportunity/get-valuation-document/${opportunityId}`);
+        const res = await response.json();
+        if (res.result) {
+            if (res.payload.length === 0) {
+                div.innerHTML = '<p class="w-100 text-black-50 text-center">Nessun documento trovato per questa proprietà</p>';
+                return;
+            }
+            let str = '';
+            for (let file of res.payload) {
+                const ext = file.name.split('.').pop().toLowerCase();
+                let icon = '';
+                switch (ext) {
+                    case 'png':
+                    case 'jpg':
+                    case 'jpeg': icon = icons[3]; break;
+                    case 'pdf': icon = icons[0]; break;
+                    case 'doc': icon = icons[1]; break;
+                    case 'docx': icon = icons[2]; break;
+                }
+                const fname = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+                str += `<div class="col mb-3">
+                            <div class="docSection d-flex justify-content-center align-items-center border rounded-3 position-relative" style="height: 130px;">
+                                <div class="position-absolute delDocument" style="display:none; right: 5px;top:5px;">
+                                    <span class="rounded-3 p-2 me-2" role="button" onclick="downloadDocument('${file.name}')" title="Scaricamento" style="background-color: #0dcaf020;">
+                                        <i class="bi bi-download fs-5 text-info"></i>
+                                    </span>
+                                    <span class="rounded-3 p-2" role="button" onclick="deleteDocument(this)" title="Eliminare" style="background-color: #ff000010;">
+                                        <i class="bi bi-trash3 fs-5 text-danger"></i>
+                                    </span>
+                                </div>
+                                <div class="card-body text-center">
+                                    <i class="bi ${icon} fs-3"></i>
+                                    <p class="card-text px-2" data-filename="${file.name}" style="overflow-wrap: anywhere;">${fname}</p>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+            div.insertAdjacentHTML("beforeend", str);
+        } else throw new Error(res.error);
+    } catch (error) {
+        showMessage(error.message, 'resultPropertyChecklistDocs', 'text-danger')
+    }
+}
+
+async function downloadDocument(filename) {
+    const spinner = document.getElementById("spinnerPropertyChecklistDocs");
+    spinner.classList.remove('d-none');
+    try {
+        const encoded = encodeURIComponent(filename);
+        const response = await fetch(`/api/opportunity/download-valuation-document/${opportunityId}/${encoded}`);
+        if (!response.ok) throw new Error("Download failed");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        spinner.classList.add('d-none');
+    } catch (error) {
+        spinner.classList.add('d-none');
+        showMessage(error.message, 'resultPropertyChecklistDocs', 'text-danger');
+    }
+}
+
+async function deleteDocument(el) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            const fname = el.parentElement.nextElementSibling.lastElementChild.dataset.filename;
+            const spinner = document.getElementById("spinnerPropertyChecklistDocs");
+            spinner.classList.remove('d-none');
+            try {
+                const response = await fetch(`/api/opportunity/delete-valuation-document/${opportunityId}/${fname}`, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#modalConfirmDelete").modal('hide');
+                    el.parentNode.parentNode.parentNode.remove();
+                    spinner.classList.add('d-none');
+                    showMessage('Documento eliminato con successo', 'resultPropertyChecklistDocs', 'text-success')
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo documento.");
+            } catch (error) {
+                $("#modalConfirmDelete").modal('hide');
+                spinner.classList.add('d-none');
+                showMessage(error.message, 'resultPropertyChecklistDocs', 'text-danger');
+            }
+        }
+    });
 }

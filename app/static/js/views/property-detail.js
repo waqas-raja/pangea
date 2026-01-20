@@ -461,7 +461,6 @@ function downloadPropertyNotary(fname) {
 
 async function loadPropertyDocuments() {
     try {
-        const icons = ['bi-file-earmark-pdf', 'bi-filetype-doc', 'bi-filetype-docx', 'bi-file-earmark-image'];
         const div = document.getElementById('propertyDocumentList');
         div.innerHTML = '';
         const response = await fetch(`/api/property/get-document/${propertyId}`);
@@ -471,6 +470,7 @@ async function loadPropertyDocuments() {
                 div.innerHTML = '<p class="w-100 text-black-50 text-center">Nessun documento trovato per questa proprietà</p>';
                 return;
             }
+            const icons = ['bi-file-earmark-pdf', 'bi-filetype-doc', 'bi-filetype-docx', 'bi-file-earmark-image'];
             let str = '';
             for (let file of res.payload) {
                 const ext = file.name.split('.').pop().toLowerCase();
@@ -496,7 +496,7 @@ async function loadPropertyDocuments() {
                                 </div>
                                 <div class="card-body text-center">
                                     <i class="bi ${icon} fs-3"></i>
-                                    <p class="card-text px-2" data-fileName="${file.name}" style="overflow-wrap: anywhere;">${fname}</p>
+                                    <p class="card-text px-2" data-filename="${file.name}" style="overflow-wrap: anywhere;">${fname}</p>
                                 </div>
                             </div>
                         </div>`;
@@ -571,7 +571,7 @@ async function downloadDocument(filename) {
 async function deleteDocument(el) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
-            const fname = el.parentElement.nextElementSibling.lastElementChild.dataset.fileName;
+            const fname = el.parentElement.nextElementSibling.lastElementChild.dataset.filename;
             const spinner = document.getElementById("spinnerUploadDocs");
             spinner.classList.remove('d-none');
             try {
@@ -584,6 +584,7 @@ async function deleteDocument(el) {
                     showMessage('Documento eliminato con successo', 'resultDocumentUpload', 'text-success')
                 } else throw new Error("Si è verificato un errore durante l'eliminazione di questo documento.");
             } catch (error) {
+                $("#modalConfirmDelete").modal('hide');
                 spinner.classList.add('d-none');
                 showMessage(error.message, 'resultDocumentUpload', 'text-danger');
             }

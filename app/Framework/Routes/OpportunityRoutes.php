@@ -54,6 +54,30 @@ class OpportunityRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+
+        $group->post('/upload-valuation-document', function (Request $request, Response $response) {
+            return Opportunity::UploadPropertyValuationDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->get('/get-valuation-document/{id}', function (Request $request, Response $response) {
+            return Opportunity::GetPropertyValuationDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->get('/download-valuation-document/{id}/{name}', function (Request $request, Response $response) {
+            return Opportunity::DownloadPropertyValuationDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->delete('/delete-valuation-document/{id}/{name}', function (Request $request, Response $response) {
+            return Opportunity::DeletePropertyValuationDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 
