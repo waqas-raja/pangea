@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function loadLands() {
-    // const response = await fetch('/api/customers');
+    // const response = await fetch('/pai/pangea/api/lands');
     // const r = await response.json();
     const hasData = [].length > 0;
     $("#landGrid").dxDataGrid({
