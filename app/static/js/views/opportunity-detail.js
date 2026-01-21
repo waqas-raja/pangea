@@ -99,6 +99,7 @@ const documentCheckList = {
         ],
     },
 };
+const STORAGE_KEY = "development_project_data";
 document.addEventListener("DOMContentLoaded", async () => {
     await loadNations();
     await loadSources();
@@ -110,6 +111,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadChecklistDocuments();
     loadPropertyValuationDocuments();
     loadMap();
+    renderTasks();
 
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
@@ -596,3 +598,209 @@ async function deleteDocument(el) {
         }
     });
 }
+
+/************************TASK MANAGEMENT*******************************/
+function showNewTaskModal() {
+    document.getElementById('modalAddTaskLabel').textContent = 'Aggiungi attività';
+    document.getElementById('txtInputTask').value = '';
+    document.getElementById('btnUpdateTask').classList.add('d-none');
+    document.getElementById('btnSaveTask').classList.remove('d-none');
+    const modalElement = document.getElementById("modalAddTask");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function renderTasks() {
+    const data = loadData();
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
+
+    $("#taskList").dxDataGrid({
+        dataSource: data.tasks,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        noDataText: "Nessun compito aggiunto",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                allowFiltering: true,
+                width: 150,
+            },
+            {
+                dataField: "text",
+                caption: "Compito",
+                allowFiltering: true,
+                width: 500,
+                // sortIndex: 2, sortOrder: "asc"
+            },
+            {
+                dataField: "status",
+                caption: "Stato",
+                allowFiltering: true,
+                alignment: "left",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    container.html(`
+                            <input type="checkbox" class="form-check-input" placeholder="${data.status ? "Deseleziona se in sospeso" : "Controlla se completato"}" ${data.status ? "checked" : ""} onchange="toggleTask(${data.id})">
+                            <span class="${data.status ? 'completed' : ''}">${data.status ? 'Completato' : 'In corso'}</span>
+                        `);
+                }
+            },
+            {
+                dataField: "scenario",
+                caption: "Scenario",
+                allowFiltering: true,
+                // sortIndex: 4, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let text = '';
+                    switch (data.scenario) {
+                        case 'best': text = 'Nel migliore dei casi'; break;
+                        case 'average': text = 'Caso medio'; break;
+                        case 'worst': text = 'Il caso peggiore'; break;
+                    }
+                    container.text(text);
+                }
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                allowFiltering: true,
+                width: 150,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-pencil-square me-3" onclick="showModalToEditTask(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteTask(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                "groupPanel",
+                "searchPanel",
+            ]
+        },
+        // onRowClick: function (e) { if (e.rowType === "data") { window.location = `/opportunity/${e.data.id}`; } },
+    });
+}
+
+function saveTask(btn) {
+    const taskTitle = document.getElementById("txtInputTask").value.trim();
+    const scenario = document.querySelector('input[name="rbScenarioEvaluation"]:checked').value;
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    if (taskTitle === '') {
+        showMessage(`Inserisci l'attività per procedere.`, 'spNewTaskResult', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        return;
+    }
+    const data = loadData();
+    const id = Date.now().toString();
+    data.tasks.push({ id: id, text: taskTitle, status: false, scenario: scenario });
+
+    saveToStorage(data);
+    document.getElementById("txtInputTask").value = "";
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddTask').modal('hide');
+    $("#taskList").dxDataGrid("dispose");
+    $("#taskList").empty();
+    renderTasks();
+}
+
+function toggleTask(id) {
+    const data = loadData();
+    const task = data.tasks.find(task => task.id === id.toString());
+    task.status = !task.status;
+    saveToStorage(data);
+    $("#taskList").dxDataGrid("dispose");
+    $("#taskList").empty();
+    renderTasks();
+}
+
+function showModalToEditTask(id) {
+    const data = loadData();
+    const task = data.tasks.find(task => task.id === id.toString());
+    document.getElementById('txtInputTask').value = task.text;
+    const radioButtons = document.getElementsByName('rbScenarioEvaluation');
+    for (let i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].value === task.scenario) {
+            radioButtons[i].checked = true;
+            break;
+        }
+    }
+    document.getElementById('modalAddTaskLabel').textContent = 'Modifica attività';
+    document.getElementById('btnUpdateTask').classList.remove('d-none');
+    document.getElementById('btnSaveTask').classList.add('d-none');
+    document.getElementById('hTaskId').value = id;
+    const modalElement = document.getElementById("modalAddTask");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function editTask(btn) {
+    const taskTitle = document.getElementById("txtInputTask").value.trim();
+    const scenario = document.querySelector('input[name="rbScenarioEvaluation"]:checked').value;
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    if (taskTitle === '') {
+        showMessage(`Inserisci l'attività per procedere.`, 'spNewTaskResult', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        return;
+    }
+    const data = loadData();
+    const id = document.getElementById('hTaskId').value;
+    const task = data.tasks.find(task => task.id === id.toString());
+    task.text = taskTitle;
+    task.scenario = scenario;
+    saveToStorage(data);
+    document.getElementById("txtInputTask").value = "";
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddTask').modal('hide');
+    $("#taskList").dxDataGrid("dispose");
+    $("#taskList").empty();
+    renderTasks();
+}
+
+function deleteTask(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            let data = loadData();
+            data.tasks = data.tasks.filter(task => task.id !== id.toString())
+            // data.tasks.splice(i, 1);
+            saveToStorage(data);
+            $("#taskList").dxDataGrid("dispose");
+            $("#taskList").empty();
+            $('#modalConfirmDelete').modal('hide');
+            renderTasks();
+        }
+    });
+}
+
+function loadData() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+        tasks: []
+    };
+}
+
+function saveToStorage(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+/************************TASK MANAGEMENT END*******************************/

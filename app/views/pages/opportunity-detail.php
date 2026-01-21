@@ -3,6 +3,7 @@ $title = 'Dettaglio valutazione';
 ob_start();
 $oid = htmlspecialchars($oid, ENT_QUOTES, 'UTF-8');
 require_once __DIR__ . "/../modals/confirm-delete.php";
+require_once __DIR__ . "/../modals/add-task.php";
 ?>
 
 <input id="hOpportunityId" type="hidden" value="<?= $oid ?>">
@@ -35,6 +36,9 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="stat-valuation-tab" data-bs-toggle="tab" data-bs-target="#stat-valuation" type="button" role="tab" aria-controls="stat-valuation" aria-selected="false">Statistiche</button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="development-project-tab" data-bs-toggle="tab" data-bs-target="#development-project" type="button" role="tab" aria-controls="development-project" aria-selected="false">Progetto di sviluppo</button>
+            </li>
         </ul>
         <div class="tab-content" id="valuationDetailTabsContent">
             <div class="tab-pane fade border border-top-0 p-3 show active" id="property-valuation" role="tabpanel" aria-labelledby="property-valuation-tab">
@@ -45,7 +49,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                     <div class="col-sm-6">
                         <div class="pai-card cardHeight">
                             <fieldset class="row mb-3">
-                                <legend class="col-form-label col-sm-4 pt-0">Tipo di immobile</legend>
+                                <legend class="col-form-label col-sm-4 pt-0">Tipo di immobile:</legend>
                                 <div class="col-sm-8">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="rbPropertyType" id="rbHouseApartment" value="1" checked>
@@ -68,7 +72,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                                 </div>
                             </fieldset>
                             <fieldset class="row">
-                                <legend class="col-form-label col-sm-4 pt-0">Tipo di transazione</legend>
+                                <legend class="col-form-label col-sm-4 pt-0">Tipo di transazione:</legend>
                                 <div class="col-sm-8">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="rbTransectionType" id="rbSale" value="sale" checked>
@@ -151,6 +155,13 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
             <div class="tab-pane fade border border-top-0 p-3" id="stat-valuation" role="tabpanel" aria-labelledby="stat-valuation-tab">
                 stats valuation content
                 <div id="" class=""></div>
+            </div>
+            <div class="tab-pane fade border border-top-0 p-3" id="development-project" role="tabpanel" aria-labelledby="development-project-tab">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="pai-title">Elenco attività</div>
+                    <button class="btn btn-blue" onclick="showNewTaskModal()">Aggiungi attività</button>
+                </div>
+                <div id="taskList"></div>
             </div>
         </div>
     </div>
