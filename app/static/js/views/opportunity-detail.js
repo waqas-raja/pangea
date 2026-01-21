@@ -603,6 +603,8 @@ async function deleteDocument(el) {
 function showNewTaskModal() {
     document.getElementById('modalAddTaskLabel').textContent = 'Aggiungi attività';
     document.getElementById('txtInputTask').value = '';
+    const radioButtons = document.getElementsByName('rbScenarioEvaluation');
+    for (let i = 0; i < 1; i++) radioButtons[i].checked = true;
     document.getElementById('btnUpdateTask').classList.add('d-none');
     document.getElementById('btnSaveTask').classList.remove('d-none');
     const modalElement = document.getElementById("modalAddTask");
