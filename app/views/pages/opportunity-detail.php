@@ -31,7 +31,7 @@ require_once __DIR__ . "/../modals/add-task.php";
                 <button class="nav-link" id="document-valuation-tab" data-bs-toggle="tab" data-bs-target="#document-valuation" type="button" role="tab" aria-controls="document-valuation" aria-selected="false">Documenti</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="note-valuation-tab" data-bs-toggle="tab" data-bs-target="#note-valuation" type="button" role="tab" aria-controls="note-valuation" aria-selected="false">Nota</button>
+                <button class="nav-link" id="note-valuation-tab" data-bs-toggle="tab" data-bs-target="#note-valuation" type="button" role="tab" aria-controls="note-valuation" aria-selected="false">Note</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="stat-valuation-tab" data-bs-toggle="tab" data-bs-target="#stat-valuation" type="button" role="tab" aria-controls="stat-valuation" aria-selected="false">Statistiche</button>
@@ -121,7 +121,6 @@ require_once __DIR__ . "/../modals/add-task.php";
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="note-valuation" role="tabpanel" aria-labelledby="note-valuation-tab">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -129,7 +128,7 @@ require_once __DIR__ . "/../modals/add-task.php";
                         <div id="resultNote"></div>
                     </div>
                     <div>
-                        <button class="btn btn-blue" onclick="allowNoteModification(this)">Modificare Nota</button>
+                        <button class="btn btn-blue" onclick="allowNoteModification(this)">Modificare Note</button>
                         <div id="noteModifySection" class="d-none">
                             <button class="btn btn-outline-secondary px-2 me-2" role="button" title="Cancel" onclick="cancelNoteModification(this)">
                                 <i class="bi bi-x-circle"></i> Annulla
@@ -143,7 +142,7 @@ require_once __DIR__ . "/../modals/add-task.php";
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row mb-0 align-items-center">
-                            <label for="txtNote" class="col-sm-3 col-form-label">Nota:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                            <label for="txtNote" class="col-sm-3 col-form-label">Note:<span class="text-danger ms-2 editControl d-none">*</span></label>
                             <div class="col-sm-9">
                                 <span id="spNote" class="valueControl"></span>
                                 <div id="txtNote" class="form-control editControl d-none mb-1"></div>
