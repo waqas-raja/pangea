@@ -6,6 +6,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadPropertyStatus();
     await loadPropertyDetail();
     await loadPropertyDocuments();
+    loadMap();
+
+    document.getElementById("txtStreet").addEventListener("focusout", loadMap);
+    document.getElementById("txtDistrict").addEventListener("focusout", loadMap);
+    document.getElementById("txtAddress").addEventListener("focusout", loadMap);
+    document.getElementById("txtCity").addEventListener("focusout", loadMap);
+    document.getElementById("ddlState").addEventListener("change", loadMap);
 });
 
 async function loadAssocaitedQuotes() {
@@ -607,4 +614,25 @@ async function deleteModal() {
             }
         }
     });
+}
+
+function loadMap() {
+    const street = document.getElementById("txtStreet").value.trim();
+    const district = document.getElementById("txtDistrict").value.trim();
+    const address = document.getElementById("txtAddress").value.trim();
+    const city = document.getElementById("txtCity").value.trim();
+    const state = $("#ddlState option:selected").text();
+    const addressCombined = street + ' ' + address + ' ' + district + ' ' + city + ' ' + state;
+    if (!addressCombined) return;
+    const url = "https://www.google.com/maps?q=" + encodeURIComponent(addressCombined) + "&output=embed";
+    document.getElementById("mapContainer").innerHTML = `
+        <iframe
+            width="100%"
+            height="350"
+            frameborder="0"
+            style="border:0"
+            src="${url}"
+            allowfullscreen>
+        </iframe>
+    `;
 }
