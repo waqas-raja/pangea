@@ -13,7 +13,8 @@ async function loadEstimateDetail() {
         document.getElementById('customerName').textContent = r.payload.estimate.customer_name + " " + r.payload.estimate.customer_surname;
         document.getElementById('customerEmail').textContent = r.payload.estimate.customer_email;
         document.getElementById('customerPhone').textContent = r.payload.estimate.customer_phone;
-        document.getElementById('propertyAddress').textContent = r.payload.estimate.propert_address;
+        const fullAddress = r.payload.estimate.propert_address + ', ' + r.payload.estimate.propert_city + ', ' + r.payload.estimate.property_nation;
+        document.getElementById('propertyAddress').textContent = fullAddress;
         document.getElementById('propertySize').textContent = r.payload.estimate.property_size + ' mq';
 
         document.getElementById('customerNameDraft').textContent = r.payload.estimate.customer_name + " " + r.payload.estimate.customer_surname;
