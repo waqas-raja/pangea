@@ -106,11 +106,7 @@
                     <label for="ddlState" class="col-sm-5 col-form-label">Stato:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spState" class="valueControl"></span>
-                        <select id="ddlState" class="form-select editControl d-none mb-1">
-                            <option value="" selected>Seleziona nazione</option>
-                            <option value="IT">IT</option>
-                            <option value="PK">PK</option>
-                        </select>
+                        <select id="ddlState" class="form-select editControl d-none mb-1"></select>
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
@@ -121,6 +117,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="pai-card mb-3">
+            <!-- <label class="form-label">Mappa:</label> -->
+            <div id="mapContainer"></div>
         </div>
     </div>
 </div>

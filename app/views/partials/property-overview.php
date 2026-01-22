@@ -71,37 +71,42 @@
                     </div>
                 </div>
                 <hr>
-                <div class="row mb-0 align-items-center">
-                    <label for="ddlPropertyStatus" class="col-sm-5 col-form-label">Stato di proprietà:<span class="text-danger ms-2 editControl d-none">*</span></label>
-                    <div class="col-sm-7">
-                        <span id="spPropertyStatus" class="valueControl"></span>
-                        <select id="ddlPropertyStatus" class="form-select editControl d-none mb-1">
-                            <option value="" selected>Seleziona</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mb-0 align-items-center">
-                    <label for="txtSize" class="col-sm-5 col-form-label">Dimensione:<span class="text-danger ms-2 editControl d-none">*</span></label>
-                    <div class="col-sm-7">
-                        <span id="spSize" class="valueControl"></span>
-                        <div class="input-group editControl d-none mb-1">
-                            <input type="number" id="txtSize" class="form-control" required>
-                            <span class="input-group-text">(mq)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-0 align-items-center">
-                    <label for="txtFloor" class="col-sm-5 col-form-label">Piano:<span class="text-danger ms-2 editControl d-none">*</span></label>
-                    <div class="col-sm-7">
-                        <span id="spFloor" class="valueControl"></span>
-                        <input type="number" id="txtFloor" class="form-control editControl d-none mb-1" min="0" value="">
-                    </div>
+                <div class="mb-0">
+                    <label class="form-label">Mappa:</label>
+                    <div id="mapContainer"></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
+            <div class="row mb-0 align-items-center">
+                <label for="ddlPropertyStatus" class="col-sm-5 col-form-label">Stato di proprietà:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <div class="col-sm-7">
+                    <span id="spPropertyStatus" class="valueControl"></span>
+                    <select id="ddlPropertyStatus" class="form-select editControl d-none mb-1">
+                        <option value="" selected>Seleziona</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-0 align-items-center">
+                <label for="txtSize" class="col-sm-5 col-form-label">Dimensione:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <div class="col-sm-7">
+                    <span id="spSize" class="valueControl"></span>
+                    <div class="input-group editControl d-none mb-1">
+                        <input type="number" id="txtSize" class="form-control" required>
+                        <span class="input-group-text">(mq)</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-0 align-items-center">
+                <label for="txtFloor" class="col-sm-5 col-form-label">Piano:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <div class="col-sm-7">
+                    <span id="spFloor" class="valueControl"></span>
+                    <input type="number" id="txtFloor" class="form-control editControl d-none mb-1" min="0" value="">
+                </div>
+            </div>
+            <hr>
             <div class="row mb-1 align-items-center">
                 <label for="txtRoom" class="col-sm-5 col-form-label">Stanze:</label>
                 <div class="col-sm-7">

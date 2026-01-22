@@ -1,8 +1,14 @@
 let _customerDetail = [];
 document.addEventListener("DOMContentLoaded", async () => {
+    renderNations();
     await loadCustomerDetail();
     loadAssociatedProperties();
     loadAssociatedQuotes();
+    loadMap();
+
+    document.getElementById("txtAddress").addEventListener("focusout", loadMap);
+    document.getElementById("txtCity").addEventListener("focusout", loadMap);
+    document.getElementById("ddlState").addEventListener("change", loadMap);
 });
 
 async function loadCustomerDetail() {
@@ -354,4 +360,35 @@ async function deleteCustomerModal() {
             }
         }
     });
+}
+
+async function renderNations() {
+    const response = await fetch('/api/nations');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlState");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona nazione</option>';
+    r.payload.forEach(type => {
+        opt += `<option value="${type.code}">${type.name}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
+
+function loadMap() {
+    const address = document.getElementById("txtAddress").value.trim();
+    const city = document.getElementById("txtCity").value.trim();
+    const state = $("#ddlState option:selected").text();
+    const addressCombined = address + ' ' + city + ' ' + state;
+    if (!addressCombined) return;
+    const url = "https://www.google.com/maps?q=" + encodeURIComponent(addressCombined) + "&output=embed";
+    document.getElementById("mapContainer").innerHTML = `
+        <iframe
+            width="100%"
+            height="350"
+            frameborder="0"
+            style="border:0"
+            src="${url}"
+            allowfullscreen>
+        </iframe>
+    `;
 }
