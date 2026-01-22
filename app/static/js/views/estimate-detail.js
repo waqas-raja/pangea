@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     await loadEstimateDetail();
     loadCustomers();
+    loadMap();
 });
 
 async function loadEstimateDetail() {
@@ -199,4 +200,23 @@ async function shareQuoteToCustomer(fname) {
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     btn.disabled = true;
+}
+
+function loadMap() {
+    const address = document.getElementById("propertyAddress").textContent.trim();
+    // const city = document.getElementById("txtCity").value.trim();
+    // const state = $("#ddlState option:selected").text();
+    // const addressCombined = address + ' ' + city + ' ' + state;
+    if (!address) return;
+    const url = "https://www.google.com/maps?q=" + encodeURIComponent(address) + "&output=embed";
+    document.getElementById("mapContainer").innerHTML = `
+        <iframe
+            width="100%"
+            height="350"
+            frameborder="0"
+            style="border:0"
+            src="${url}"
+            allowfullscreen>
+        </iframe>
+    `;
 }
