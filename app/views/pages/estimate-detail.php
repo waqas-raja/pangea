@@ -75,6 +75,10 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                     <span>Rif. Catastale:</span>
                     <span id="propertyRegistryRef" class="text-end fw-semibold">F.23, Part. 123, Sub. 4</span>
                 </div>
+                <div class="mb-0">
+                    <label class="form-label">Mappa:</label>
+                    <div id="mapContainer"></div>
+                </div>
             </div>
         </div>
         <div class="col">
