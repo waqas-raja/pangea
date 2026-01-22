@@ -114,10 +114,13 @@ final class Estimate
                     c.email as customer_email,
                     c.phone as customer_phone,
                     p.address as propert_address,
-                    p.size as property_size
+                    p.city as propert_city,
+                    p.size as property_size,
+                    n.name as property_nation
                 from estimate as e
                 left join customer as c on e.customer = c.id
                 left join property as p on e.property = p.id
+                left join td_nation as n on p.nation = n.code
                 where e.id = ?
             query;
             $estimates = DB::Query($q, [$id]);
