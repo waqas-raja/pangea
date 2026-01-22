@@ -30,7 +30,19 @@
                         <input type="tell" id="txtPhone" class="form-control editControl d-none mb-1" maxlength="16" value="">
                     </div>
                 </div>
-
+                <div class="row mb-0 align-items-center">
+                    <label for="ddlTag" class="col-sm-5 col-form-label">Etichetta persona<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <div class="col-sm-7">
+                        <span id="spTag" class="valueControl">Cliente, Agente</span>
+                        <select id="ddlTag" class="form-select editControl d-none mb-1" multiple style="height: 75px;">
+                            <option value="">Seleziona il tag della persona</option>
+                            <option value="investor">Investitore</option>
+                            <option value="owner">Proprietario</option>
+                            <option value="client" selected>Cliente</option>
+                            <option value="agent" selected>Agente</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

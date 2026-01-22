@@ -46,12 +46,20 @@ async function loadCustomers() {
             },
             {
                 dataField: "email",
-                caption: "Email", 
+                caption: "Email",
+                width: 200,
                 // sortIndex: 2, sortOrder: "asc"
             },
             {
                 dataField: "phone",
                 caption: "Telefono",
+                width: 200,
+                // sortIndex: 3, sortOrder: "asc"
+            },
+            {
+                dataField: "",
+                caption: "Etichetta persona",
+                width: 200,
                 // sortIndex: 3, sortOrder: "asc"
             },
             {
@@ -123,15 +131,23 @@ async function saveCustomer() {
     const lastName = document.getElementById("txtLastName").value.trim();
     const email = document.getElementById("txtEmail").value.trim();
     const phone = document.getElementById("txtPhone").value.trim();
+    const tag = document.getElementById("ddlTag");
+    const tags = Array.from(tag.options)
+    .filter(option => option.selected)
+    .map(option => option.value);
     const isCompany = document.getElementById("ckIsCompany").checked;
     let bizname = document.getElementById("txtBizname").value.trim();
     let vat = document.getElementById("txtVat").value.trim();
     const result = document.getElementById("spNewCustomerResult");
     result.innerHTML = '';
-    if (firstName === '' || lastName === "" || email === "" || phone === "" || (isCompany && (bizname === "" || vat === ""))) {
-        result.innerText = "Si prega di compilare tutti i campi richiesti";
+    if (firstName === '' || lastName === "" || email === "" || phone === "" || (tags.length === 0 || tags[0] === '') || (isCompany && (bizname === "" || vat === ""))) {
         result.classList.remove("d-none");
-        return;
+        if (firstName === '') { result.innerText = 'Il nome è obbligatorio'; return; }
+        if (lastName === '') { result.innerText = 'Il cognome è obbligatorio'; return; }
+        if (email === '') { result.innerText = 'L\'email è obbligatoria'; return; }
+        if (phone === '') { result.innerText = 'Il telefono è obbligatorio'; return; }
+        if (tags.length === 0 || tags[0] === '') { result.innerText = 'Seleziona almeno un tag'; return; }
+        // result.innerText = "Si prega di compilare tutti i campi richiesti";
     }
     if (isValidEmail(email) === false) {
         result.innerText = "L'indirizzo email non è valido";
@@ -153,7 +169,7 @@ async function saveCustomer() {
         const response = await fetch("/api/customer", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "name": firstName, "surname": lastName, "email": email, "phone": phone, "bizname": bizname, "vat": vat })
+            body: JSON.stringify({ "name": firstName, "surname": lastName, "email": email, "phone": phone, "bizname": bizname, "vat": vat, "tags": tags })
         });
         const res = await response.json();
         if (res.result) {

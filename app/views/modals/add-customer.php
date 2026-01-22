@@ -1,5 +1,5 @@
 <div id="modalAddCustomer" class="modal fade" tabindex="-1" aria-labelledby="modalAddAgentLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalAddAgentLabel"><i class="bi bi-person-lines-fill me-3"></i>Aggiungi Persone</h5>
@@ -29,6 +29,18 @@
                         <label for="txtPhone" class="col-sm-4 col-form-label">Telefono<span class="text-danger ms-2">*</span></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="txtPhone" placeholder="Con o senza prefisso internazionale" required>
+                        </div>
+                    </div>
+                    <div class="row mb-0 align-items-center">
+                        <label for="ddlTag" class="col-sm-4 col-form-label">Etichetta persona<span class="text-danger ms-2">*</span></label>
+                        <div class="col-sm-8">
+                            <select id="ddlTag" class="form-select editControl mb-1" multiple style="height: 75px;">
+                                <option value="" selected>Seleziona il tag della persona</option>
+                                <option value="investor">Investitore</option>
+                                <option value="owner">Proprietario</option>
+                                <option value="client">Cliente</option>
+                                <option value="agent">Agente</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row mb-3">
