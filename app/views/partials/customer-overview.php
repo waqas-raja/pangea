@@ -87,6 +87,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mb-0 align-items-center">
+                    <label for="txtPotentialInvestment" class="col-sm-5 col-form-label">Investimento potenziale:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <div class="col-sm-7">
+                        <span id="spPotentialInvestment" class="valueControl">n.d.</span>
+                        <input type="text" id="txtPotentialInvestment" class="form-control editControl d-none mb-1" value="">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
