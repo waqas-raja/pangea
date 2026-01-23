@@ -1,4 +1,49 @@
 let _marginalPercentage = 0;
+const earningsData = [
+    { propertyId: 1, alias: "Building A", month: "2024-01", amount: 12000 },
+    { propertyId: 1, alias: "Building A", month: "2024-02", amount: 13500 },
+    { propertyId: 1, alias: "Building A", month: "2024-03", amount: 11000 },
+
+    { propertyId: 2, alias: "Mall Portfolio", month: "2024-01", amount: 8000 },
+    { propertyId: 2, alias: "Mall Portfolio", month: "2024-02", amount: 9000 },
+    { propertyId: 2, alias: "Mall Portfolio", month: "2024-03", amount: 9500 }
+];
+
+const chartInstance = $("#earningsChart").dxChart({
+    dataSource: [],
+    commonSeriesSettings: {
+        argumentField: "month",
+        type: "line"
+    },
+    series: [{
+        valueField: "amount",
+        name: "Earnings (€)"
+    }],
+    tooltip: {
+        enabled: true,
+        customizeTooltip(info) {
+            const data = info.point.data;
+            return {
+                html: `
+                <strong>${data.alias}</strong><br/>
+                Month: ${data.month}<br/>
+                Earnings: € ${data.amount.toLocaleString()}
+            `};
+        }
+    },
+    argumentAxis: {
+        valueMarginsEnabled: false
+    },
+    valueAxis: {
+        label: {
+            format: "currency"
+        }
+    },
+    legend: {
+        visible: true
+    }
+}).dxChart("instance");
+
 document.addEventListener("DOMContentLoaded", async () => {
     await loadProperties();
     loadPropertyTypes();
@@ -10,6 +55,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('txtExtraPrice').addEventListener('keyup', calculateMarginalPercentage);
     document.getElementById('txtAcqPrice').addEventListener('keyup', calculateMarginalPercentage);
     document.getElementById('txtRenPrice').addEventListener('keyup', calculateMarginalPercentage);
+
+    $("#propertySelect").dxSelectBox({
+        width: 220,
+        placeholder: "Select property",
+        dataSource: [
+            { id: 0, name: "All Properties" },
+            { id: 1, name: "Building A" },
+            { id: 2, name: "Mall Portfolio" }
+        ],
+        displayExpr: "name",
+        valueExpr: "id",
+        value: 0,
+        onValueChanged: reloadChart
+    });
+
+    $("#rangeSelect").dxSelectBox({
+        width: 160,
+        dataSource: [
+            { id: 6, text: "Last 6 months" },
+            { id: 12, text: "Last 12 months" },
+            { id: "custom", text: "Custom" }
+        ],
+        displayExpr: "text",
+        valueExpr: "id",
+        value: 'custom',
+        onValueChanged(e) {
+            $("#dateRange").toggle(e.value === "custom");
+            reloadChart();
+        }
+    });
+
+    $("#dateRange").dxDateRangeBox({
+        width: 240,
+        visible: false,
+        onValueChanged: reloadChart
+    });
+
+    reloadChart();
+
 });
 
 async function loadProperties() {
@@ -423,4 +507,30 @@ function calculateMarginalPercentage() {
     _marginalPercentage = (((sellPrice - (acqCost + renCost + extraCost)) / (acqCost + renCost + extraCost)) * 100);
     if (isNaN(_marginalPercentage)) _marginalPercentage = 0;
     document.getElementById('txtMarginalPercentage').value = _marginalPercentage.toFixed(2);
+}
+
+function reloadChart() {
+    const propertyId = $("#propertySelect").dxSelectBox("instance").option("value");
+    const range = $("#rangeSelect").dxSelectBox("instance").option("value");
+    const customRange = $("#dateRange").dxDateRangeBox("instance").option("value");
+
+    let filtered = [...earningsData];
+    // Property filter
+    if (propertyId && propertyId !== 0) {
+        filtered = filtered.filter(x => x.propertyId === propertyId);
+    }
+    // Time range filter
+    if (range !== "custom") {
+        const cutoff = new Date();
+        cutoff.setMonth(cutoff.getMonth() - range);
+        filtered = filtered.filter(x =>
+            new Date(x.month + "-01") >= cutoff
+        );
+    } else if (customRange && customRange[0]) {
+        filtered = filtered.filter(x => {
+            const d = new Date(x.month + "-01");
+            return d >= customRange[0] && d <= customRange[1];
+        });
+    }
+    chartInstance.option("dataSource", filtered);
 }

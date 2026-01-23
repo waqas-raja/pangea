@@ -174,11 +174,33 @@ require_once __DIR__ . "/../modals/add-task.php";
                 <div id="" class=""></div>
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="development-project" role="tabpanel" aria-labelledby="development-project-tab">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="pai-title">Elenco attività</div>
-                    <button class="btn btn-blue" onclick="showNewTaskModal()">Aggiungi attività</button>
+
+                <ul class="nav nav-tabs" id="developmentProjectTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="development-project-profile-tab" data-bs-toggle="tab" data-bs-target="#development-project-profile" type="button" role="tab" aria-controls="development-project-profile" aria-selected="false">Anagrafica</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="development-project-quotes-tab" data-bs-toggle="tab" data-bs-target="#development-project-quotes" type="button" role="tab" aria-controls="development-project-quotes" aria-selected="false">Preventivi</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="development-project-notes-tab" data-bs-toggle="tab" data-bs-target="#development-project-notes" type="button" role="tab" aria-controls="development-project-notes" aria-selected="false">Notes</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="developmentProjectTabsContent">
+                    <div class="tab-pane fade border border-top-0 p-3 show active" id="development-project-profile" role="tabpanel" aria-labelledby="development-project-profile-tab">
+                        Profile tab
+                    </div>
+                    <div class="tab-pane fade border border-top-0 p-3" id="development-project-quotes" role="tabpanel" aria-labelledby="development-project-profile-tab">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="pai-title">Elenco attività</div>
+                            <button class="btn btn-blue" onclick="showNewTaskModal()">Aggiungi attività</button>
+                        </div>
+                        <div id="taskList"></div>
+                    </div>
+                    <div class="tab-pane fade border border-top-0 p-3" id="development-project-notes" role="tabpanel" aria-labelledby="development-project-profile-tab">
+                        notes tab
+                    </div>
                 </div>
-                <div id="taskList"></div>
             </div>
         </div>
     </div>
