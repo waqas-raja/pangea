@@ -270,6 +270,7 @@ async function updateGenericInfo() {
     const vat = document.getElementById("txtVat").value.trim();
     const fiscal = document.getElementById("txtFiscal").value.trim();
     const sdi = document.getElementById("txtSdi").value.trim();
+    const investment = document.getElementById("txtPotentialInvestment").value.trim();
     const address = document.getElementById("txtAddress").value.trim();
     const city = document.getElementById("txtCity").value.trim();
     const zip = document.getElementById("txtZip").value.trim();
@@ -326,6 +327,7 @@ async function updateGenericInfo() {
                 vat: isCompany ? vat : null,
                 fiscal: fiscal !== "" ? fiscal : null,
                 sdi: sdi !== "" ? sdi : null,
+                potentialInvestment: investment !== "" ? investment : null,
                 address: address,
                 city: city,
                 zip: zip,
