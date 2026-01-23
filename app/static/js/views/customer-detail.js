@@ -265,6 +265,10 @@ async function updateGenericInfo() {
     const surname = document.getElementById("txtLastName").value.trim();
     const email = document.getElementById("txtEmail").value.trim();
     const phone = document.getElementById("txtPhone").value.trim();
+    const tag = document.getElementById("ddlTag");
+    const tags = Array.from(tag.options)
+    .filter(option => option.selected)
+    .map(option => option.value);
     const isCompany = document.getElementById("ckIsCompany").checked;
     const bizname = document.getElementById("txtBizname").value.trim();
     const vat = document.getElementById("txtVat").value.trim();
@@ -278,7 +282,7 @@ async function updateGenericInfo() {
     const note = document.getElementById("txtNote").value.trim();
     let err = document.getElementById('errEditCustomer');
     err.innerText = '';
-    if (name === "" || surname === "" || email === "" || phone === "" || address === "" || city === "" || zip === "" || state === "") {
+    if (name === "" || surname === "" || email === "" || phone === "" || (tags.length === 0 || tags[0] === '') || address === "" || city === "" || zip === "" || state === "") {
         btn.disabled = false;
         if (name === "") { err.textContent = "Il campo Nome è obbligatorio"; return; }
         if (surname === "") { err.textContent = "Il campo Cognome è obbligatorio"; return; }
@@ -288,6 +292,7 @@ async function updateGenericInfo() {
         if (city === "") { err.textContent = "La città è obbligatoria"; return; }
         if (zip === "") { err.textContent = "È richiesto il codice postale con un numero valido"; return; }
         if (state === "") { err.textContent = "Lo Stato è obbligatorio"; return; }
+        if (tags.length === 0 || tags[0] === '') { err.textContent = 'Seleziona almeno un tag'; return; }
     }
     if (email !== "" && !isValidEmail(email)) {
         err.textContent = "L'email fornita non risulta valida.";
@@ -323,6 +328,7 @@ async function updateGenericInfo() {
                 surname: surname,
                 email: email,
                 phone: phone,
+                tags: tags,
                 bizname: isCompany ? bizname : null,
                 vat: isCompany ? vat : null,
                 fiscal: fiscal !== "" ? fiscal : null,

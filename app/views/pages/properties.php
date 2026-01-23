@@ -10,7 +10,7 @@ require_once __DIR__ . '/../modals/add-property.php';
         <!-- <div class="bg-light p-3 mt-3"><i>Page under constructions</i></div> -->
         <button type="button" class="btn btn-blue" onclick="showModalAddProperty(null, 'Aggiungi immobili')"><i class="bi bi-plus-lg me-2"></i> Aggiungi immobili</button>
     </div>
-    <div class="pai-card">
+    <div class="pai-card mb-3">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <!-- <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="property-tab" data-bs-toggle="tab" data-bs-target="#property" type="button" role="tab" aria-controls="property" aria-selected="true">Immobili</button>
@@ -32,6 +32,19 @@ require_once __DIR__ . '/../modals/add-property.php';
             <!-- <div class="tab-pane fade border border-top-0 p-3" id="under-evaluation" role="tabpanel" aria-labelledby="under-evaluation-tab">
                 <div id="propertyUnderEvaluationGrid" class=""></div>
             </div> -->
+        </div>
+    </div>
+    <div class="pai-card">
+        <div class="pai-title mb-2">Grafico dell'andamento degli utili immobiliari nel tempo</div>
+        <div class="property-chart-card">
+            <div class="chart-header mb-3">
+                <div class="chart-filters d-flex gap-3">
+                    <div id="propertySelect"></div>
+                    <div id="rangeSelect"></div>
+                    <div id="dateRange"></div>
+                </div>
+            </div>
+            <div id="earningsChart" style="height: 350px;"></div>
         </div>
     </div>
 </div>
