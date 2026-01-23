@@ -99,6 +99,116 @@ const documentCheckList = {
         ],
     },
 };
+const propertyCategories = [
+    {
+        id: 1,
+        name: "Retail Spaces",
+        children: [
+            { id: 101, name: "Shops" },
+            { id: 102, name: "Retail Units" },
+            { id: 103, name: "Showrooms" },
+            { id: 104, name: "Kiosks" },
+            { id: 105, name: "Street-Level Stores" },
+            { id: 106, name: "Shopping Mall Units" }
+        ]
+    },
+    {
+        id: 2,
+        name: "Offices",
+        children: [
+            { id: 201, name: "Executive Offices" },
+            { id: 202, name: "Professional Studios" },
+            { id: 203, name: "Coworking Spaces" },
+            { id: 204, name: "Business Centers" }
+        ]
+    },
+    {
+        id: 3,
+        name: "Industrial Properties",
+        children: [
+            { id: 301, name: "Warehouses" },
+            { id: 302, name: "Industrial Units" },
+            { id: 303, name: "Manufacturing Facilities" },
+            { id: 304, name: "Workshops" },
+            { id: 305, name: "Logistics Centers" }
+        ]
+    },
+    {
+        id: 4,
+        name: "Storage & Logistics",
+        children: [
+            { id: 401, name: "Storage Units" },
+            { id: 402, name: "Deposits" },
+            { id: 403, name: "Distribution Hubs" },
+            { id: 404, name: "Commercial Garages" }
+        ]
+    },
+    {
+        id: 5,
+        name: "Food & Hospitality",
+        children: [
+            { id: 501, name: "Restaurants" },
+            { id: 502, name: "Bars & Cafés" },
+            { id: 503, name: "Pizzerias" },
+            { id: 504, name: "Pubs" },
+            { id: 505, name: "Catering Facilities" }
+        ]
+    },
+    {
+        id: 6,
+        name: "Hospitality Properties",
+        children: [
+            { id: 601, name: "Hotels" },
+            { id: 602, name: "Motels" },
+            { id: 603, name: "Bed & Breakfasts" },
+            { id: 604, name: "Hostels" },
+            { id: 605, name: "Agritourism Properties" },
+            { id: 606, name: "Holiday Rentals (Commercial Use)" }
+        ]
+    },
+    {
+        id: 7,
+        name: "Service Properties",
+        children: [
+            { id: 701, name: "Medical Clinics" },
+            { id: 702, name: "Pharmacies" },
+            { id: 703, name: "Gyms & Fitness Centers" },
+            { id: 704, name: "Beauty Centers" },
+            { id: 705, name: "Private Schools" },
+            { id: 706, name: "Training Centers" }
+        ]
+    },
+    {
+        id: 8,
+        name: "Parking & Ancillary Spaces",
+        children: [
+            { id: 801, name: "Garages" },
+            { id: 802, name: "Parking Spaces" },
+            { id: 803, name: "Commercial Parking Lots" }
+        ]
+    },
+    {
+        id: 9,
+        name: "Land & Development",
+        children: [
+            { id: 901, name: "Commercial Land" },
+            { id: 902, name: "Industrial Land" },
+            { id: 903, name: "Development Plots" },
+            { id: 904, name: "Exhibition Areas" }
+        ]
+    },
+    {
+        id: 10,
+        name: "Investment Properties",
+        children: [
+            { id: 1001, name: "Income-Producing Properties" },
+            { id: 1002, name: "Rented Commercial Units" },
+            { id: 1003, name: "Entire Commercial Buildings" },
+            { id: 1004, name: "Property Portfolios" }
+        ]
+    }
+];
+
 const STORAGE_KEY = "development_project_data";
 document.addEventListener("DOMContentLoaded", async () => {
     await loadNations();
@@ -119,6 +229,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll('input[name="rbPropertyType"]').forEach(radio => {
         radio.addEventListener("change", loadChecklistDocuments);
     });
+    document.getElementById("ddlCommercialPropertyCats").addEventListener("change", function (e) {
+        if (e.currentTarget.value !== '') {
+            let ctrl = document.getElementById("ddlCommercialPropertySubCats");
+            ctrl.innerHTML = '';
+            let opt = '<option value="" selected>Seleziona</option>';
+            const subCats = propertyCategories.find(cat => cat.id.toString() === e.currentTarget.value).children;
+            subCats.forEach(subCat => {
+                opt += `<option value="${subCat.id}">${subCat.name}</option>`;
+            });
+            ctrl.innerHTML = opt;
+            document.getElementById('commercialPropertySubCats').classList.remove('d-none');
+        } else document.getElementById('commercialPropertySubCats').classList.add('d-none');
+    });
+    document.getElementById("ddlCommercialPropertySubCats").addEventListener("change", loadChecklistDocuments);
     document.querySelectorAll('input[name="rbTransectionType"]').forEach(radio => {
         radio.addEventListener("change", loadChecklistDocuments);
     });
@@ -127,8 +251,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 function loadChecklistDocuments() {
     const propertyType = document.querySelector('input[name="rbPropertyType"]:checked').value;
     const transectionType = document.querySelector('input[name="rbTransectionType"]:checked').value;
+    const c = document.getElementById('ddlCommercialPropertyCats').value;
+    const sc = document.getElementById('ddlCommercialPropertySubCats').value;
+    if (propertyType === '3' && sc === '') {
+        let ctrl = document.getElementById("ddlCommercialPropertyCats");
+        ctrl.innerHTML = '';
+        let opt = '<option value="" selected>Seleziona</option>';
+        propertyCategories.forEach(cat => {
+            opt += `<option value="${cat.id}">${cat.name}</option>`;
+        });
+        ctrl.innerHTML = opt;
+        document.getElementById('commercialPropertyCats').classList.remove('d-none');
+    } else if (propertyType !== '3') {
+        document.getElementById('ddlCommercialPropertyCats').value = '';
+        document.getElementById('commercialPropertyCats').classList.add('d-none');
+        document.getElementById('ddlCommercialPropertySubCats').value = '';
+        document.getElementById('commercialPropertySubCats').classList.add('d-none');
+    }
     const arr = documentCheckList[propertyType][transectionType];
     let grid = document.getElementById('documentChecklistGrid');
+    grid.innerHTML = '';
+    if (propertyType === '3' && (c === '' || sc === '') ) {
+        grid.innerHTML = '<div class="w-100 text-black-50 text-center"><em>Seleziona una sottocategoria commerciale per visualizzare l\'elenco dei documenti richiesti.</em></div>';
+        return;
+    }
     let str = '';
     if (Array.isArray(arr)) {
         arr.forEach(name => {
