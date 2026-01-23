@@ -49,8 +49,8 @@ require_once __DIR__ . "/../modals/add-task.php";
                     <div class="col-sm-6">
                         <div class="pai-card cardHeight">
                             <fieldset class="row mb-3">
-                                <legend class="col-form-label col-sm-4 pt-0">Tipo di immobile:</legend>
-                                <div class="col-sm-8">
+                                <legend class="col-form-label col-sm-5 pt-0">Tipo di immobile:</legend>
+                                <div class="col-sm-7">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="rbPropertyType" id="rbHouseApartment" value="1" checked>
                                         <label class="form-check-label" for="rbHouseApartment">
@@ -66,14 +66,32 @@ require_once __DIR__ . "/../modals/add-task.php";
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="rbPropertyType" id="rbCommercial" value="3">
                                         <label class="form-check-label" for="rbCommercial">
-                                            Commerciale Immobile
+                                            Commerciale immobiliare
                                         </label>
                                     </div>
                                 </div>
                             </fieldset>
+                            <div id="commercialPropertyCats" class="row mb-3 align-items-center d-none">
+                                <label for="ddlCommercialPropertyCats" class="col-sm-5 col-form-label">
+                                    categorie commerciali:
+                                    <span class="text-danger ms-2 editControl">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <select id="ddlCommercialPropertyCats" class="form-select editControl mb-1"></select>
+                                </div>
+                            </div>
+                            <div id="commercialPropertySubCats" class="row mb-3 align-items-center d-none">
+                                <label for="ddlCommercialPropertySubCats" class="col-sm-5 col-form-label">
+                                    Sottocategorie commerciali:
+                                    <span class="text-danger ms-2 editControl">*</span>
+                                </label>
+                                <div class="col-sm-7">
+                                    <select id="ddlCommercialPropertySubCats" class="form-select editControl mb-1"></select>
+                                </div>
+                            </div>
                             <fieldset class="row">
-                                <legend class="col-form-label col-sm-4 pt-0">Tipo di transazione:</legend>
-                                <div class="col-sm-8">
+                                <legend class="col-form-label col-sm-5 pt-0">Tipo di transazione:</legend>
+                                <div class="col-sm-7">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="rbTransectionType" id="rbSale" value="sale" checked>
                                         <label class="form-check-label" for="rbSale">
