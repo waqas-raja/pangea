@@ -194,6 +194,42 @@ function formatNumber(num) {
     }));
 }
 
+function initProjectAutocomplete(ctr_id, hidden_id, source = null) {
+    const placeholderString = "Cerca per nome...";
+    $(`#${ctr_id}`).dxAutocomplete({
+        dataSource: source !== null ? source : new DevExpress.data.DataSource({
+            key: "id",
+            load: async function (txt) {
+                try {
+                    const response = await fetch("/api/contact/search", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({criteria: txt.searchValue}),
+                    });
+                    if(!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
+                    const data = await response.json();
+                    return data.payload || [];
+                } catch (error) {
+                    console.error("Errore nel caricamento dei dati:", error);
+                    throw error;
+                }
+            },
+        }),
+        displayExpr: "id",
+        valueExpr: "project_name",
+        placeholder: placeholderString,
+        minSearchLength: 3,
+        searchExpr: ["project_name"],
+        searchTimeout: 300,
+        onSelectionChanged: el => {
+            if (el.selectedItem) {
+                // const selectedContact = el.selectedItem;
+                document.getElementById(hidden_id).value = el.selectedItem.id;
+            }
+        }
+    });
+}
+
 function showMessage(msg, id, cls) {
     const result = document.getElementById(id);
     result.innerHTML = msg;
