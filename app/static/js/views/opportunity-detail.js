@@ -210,6 +210,8 @@ const propertyCategories = [
 ];
 
 const STORAGE_KEY = "development_project_data";
+const PROJECT_PROFILE_KEY = "development_project_profile_data";
+const PROJECT_NOTE_KEY = "development_project_note_data";
 document.addEventListener("DOMContentLoaded", async () => {
     await loadNations();
     await loadSources();
@@ -217,11 +219,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadPropertyTypes();
     await loadPropertyStatus();
     initHtmlEditor('txtNote');
+    initHtmlEditor('txtProjectNote');
     await loadOpportunityDetail();
     loadChecklistDocuments();
     loadPropertyValuationDocuments();
     loadMap();
+    renderProjectProfileList();
     renderTasks();
+    renderProjectNotesList();
 
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
@@ -271,7 +276,7 @@ function loadChecklistDocuments() {
     const arr = documentCheckList[propertyType][transectionType];
     let grid = document.getElementById('documentChecklistGrid');
     grid.innerHTML = '';
-    if (propertyType === '3' && (c === '' || sc === '') ) {
+    if (propertyType === '3' && (c === '' || sc === '')) {
         grid.innerHTML = '<div class="w-100 text-black-50 text-center"><em>Seleziona una sottocategoria commerciale per visualizzare l\'elenco dei documenti richiesti.</em></div>';
         return;
     }
@@ -752,9 +757,9 @@ async function deleteDocument(el) {
     });
 }
 
-/************************TASK MANAGEMENT*******************************/
+/************************PROJECT PROCESS TASK MANAGEMENT START*******************************/
 function showNewTaskModal() {
-    document.getElementById('modalAddTaskLabel').textContent = 'Aggiungi attività';
+    document.getElementById('modalAddTaskLabel').innerHTML = '<i class="bi bi-list-task me-3"></i>Aggiungi attività';
     document.getElementById('txtInputTask').value = '';
     const radioButtons = document.getElementsByName('rbScenarioEvaluation');
     for (let i = 0; i < 1; i++) radioButtons[i].checked = true;
@@ -766,10 +771,8 @@ function showNewTaskModal() {
 }
 
 function renderTasks() {
+    // TODO: LOAD TASKS FROM API...
     const data = loadData();
-    const list = document.getElementById("taskList");
-    list.innerHTML = "";
-
     $("#taskList").dxDataGrid({
         dataSource: data.tasks,
         keyExpr: "id",
@@ -864,6 +867,7 @@ function saveTask(btn) {
         btn.lastElementChild.classList.add('d-none');
         return;
     }
+    // TODO: SAVE NEW TASK...
     const data = loadData();
     const id = Date.now().toString();
     data.tasks.push({ id: id, text: taskTitle, status: false, scenario: scenario });
@@ -879,6 +883,7 @@ function saveTask(btn) {
 }
 
 function toggleTask(id) {
+    // TODO: TOGGLE TASK STATUS...
     const data = loadData();
     const task = data.tasks.find(task => task.id === id.toString());
     task.status = !task.status;
@@ -899,7 +904,7 @@ function showModalToEditTask(id) {
             break;
         }
     }
-    document.getElementById('modalAddTaskLabel').textContent = 'Modifica attività';
+    document.getElementById('modalAddTaskLabel').innerHTML = '<i class="bi bi-list-task me-3"></i>Modifica attività';
     document.getElementById('btnUpdateTask').classList.remove('d-none');
     document.getElementById('btnSaveTask').classList.add('d-none');
     document.getElementById('hTaskId').value = id;
@@ -919,8 +924,9 @@ function editTask(btn) {
         btn.lastElementChild.classList.add('d-none');
         return;
     }
-    const data = loadData();
     const id = document.getElementById('hTaskId').value;
+    // TODO: UPDATE TASK...
+    const data = loadData();
     const task = data.tasks.find(task => task.id === id.toString());
     task.text = taskTitle;
     task.scenario = scenario;
@@ -937,9 +943,9 @@ function editTask(btn) {
 function deleteTask(id) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
+            // TODO: DELETE TASK...
             let data = loadData();
-            data.tasks = data.tasks.filter(task => task.id !== id.toString())
-            // data.tasks.splice(i, 1);
+            data.tasks = data.tasks.filter(task => task.id !== id.toString());
             saveToStorage(data);
             $("#taskList").dxDataGrid("dispose");
             $("#taskList").empty();
@@ -958,4 +964,363 @@ function loadData() {
 function saveToStorage(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
-/************************TASK MANAGEMENT END*******************************/
+/************************PROCESS PROJECT TASK MANAGEMENT END*******************************/
+
+/************************PROCESS PROJECT PROFILE MANAGEMENT START*******************************/
+function loadProjectProfileData() {
+    return JSON.parse(localStorage.getItem(PROJECT_PROFILE_KEY)) || {
+        profiles: []
+    };
+}
+
+function saveToProjectProfileStorage(data) {
+    localStorage.setItem(PROJECT_PROFILE_KEY, JSON.stringify(data));
+}
+
+function renderProjectProfileList() {
+    // TODO: LOAD DATA FROM API...
+    const data = loadProjectProfileData();
+    $("#developmentProjectProfileList").dxDataGrid({
+        dataSource: data.profiles,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        noDataText: "Nessun compito aggiunto",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                allowFiltering: true,
+                width: 150,
+            },
+            {
+                dataField: "project_name",
+                caption: "Nome progetto",
+                allowFiltering: true,
+                width: 300,
+                // sortIndex: 2, sortOrder: "asc"
+            },
+            {
+                dataField: "project_code",
+                caption: "Codice progetto",
+                allowFiltering: true,
+                width: 200,
+                // sortIndex: 2, sortOrder: "asc"
+            },
+            {
+                dataField: "project_address",
+                caption: "Indirizzo del progetto",
+                allowFiltering: true,
+            },
+            {
+                dataField: "project_contact",
+                caption: "Contatto del progetto",
+                allowFiltering: true,
+                width: 200,
+                // sortIndex: 2, sortOrder: "asc"
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                allowFiltering: true,
+                width: 150,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-pencil-square me-3" onclick="showModalToEditProjectProfile(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteProjectProfile(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                "groupPanel",
+                "searchPanel",
+            ]
+        },
+        // onRowClick: function (e) { if (e.rowType === "data") { window.location = `/opportunity/${e.data.id}`; } },
+    });
+}
+
+function showNewProjectProfileModal() {
+    document.getElementById('modalAddProjectProfileLabel').innerHTML = `<i class="bi bi-terminal me-3"></i>Aggiungi profilo progetto`;
+    document.getElementById('txtProjectName').value = '';
+    document.getElementById('txtProjectCode').value = '';
+    document.getElementById('txtProjectAddress').value = '';
+    document.getElementById('txtProjectContact').value = '';
+    const modalElement = document.getElementById("modalAddProjectProfile");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function saveProjectProfile(btn) {
+    const projectName = document.getElementById("txtProjectName").value.trim();
+    const projectCode = document.getElementById("txtProjectCode").value.trim();
+    const projectAddress = document.getElementById("txtProjectAddress").value.trim();
+    const projectContact = document.getElementById("txtProjectContact").value.trim();
+    if (projectName === '' || projectCode === '' || projectAddress === '' || projectContact === '') {
+        if (projectName === '') { showMessage(`Il nome del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+        if (projectCode === '') { showMessage(`Il codice del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+        if (projectAddress === '') { showMessage(`L'indirizzo del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+        if (projectContact === '') { showMessage(`Il contatto del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+    }
+    if (isValidPhone(projectContact) === false) {
+        showMessage("Il numero di telefono non è valido", 'spProjectProfileResult', 'text-danger');
+        return;
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    // TODO: SAVE PROFILE...
+    const data = loadProjectProfileData();
+    const id = Date.now().toString();
+    data.profiles.push({ id: id, project_name: projectName, project_code: projectCode, project_address: projectAddress, project_contact: projectContact });
+
+    saveToProjectProfileStorage(data);
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddProjectProfile').modal('hide');
+    $("#developmentProjectProfileList").dxDataGrid("dispose");
+    $("#developmentProjectProfileList").empty();
+    renderProjectProfileList();
+}
+
+function showModalToEditProjectProfile(id) {
+    const data = loadProjectProfileData();
+    const profile = data.profiles.find(p => p.id === id.toString());
+    document.getElementById('txtProjectName').value = profile.project_name;
+    document.getElementById('txtProjectCode').value = profile.project_code;
+    document.getElementById('txtProjectAddress').value = profile.project_address;
+    document.getElementById('txtProjectContact').value = profile.project_contact;
+
+    document.getElementById('modalAddProjectProfileLabel').innerHTML = '<i class="bi bi-terminal me-3"></i>Modifica profilo progetto';
+    document.getElementById('btnUpdateProjectProfile').classList.remove('d-none');
+    document.getElementById('btnSaveProjectProfile').classList.add('d-none');
+    document.getElementById('hProjectProfileId').value = id;
+    const modalElement = document.getElementById("modalAddProjectProfile");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function editProjectProfile(btn) {
+    const projectName = document.getElementById("txtProjectName").value.trim();
+    const projectCode = document.getElementById("txtProjectCode").value.trim();
+    const projectAddress = document.getElementById("txtProjectAddress").value.trim();
+    const projectContact = document.getElementById("txtProjectContact").value.trim();
+    if (projectName === '') { showMessage(`Il nome del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+    if (projectCode === '') { showMessage(`Il codice del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+    if (projectAddress === '') { showMessage(`L'indirizzo del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+    if (projectContact === '') { showMessage(`Il contatto del progetto è obbligatorio.`, 'spProjectProfileResult', 'text-danger'); return; }
+    if (isValidPhone(projectContact) === false) {
+        showMessage("Il numero di telefono non è valido", 'spProjectProfileResult', 'text-danger');
+        return;
+    }
+    const data = loadProjectProfileData();
+    const id = document.getElementById('hProjectProfileId').value;
+    // TODO: UPDATE PROFILE...
+    const profile = data.profiles.find(p => p.id === id.toString());
+    profile.project_name = projectName;
+    profile.project_code = projectCode;
+    profile.project_address = projectAddress;
+    profile.project_contact = projectContact;
+    saveToProjectProfileStorage(data);
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddProjectProfile').modal('hide');
+    $("#developmentProjectProfileList").dxDataGrid("dispose");
+    $("#developmentProjectProfileList").empty();
+    renderProjectProfileList();
+}
+
+function deleteProjectProfile(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            // TODO: DELETE PROFILE...
+            let data = loadProjectProfileData();
+            data.profiles = data.profiles.filter(profile => profile.id !== id.toString())
+            // data.tasks.splice(i, 1);
+            saveToProjectProfileStorage(data);
+            $("#developmentProjectProfileList").dxDataGrid("dispose");
+            $("#developmentProjectProfileList").empty();
+            $('#modalConfirmDelete').modal('hide');
+            renderProjectProfileList();
+        }
+    });
+}
+/************************PROCESS PROJECT PROFILE MANAGEMENT END*******************************/
+
+/************************PROCESS PROJECT NOTES MANAGEMENT START*******************************/
+function loadProjectNoteData() {
+    return JSON.parse(localStorage.getItem(PROJECT_NOTE_KEY)) || {
+        notes: []
+    };
+}
+
+function saveToProjectNoteStorage(data) {
+    localStorage.setItem(PROJECT_NOTE_KEY, JSON.stringify(data));
+}
+
+function renderProjectNotesList() {
+    // TODO: LOAD DATA FROM API...
+    const data = loadProjectNoteData();
+    $("#developmentProjectNotesList").dxDataGrid({
+        dataSource: data.notes,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        noDataText: "Nessun compito aggiunto",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                allowFiltering: true,
+                width: 150,
+            },
+            {
+                dataField: "project_id",
+                caption: "ID progetto",
+                allowFiltering: true,
+                width: 150,
+            },
+            {
+                dataField: "project_note",
+                caption: "Note progetto",
+                allowFiltering: true,
+                cellTemplate: function (container, options) {
+                    container.html(options.data.project_note)
+                }
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                allowFiltering: true,
+                width: 150,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-pencil-square me-3" onclick="showModalToEditProjectNote(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteProjectNote(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                "groupPanel",
+                "searchPanel",
+            ]
+        },
+        // onRowClick: function (e) { if (e.rowType === "data") { window.location = `/opportunity/${e.data.id}`; } },
+    });
+}
+
+function showNewNoteModal() {
+    const projects = loadProjectProfileData().profiles;
+    initProjectAutocomplete('txtProjectNoteAutoComplete', 'hProjectProfileId', projects);
+    document.getElementById('modalAddProjectNoteLabel').innerHTML = `<i class="bi bi-stickies me-3"></i>Aggiungi nota progetto`;
+    $("#txtProjectNote").dxHtmlEditor('instance').option('value', '');
+    const modalElement = document.getElementById("modalAddProjectNote");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function saveProjectNote(btn) {
+    const projectId = document.getElementById('hProjectProfileId').value;
+    const projectNote = $("#txtProjectNote").dxHtmlEditor('instance').option('value');
+    if (projectNote === '') { showMessage(`La nota del progetto è obbligatoria.`, 'spProjectNoteResult', 'text-danger'); return; }
+    if (projectId === '') { showMessage(`Seleziona un progetto per procedere.`, 'spProjectNoteResult', 'text-danger'); return; }
+
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    // TODO: SAVE NOTE...
+    const data = loadProjectNoteData();
+    const id = Date.now().toString();
+    data.notes.push({ id: id, project_note: projectNote, project_id: projectId });
+
+    saveToProjectNoteStorage(data);
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddProjectNote').modal('hide');
+    $("#developmentProjectNotesList").dxDataGrid("dispose");
+    $("#developmentProjectNotesList").empty();
+    renderProjectNotesList();
+}
+
+function showModalToEditProjectNote(id) {
+    document.getElementById('modalAddProjectNoteLabel').innerHTML = '<i class="bi bi-stickies me-3"></i>Modifica nota progetto';
+    const data = loadProjectNoteData();
+    const note = data.notes.find(n => n.id === id.toString());
+    const projects = loadProjectProfileData().profiles;
+    let pname = '';
+    projects.forEach(p => {
+        if (p.id === note.project_id) pname = p.project_name;
+    });
+    initProjectAutocomplete('txtProjectNoteAutoComplete', 'hProjectProfileId', projects);
+    const auto = $("#txtProjectNoteAutoComplete").dxAutocomplete("instance");
+    auto.option("value", pname);
+    $("#txtProjectNote").dxHtmlEditor('instance').option('value', note.project_note);
+    document.getElementById('hProjectProfileId').value = note.project_id;
+    document.getElementById('hProjectNoteId').value = id;
+    const modalElement = document.getElementById("modalAddProjectNote");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function editProjectNote(btn) {
+    const projectId = document.getElementById('hProjectProfileId').value;
+    const projectNote = $("#txtProjectNote").dxHtmlEditor('instance').option('value');
+    if (projectNote === '') { showMessage(`La nota del progetto è obbligatoria.`, 'spProjectNoteResult', 'text-danger'); return; }
+    if (projectId === '') { showMessage(`Seleziona un progetto per procedere.`, 'spProjectNoteResult', 'text-danger'); return; }
+
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    // TODO: UPDATE NOTE...
+    const data = loadProjectNoteData();
+    const id = document.getElementById('hProjectNoteId').value;
+    const note = data.notes.find(n => n.id === id.toString());
+    note.project_note = projectNote;
+    note.project_id = projectId;
+    saveToProjectNoteStorage(data);
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddProjectNote').modal('hide');
+    $("#developmentProjectNotesList").dxDataGrid("dispose");
+    $("#developmentProjectNotesList").empty();
+    renderProjectNotesList();
+}
+
+function deleteProjectNote(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            // TODO: DELETE NOTE...
+            let data = loadProjectNoteData();
+            data.notes = data.notes.filter(note => note.id !== id.toString());
+            saveToProjectNoteStorage(data);
+            $("#developmentProjectNotesList").dxDataGrid("dispose");
+            $("#developmentProjectNotesList").empty();
+            $('#modalConfirmDelete').modal('hide');
+            renderProjectNotesList();
+        }
+    });
+}
+/************************PROJECT PROFILE NOTES MANAGEMENT END*******************************/

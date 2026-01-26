@@ -4,6 +4,8 @@ ob_start();
 $oid = htmlspecialchars($oid, ENT_QUOTES, 'UTF-8');
 require_once __DIR__ . "/../modals/confirm-delete.php";
 require_once __DIR__ . "/../modals/add-task.php";
+require_once __DIR__ . "/../modals/add-project-profile.php";
+require_once __DIR__ . "/../modals/add-project-note.php";
 ?>
 
 <input id="hOpportunityId" type="hidden" value="<?= $oid ?>">
@@ -188,7 +190,11 @@ require_once __DIR__ . "/../modals/add-task.php";
                 </ul>
                 <div class="tab-content" id="developmentProjectTabsContent">
                     <div class="tab-pane fade border border-top-0 p-3 show active" id="development-project-profile" role="tabpanel" aria-labelledby="development-project-profile-tab">
-                        Profile tab
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="pai-title">Progetti</div>
+                            <button class="btn btn-blue" onclick="showNewProjectProfileModal()">Aggiungi profilo progetto</button>
+                        </div>
+                        <div id="developmentProjectProfileList"></div>
                     </div>
                     <div class="tab-pane fade border border-top-0 p-3" id="development-project-quotes" role="tabpanel" aria-labelledby="development-project-profile-tab">
                         <div class="d-flex align-items-center justify-content-between">
@@ -198,7 +204,11 @@ require_once __DIR__ . "/../modals/add-task.php";
                         <div id="taskList"></div>
                     </div>
                     <div class="tab-pane fade border border-top-0 p-3" id="development-project-notes" role="tabpanel" aria-labelledby="development-project-profile-tab">
-                        notes tab
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="pai-title">Notes</div>
+                            <button class="btn btn-blue" onclick="showNewNoteModal()">Aggiungi notes</button>
+                        </div>
+                        <div id="developmentProjectNotesList"></div>
                     </div>
                 </div>
             </div>
