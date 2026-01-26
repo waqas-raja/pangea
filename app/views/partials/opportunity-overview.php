@@ -219,11 +219,18 @@
             </div>
             <hr>
             <div class="row mb-0 align-items-center">
+                <label for="txtProcessingTime" class="col-sm-5 col-form-label">Tempo di elaborazione:</label>
+                <div class="col-sm-7">
+                    <span id="spProcessingTime" class="valueControl"></span>
+                    <input id="txtProcessingTime" type="text" class="form-control editControl d-none mb-1" value="" placeholder="">
+                </div>
+            </div>
+            <div class="row mb-0 align-items-center">
                 <label for="txtEstimatedProcessingTime" class="col-sm-5 col-form-label">Tempi di lavorazione stimati:</label>
                 <div class="col-sm-7">
                     <span id="spEstimatedProcessingTime" class="valueControl"></span>
                     <div class="input-group editControl d-none">
-                        <input id="txtEstimatedProcessingTime" type="text" class="form-control" value="" placeholder="3 - 5" required>
+                        <input id="txtEstimatedProcessingTime" type="text" class="form-control" value="" placeholder="3 - 5">
                         <span class="input-group-text">Months</span>
                     </div>
                 </div>

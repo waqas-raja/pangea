@@ -329,6 +329,7 @@ async function loadOpportunityDetail() {
     document.getElementById("spEstimatedSellPrice").innerText = formatNumber(0);
     document.getElementById("spNote").innerHTML = r.payload.note ?? 'n.d.';
     document.getElementById("spEstimatedProcessingTime").innerHTML = 'n.d.';
+    document.getElementById("spProcessingTime").innerHTML = 'n.d.';
 
     document.getElementById("txtAlias").value = r.payload.alias ?? '';
     document.getElementById("ddlSource").value = r.payload.source;
@@ -459,6 +460,7 @@ async function updateGenericInfo(btn) {
     const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const estimatedSellPrice = document.getElementById("txtEstimatedSellPrice").value.trim();
+    const processingTime = document.getElementById("txtProcessingTime").value.trim();
     const estimatedProcessingTime = document.getElementById("txtEstimatedProcessingTime").value.trim();
     if (alias === '' || source === '' || propertyType === '' || opportunityStatus === '' || size === '' || price === '' || address === '' || city === '' || nation === '' || tax === '') {
         btn.disabled = false;
@@ -506,6 +508,7 @@ async function updateGenericInfo(btn) {
                 acqPrice: parseInt(acqPrice),
                 estimatedSellPrice: estimatedSellPrice,
                 estimatedProcessingTime: estimatedProcessingTime,
+                processingTime: processingTime,
             })
         });
         const res = await response.json();
