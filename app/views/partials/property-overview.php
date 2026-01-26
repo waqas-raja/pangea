@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
-                    <label for="txtCity" class="col-sm-5 col-form-label">Città:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <label for="txtCity" class="col-sm-5 col-form-label">Citt&agrave;:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spCity" class="valueControl"></span>
                         <input type="text" id="txtCity" class="form-control editControl d-none mb-1" value="">
@@ -81,7 +81,7 @@
     <div class="col-sm-6">
         <div class="pai-card position-relative cardHeight">
             <div class="row mb-0 align-items-center">
-                <label for="ddlPropertyStatus" class="col-sm-5 col-form-label">Stato di proprietà:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <label for="ddlPropertyStatus" class="col-sm-5 col-form-label">Stato di propriet&agrave;:<span class="text-danger ms-2 editControl d-none">*</span></label>
                 <div class="col-sm-7">
                     <span id="spPropertyStatus" class="valueControl"></span>
                     <select id="ddlPropertyStatus" class="form-select editControl d-none mb-1">

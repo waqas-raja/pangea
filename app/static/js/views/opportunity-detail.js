@@ -328,6 +328,7 @@ async function loadOpportunityDetail() {
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price !== null ? r.payload.acquisition_price : 0));
     document.getElementById("spEstimatedSellPrice").innerText = formatNumber(0);
     document.getElementById("spNote").innerHTML = r.payload.note ?? 'n.d.';
+    document.getElementById("spEstimatedProcessingTime").innerHTML = 'n.d.';
 
     document.getElementById("txtAlias").value = r.payload.alias ?? '';
     document.getElementById("ddlSource").value = r.payload.source;
@@ -458,6 +459,7 @@ async function updateGenericInfo(btn) {
     const elevator = document.getElementById("txtElevator").checked === true ? 1 : 0;
     const acqPrice = document.getElementById("txtAcqPrice").value.trim();
     const estimatedSellPrice = document.getElementById("txtEstimatedSellPrice").value.trim();
+    const estimatedProcessingTime = document.getElementById("txtEstimatedProcessingTime").value.trim();
     if (alias === '' || source === '' || propertyType === '' || opportunityStatus === '' || size === '' || price === '' || address === '' || city === '' || nation === '' || tax === '') {
         btn.disabled = false;
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
@@ -502,6 +504,8 @@ async function updateGenericInfo(btn) {
                 referenceEmail: refEmail,
                 referencePhone: refPhone,
                 acqPrice: parseInt(acqPrice),
+                estimatedSellPrice: estimatedSellPrice,
+                estimatedProcessingTime: estimatedProcessingTime,
             })
         });
         const res = await response.json();
