@@ -6,8 +6,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" id="hTaskId" value="" hidden>
+                <input type="hidden" id="hProjectProfileTaskId">
+                <input type="hidden" id="hTaskId">
                 <form id="">
+                    <div class="row mb-3 align-items-center">
+                        <label for="txtProjectTaskAutoComplete" class="col-sm-4 col-form-label">Progetto:<span class="text-danger ms-2">*</span></label>
+                        <div class="col-sm-8">
+                            <div id="txtProjectTaskAutoComplete" class="form-control"></div>
+                        </div>
+                    </div>
                     <fieldset class="row mb-3">
                         <legend class="col-form-label col-sm-4 pt-0">Valutazione dello scenario:</legend>
                         <div class="col-sm-8">
