@@ -760,6 +760,9 @@ async function deleteDocument(el) {
 /************************PROJECT PROCESS TASK MANAGEMENT START*******************************/
 function showNewTaskModal() {
     document.getElementById('modalAddTaskLabel').innerHTML = '<i class="bi bi-list-task me-3"></i>Aggiungi attività';
+    const projects = loadProjectProfileData().profiles;
+    initProjectAutocomplete('txtProjectTaskAutoComplete', 'hProjectProfileTaskId', projects);
+    $("#txtProjectTaskAutoComplete").dxAutocomplete("instance").option("value", '');
     document.getElementById('txtInputTask').value = '';
     const radioButtons = document.getElementsByName('rbScenarioEvaluation');
     for (let i = 0; i < 1; i++) radioButtons[i].checked = true;
@@ -791,6 +794,18 @@ function renderTasks() {
                 caption: "ID",
                 allowFiltering: true,
                 width: 150,
+            },
+            {
+                dataField: "",
+                caption: "Progetto",
+                allowFiltering: true,
+                width: 200,
+                cellTemplate: function (container, options) {
+                    const pid = options.data.project_id;
+                    const projects = loadProjectProfileData().profiles;
+                    const project = projects.find(p => p.id === pid);
+                    container.text(project ? project.project_name : 'n.d.');
+                }
             },
             {
                 dataField: "text",
@@ -859,19 +874,21 @@ function renderTasks() {
 function saveTask(btn) {
     const taskTitle = document.getElementById("txtInputTask").value.trim();
     const scenario = document.querySelector('input[name="rbScenarioEvaluation"]:checked').value;
-    btn.disabled = true;
-    btn.lastElementChild.classList.remove('d-none');
+    const projectId = document.getElementById('hProjectProfileTaskId').value;
     if (taskTitle === '') {
         showMessage(`Inserisci l'attività per procedere.`, 'spNewTaskResult', 'text-danger');
-        btn.disabled = false;
-        btn.lastElementChild.classList.add('d-none');
         return;
     }
+    if (projectId === '') {
+        showMessage(`Seleziona un progetto per procedere.`, 'spNewTaskResult', 'text-danger');
+        return;
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
     // TODO: SAVE NEW TASK...
     const data = loadData();
     const id = Date.now().toString();
-    data.tasks.push({ id: id, text: taskTitle, status: false, scenario: scenario });
-
+    data.tasks.push({ id: id, text: taskTitle, status: false, scenario: scenario, project_id: projectId });
     saveToStorage(data);
     document.getElementById("txtInputTask").value = "";
     btn.disabled = false;
@@ -895,7 +912,17 @@ function toggleTask(id) {
 
 function showModalToEditTask(id) {
     const data = loadData();
+
     const task = data.tasks.find(task => task.id === id.toString());
+    const projects = loadProjectProfileData().profiles;
+    let pname = '';
+    projects.forEach(p => {
+        if (p.id === task.project_id) pname = p.project_name;
+    });
+    initProjectAutocomplete('txtProjectTaskAutoComplete', 'hProjectProfileTaskId', projects);
+    const auto = $("#txtProjectTaskAutoComplete").dxAutocomplete("instance");
+    auto.option("value", pname);
+
     document.getElementById('txtInputTask').value = task.text;
     const radioButtons = document.getElementsByName('rbScenarioEvaluation');
     for (let i = 0; i < radioButtons.length; i++) {
@@ -907,6 +934,7 @@ function showModalToEditTask(id) {
     document.getElementById('modalAddTaskLabel').innerHTML = '<i class="bi bi-list-task me-3"></i>Modifica attività';
     document.getElementById('btnUpdateTask').classList.remove('d-none');
     document.getElementById('btnSaveTask').classList.add('d-none');
+    document.getElementById('hProjectProfileTaskId').value = task.projectId;
     document.getElementById('hTaskId').value = id;
     const modalElement = document.getElementById("modalAddTask");
     const modal = new bootstrap.Modal(modalElement);
@@ -914,22 +942,26 @@ function showModalToEditTask(id) {
 }
 
 function editTask(btn) {
+    const projectId = document.getElementById('hProjectProfileTaskId').value;
     const taskTitle = document.getElementById("txtInputTask").value.trim();
     const scenario = document.querySelector('input[name="rbScenarioEvaluation"]:checked').value;
-    btn.disabled = true;
-    btn.lastElementChild.classList.remove('d-none');
     if (taskTitle === '') {
         showMessage(`Inserisci l'attività per procedere.`, 'spNewTaskResult', 'text-danger');
-        btn.disabled = false;
-        btn.lastElementChild.classList.add('d-none');
         return;
     }
+    if (projectId === '') {
+        showMessage(`Seleziona un progetto per procedere.`, 'spNewTaskResult', 'text-danger');
+        return;
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
     const id = document.getElementById('hTaskId').value;
     // TODO: UPDATE TASK...
     const data = loadData();
     const task = data.tasks.find(task => task.id === id.toString());
     task.text = taskTitle;
     task.scenario = scenario;
+    task.project_id = projectId;
     saveToStorage(data);
     document.getElementById("txtInputTask").value = "";
     btn.disabled = false;
@@ -1193,10 +1225,16 @@ function renderProjectNotesList() {
                 width: 150,
             },
             {
-                dataField: "project_id",
-                caption: "ID progetto",
+                dataField: "",
+                caption: "Progetto",
                 allowFiltering: true,
-                width: 150,
+                width: 200,
+                cellTemplate: function (container, options) {
+                    const pid = options.data.project_id;
+                    const projects = loadProjectProfileData().profiles;
+                    const project = projects.find(p => p.id === pid);
+                    container.text(project ? project.project_name : 'n.d.');
+                }
             },
             {
                 dataField: "project_note",
@@ -1237,6 +1275,7 @@ function renderProjectNotesList() {
 function showNewNoteModal() {
     const projects = loadProjectProfileData().profiles;
     initProjectAutocomplete('txtProjectNoteAutoComplete', 'hProjectProfileId', projects);
+    $("#txtProjectNoteAutoComplete").dxAutocomplete("instance").option("value", '');
     document.getElementById('modalAddProjectNoteLabel').innerHTML = `<i class="bi bi-stickies me-3"></i>Aggiungi nota progetto`;
     $("#txtProjectNote").dxHtmlEditor('instance').option('value', '');
     const modalElement = document.getElementById("modalAddProjectNote");
@@ -1281,6 +1320,8 @@ function showModalToEditProjectNote(id) {
     $("#txtProjectNote").dxHtmlEditor('instance').option('value', note.project_note);
     document.getElementById('hProjectProfileId').value = note.project_id;
     document.getElementById('hProjectNoteId').value = id;
+    document.getElementById('btnUpdateProjectNote').classList.remove('d-none');
+    document.getElementById('btnSaveProjectNote').classList.add('d-none');
     const modalElement = document.getElementById("modalAddProjectNote");
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
