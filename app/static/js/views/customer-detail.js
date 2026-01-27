@@ -1,10 +1,21 @@
 let _customerDetail = [];
+const crmData = {
+    calls: [],
+    appointments: [],
+    emails: []
+};
 document.addEventListener("DOMContentLoaded", async () => {
     renderNations();
     await loadCustomerDetail();
     loadAssociatedProperties();
     loadAssociatedQuotes();
     loadMap();
+    loadCalls();
+    initHtmlEditor('txtCallNote');
+    loadAppointments();
+    initHtmlEditor('txtAppointmentNote');
+    loadEmails();
+    initHtmlEditor('txtEmailContent');
 
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
@@ -267,8 +278,8 @@ async function updateGenericInfo() {
     const phone = document.getElementById("txtPhone").value.trim();
     const tag = document.getElementById("ddlTag");
     const tags = Array.from(tag.options)
-    .filter(option => option.selected)
-    .map(option => option.value);
+        .filter(option => option.selected)
+        .map(option => option.value);
     const isCompany = document.getElementById("ckIsCompany").checked;
     const bizname = document.getElementById("txtBizname").value.trim();
     const vat = document.getElementById("txtVat").value.trim();
@@ -399,4 +410,382 @@ function loadMap() {
             allowfullscreen>
         </iframe>
     `;
+}
+
+async function loadCalls() {
+    // TODO: FETCH CALLS DATA FROM API AND LOAD...
+    // const response = await fetch('/api/customer/quotes/' + customerId);
+    // const r = await response.json();
+    $("#callsList").dxDataGrid({
+        dataSource: crmData.calls,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 300,
+            placeholder: "Cerca..."
+        },
+        noDataText: "Nessun record trovato per le chiamate",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                alignment: "left",
+                width: 120,
+            },
+            {
+                dataField: "date",
+                caption: "Data creazione",
+                // allowFiltering: true,
+                width: 150,
+                // sortIndex: 5, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let date = data.date.split('T')[0];
+                    date = date.split('-');
+                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.date.split('T')[1]);
+                }
+            },
+            {
+                dataField: "person",
+                caption: "Contatto",
+                // allowFiltering: true,
+                width: 100,
+            },
+            {
+                dataField: "outcome",
+                caption: "Esito",
+                // allowFiltering: true,
+                width: 150,
+            },
+            {
+                dataField: "note",
+                caption: "Note",
+                // allowFiltering: true,
+                cellTemplate: function (container, options) {
+                    container.html(options.data.note);
+                }
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                // allowFiltering: true,
+                width: 70,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-pencil-square me-3" onclick="editCall(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteCall(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 5 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                {
+                    name: "searchPanel",
+                    location: "before"
+                },
+                "groupPanel",
+            ]
+        },
+        onRowClick: function (e) {
+            // if (e.rowType === "data") window.location = `/estimate/${e.data.id}`;
+        },
+    });
+}
+
+function showNewCallModal() {
+    document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Nuova chiamata`;
+    document.getElementById('txtCallDate').value = '';
+    document.getElementById('txtCallOutcome').value = '';
+    $("#txtCallNote").dxHtmlEditor('instance').option('value', '');
+    const modalElement = document.getElementById("modalAddCall");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function saveCall(btn) {
+    const date = document.getElementById('txtCallDate').value;
+    const person = document.getElementById('txtCallWith').value;
+    const outcome = document.getElementById('txtCallOutcome').value;
+    const note = $("#txtCallNote").dxHtmlEditor('instance').option('value');
+    if (!date || !outcome || !note) {
+        if (date === '') { showMessage('Il campo data è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        // if (person === '') { showMessage('Il campo persona è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (outcome === '') { showMessage('Il campo esito è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.add('d-none');
+    // TODO: SEND CALL DATA TO API AND SAVE...
+    const id = Date.now().toString();
+    crmData.calls.push({ id: id, date: date, person: person, outcome: outcome, note: note });
+    btn.disabled = false;
+    btn.lastElementChild.classList.remove('d-none');
+    $('#modalAddCall').modal('hide');
+    $("#callsList").dxDataGrid("dispose");
+    $("#callsList").empty();
+    loadCalls();
+}
+
+async function loadAppointments() {
+    // TODO: FETCH APPOINTMENTS DATA FROM API AND LOAD...
+    // const response = await fetch('/api/customer/quotes/' + customerId);
+    // const r = await response.json();
+    $("#appointmentsList").dxDataGrid({
+        dataSource: crmData.appointments,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 300,
+            placeholder: "Cerca..."
+        },
+        noDataText: "Nessun record trovato per le appuntamento",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                alignment: "left",
+                width: 120,
+            },
+            {
+                dataField: "date",
+                caption: "Data creazione",
+                allowFiltering: true,
+                width: 130,
+                // sortIndex: 5, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let date = data.date.split('T')[0];
+                    date = date.split('-');
+                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.date.split('T')[1]);
+                }
+            },
+            {
+                dataField: "type",
+                caption: "Tipo",
+                // allowFiltering: true,
+            },
+            {
+                dataField: "note",
+                caption: "Note",
+                // allowFiltering: true,
+                cellTemplate: function (container, options) {
+                    container.html(options.data.note);
+                }
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                allowFiltering: true,
+                width: 70,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-pencil-square me-3" onclick="editAppointment(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteAppointment(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 5 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                {
+                    name: "searchPanel",
+                    location: "before"
+                },
+                "groupPanel",
+            ]
+        },
+        onRowClick: function (e) {
+            // if (e.rowType === "data") window.location = `/estimate/${e.data.id}`;
+        },
+    });
+}
+
+function showNewAppointmentModal() {
+    document.getElementById('modalAddAppointmentLabel').innerHTML = `<i class="bi bi-calendar me-3"></i>Nuovo appuntamento`;
+    document.getElementById('txtAppointmentDate').value = '';
+    document.getElementById('txtAppointmentType').value = '';
+    $("#txtAppointmentNote").dxHtmlEditor('instance').option('value', '');
+    const modalElement = document.getElementById("modalAddAppointment");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function saveAppointment(btn) {
+    const date = document.getElementById('txtAppointmentDate').value;
+    const type = document.getElementById('txtAppointmentType').value;
+    const note = $("#txtAppointmentNote").dxHtmlEditor('instance').option('value');
+    if (!date || !type || !note) {
+        if (date === '') { showMessage('Il campo data è obbligatorio', 'crmAppointmentResult', 'text-danger'); return; }
+        if (type === '') { showMessage('Il campo tipo è obbligatorio', 'crmAppointmentResult', 'text-danger'); return; }
+        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmAppointmentResult', 'text-danger'); return; }
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.add('d-none');
+    // TODO: SEND CALL DATA TO API AND SAVE...
+    const id = Date.now().toString();
+    crmData.appointments.push({ id: id, date: date, type: type, note: note });
+    btn.disabled = false;
+    btn.lastElementChild.classList.remove('d-none');
+    $('#modalAddAppointment').modal('hide');
+    $("#appointmentsList").dxDataGrid("dispose");
+    $("#appointmentsList").empty();
+    loadAppointments();
+}
+
+async function loadEmails() {
+    // TODO: FETCH APPOINTMENTS DATA FROM API AND LOAD...
+    // const response = await fetch('/api/customer/quotes/' + customerId);
+    // const r = await response.json();
+    $("#emailsList").dxDataGrid({
+        dataSource: crmData.emails,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 300,
+            placeholder: "Cerca..."
+        },
+        noDataText: "Nessun record trovato per le email",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                alignment: "left",
+                width: 100,
+            },
+            {
+                dataField: "date",
+                caption: "Data",
+                allowFiltering: true,
+                width: 130,
+                // sortIndex: 5, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let date = data.date.split('T')[0];
+                    date = date.split('-');
+                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.date.split('T')[1]);
+                }
+            },
+            {
+                dataField: "subject",
+                caption: "Soggetto",
+                // allowFiltering: true,
+            },
+            {
+                dataField: "recipients",
+                caption: "Destinatari",
+                // allowFiltering: true,
+            },
+            {
+                dataField: "content",
+                caption: "Contenuto",
+                // allowFiltering: true,
+                cellTemplate: function (container, options) {
+                    container.html(options.data.content);
+                }
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                allowFiltering: true,
+                width: 70,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-pencil-square me-3" onclick="editEmail(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteEmail(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                {
+                    name: "searchPanel",
+                    location: "before"
+                },
+                "groupPanel",
+            ]
+        },
+        onRowClick: function (e) {
+            // if (e.rowType === "data") window.location = `/estimate/${e.data.id}`;
+        },
+    });
+}
+
+function showNewEmailModal() {
+    document.getElementById('modalAddEmailLabel').innerHTML = `<i class="bi bi-envelope me-3"></i>Nuova email`;
+    document.getElementById('txtEmailDate').value = '';
+    document.getElementById('txtEmailSubject').value = '';
+    document.getElementById('txtEmailRecipients').value = '';
+    $("#txtEmailContent").dxHtmlEditor('instance').option('value', '');
+    const modalElement = document.getElementById("modalAddEmail");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+
+function saveEmail(btn) {
+    const date = document.getElementById('txtEmailDate').value;
+    const subject = document.getElementById('txtEmailSubject').value;
+    const recipients = document.getElementById('txtEmailRecipients').value;
+    const content = $("#txtEmailContent").dxHtmlEditor('instance').option('value');
+    if (!date || !subject || !recipients || !content) {
+        if (date === '') { showMessage('Il campo data è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+        if (subject === '') { showMessage('Il campo soggetto è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+        if (recipients === '') { showMessage('Il campo destinatari è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+        if (content === '') { showMessage('Il campo contenuto è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+    }
+    if (!isValidEmail(recipients)) {
+        showMessage('Uno o più indirizzi email non sono validi', 'crmEmailResult', 'text-danger');
+        return;
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.add('d-none');
+    // TODO: SEND CALL DATA TO API AND SAVE...
+    const id = Date.now().toString();
+    crmData.emails.push({ id: id, date: date, subject: subject, recipients: recipients, content: content });
+    btn.disabled = false;
+    btn.lastElementChild.classList.remove('d-none');
+    $('#modalAddEmail').modal('hide');
+    $("#emailsList").dxDataGrid("dispose");
+    $("#emailsList").empty();
+    loadEmails();
 }

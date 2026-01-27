@@ -139,11 +139,58 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-sm-12">
-        <div class="pai-card mb-3">
+<div class="row mb-3">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-4">
+        <div class="pai-card cardHeight">
             <!-- <label class="form-label">Mappa:</label> -->
             <div id="mapContainer"></div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-8 col-lg-8">
+        <div class="pai-card cardHeight">
+            <div class="card-header d-flex justify-content-between align-items-center mb-3">
+                <h5 class="pai-title mb-0">Attività CRM del cliente</h5>
+                <span class="badge btn-blue">Interazioni</span>
+            </div>
+            <div id="" class="">
+                <ul class="nav nav-tabs" id="crmActivityCardTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="crm-call-tab" data-bs-toggle="tab" data-bs-target="#crm-call" type="button" role="tab" aria-controls="crm-call" aria-selected="false">Chiamate</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="crm-appointment-tab" data-bs-toggle="tab" data-bs-target="#crm-appointment" type="button" role="tab" aria-controls="crm-appointment" aria-selected="false">Appuntamenti</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="crm-email-tab" data-bs-toggle="tab" data-bs-target="#crm-email" type="button" role="tab" aria-controls="crm-email" aria-selected="false">E-mail</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="crmActivityCardTabsContent">
+                    <div class="tab-pane fade border border-top-0 p-3 show active" id="crm-call" role="tabpanel" aria-labelledby="crm-call-tab">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="pai-title">Gestione delle chiamate</div>
+                            <button class="btn btn-blue" onclick="showNewCallModal()">Nuova chiamata</button>
+                        </div>
+                        <hr>
+                        <div id="callsList"></div>
+                    </div>
+                    <div class="tab-pane fade border border-top-0 p-3" id="crm-appointment" role="tabpanel" aria-labelledby="crm-appointment-tab">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="pai-title">Gestione degli appuntamenti</div>
+                            <button class="btn btn-blue" onclick="showNewAppointmentModal()">Nuova appuntamento</button>
+                        </div>
+                        <hr>
+                        <div id="appointmentsList"></div>
+                    </div>
+                    <div class="tab-pane fade border border-top-0 p-3" id="crm-email" role="tabpanel" aria-labelledby="crm-email-tab">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="pai-title">Gestione della posta elettronica</div>
+                            <button class="btn btn-blue" onclick="showNewEmailModal()">Nuova email</button>
+                        </div>
+                        <hr>
+                        <div id="emailsList"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

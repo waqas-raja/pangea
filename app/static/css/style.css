@@ -108,14 +108,16 @@ body { font-family:"Lato", serif; font-size: 16px; }
 #associatedPropertiesGrid .dx-datagrid-search-panel,
 #associatedQuotesList .dx-datagrid-search-panel,
 #estimateUnderManagemanetGrid .dx-datagrid-search-panel,
-#estimateAcquiredGrid .dx-datagrid-search-panel {margin: 0px !important;}
+#estimateAcquiredGrid .dx-datagrid-search-panel, .dx-datagrid-search-panel {margin: 0px !important;}
 #page-properties .nav-item .nav-link,
 #page-list-estimates .nav-item .nav-link,
 #opportunity_detail .nav-item .nav-link,
+#crmActivityCardTabs .nav-item .nav-link,
 #settings .nav-item .nav-link { color: #212529 !important; }
 #page-properties .nav-item .nav-link.active,
 #page-list-estimates .nav-item .nav-link.active,
 #opportunity_detail .nav-item .nav-link.active,
+#crmActivityCardTabs .nav-item .nav-link.active,
 #settings .nav-item .nav-link.active { color: var(--primary-blue) !important; }
 #propertyDocumentList .docSection:hover .delDocument,
 #propertyValuationDocumentList .docSection:hover .delDocument { display: block !important; }

@@ -3,6 +3,9 @@ $title = 'Dettaglio Persona';
 ob_start();
 $cid = htmlspecialchars($cid, ENT_QUOTES, 'UTF-8');
 require_once __DIR__ . "/../modals/confirm-delete.php";
+require_once __DIR__ . "/../modals/crm-add-call.php";
+require_once __DIR__ . "/../modals/crm-add-appointment.php";
+require_once __DIR__ . "/../modals/crm-add-email.php";
 ?>
 
 <input id="hCustomerId" type="hidden" value="<?= $cid ?>">
