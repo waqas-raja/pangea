@@ -6,6 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="hCallId">
                 <form id="">
                     <div class="row mb-3">
                         <label for="txtCallDate" class="col-sm-3 col-form-label">Data e ora<span class="text-danger ms-2">*</span></label>
@@ -39,6 +40,10 @@
                 <button id="btnSaveCall" type="button" class="btn btn-blue" onclick="saveCall(this)">
                     <i class="bi bi-check-lg"></i> Salva
                     <div id="spinnerNewCall" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
+                </button>
+                <button id="btnUpdateCall" type="button" class="btn btn-blue d-none" onclick="updateCall(this)">
+                    <i class="bi bi-check-lg"></i> Modificare
+                    <div id="" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>
             </div>
         </div>
