@@ -1,8 +1,8 @@
 let _customerDetail = [];
 const crmData = {
-    calls: [],
-    appointments: [],
-    emails: []
+    calls: [{ id: "1769575418394", date: "2026-01-28T10:34", person: "subject", outcome: "test@mail.com", note: "this is test content" }],
+    appointments: [{ id: "1769575418395", date: "2026-01-28T10:34", type: "Type A", note: "this is test content" }],
+    emails: [{ id: "1769575418396", date: "2026-01-28T10:34", subject: "subject", recipients: "test@mail.com", content: "this is test content" }]
 };
 document.addEventListener("DOMContentLoaded", async () => {
     renderNations();
@@ -412,6 +412,7 @@ function loadMap() {
     `;
 }
 
+/*************************CRM CALLS MANAGEMENT START*************************** */
 async function loadCalls() {
     // TODO: FETCH CALLS DATA FROM API AND LOAD...
     // const response = await fetch('/api/customer/quotes/' + customerId);
@@ -477,10 +478,10 @@ async function loadCalls() {
                 dataField: "",
                 caption: "Azioni",
                 // allowFiltering: true,
-                width: 70,
+                width: 60,
                 cellTemplate: function (container, options) {
                     const html = `
-                            <i class="bi bi-pencil-square me-3" onclick="editCall(${options.data.id})"></i>
+                            <i class="bi bi-pencil-square me-2" onclick="showNewCallModal(${options.data.id})"></i>
                             <i class="bi bi-trash3 text-danger" onclick="deleteCall(${options.data.id})"></i>
                         `;
                     container.html(html);
@@ -506,11 +507,26 @@ async function loadCalls() {
     });
 }
 
-function showNewCallModal() {
-    document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Nuova chiamata`;
-    document.getElementById('txtCallDate').value = '';
-    document.getElementById('txtCallOutcome').value = '';
-    $("#txtCallNote").dxHtmlEditor('instance').option('value', '');
+function showNewCallModal(id = null) {
+    if (id === null) {
+        document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Nuova chiamata`;
+        document.getElementById('txtCallDate').value = '';
+        document.getElementById('txtCallWith').value = '';
+        document.getElementById('txtCallOutcome').value = '';
+        $("#txtCallNote").dxHtmlEditor('instance').option('value', '');
+        document.getElementById('btnSaveCall').classList.remove('d-none');
+        document.getElementById('btnUpdateCall').classList.add('d-none');
+    } else {
+        const call = crmData.calls.find(c => c.id === id.toString());
+        document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Modifica chiamata`;
+        document.getElementById('hCallId').value = id;
+        document.getElementById('txtCallDate').value = call.date;
+        document.getElementById('txtCallWith').value = call.person;
+        document.getElementById('txtCallOutcome').value = call.outcome;
+        $("#txtCallNote").dxHtmlEditor('instance').option('value', call.note);
+        document.getElementById('btnSaveCall').classList.add('d-none');
+        document.getElementById('btnUpdateCall').classList.remove('d-none');
+    }
     const modalElement = document.getElementById("modalAddCall");
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
@@ -540,6 +556,51 @@ function saveCall(btn) {
     loadCalls();
 }
 
+function updateCall(btn) {
+    const id = document.getElementById('hCallId').value;
+    const date = document.getElementById('txtCallDate').value;
+    const person = document.getElementById('txtCallWith').value;
+    const outcome = document.getElementById('txtCallOutcome').value;
+    const note = $("#txtCallNote").dxHtmlEditor('instance').option('value');
+    if (!date || !person || !outcome || !note) {
+        if (date === '') { showMessage('Il campo data è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (person === '') { showMessage('Il campo persona è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (outcome === '') { showMessage('Il campo esito è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    // TODO: SEND CALL DATA TO API AND UPDATE...
+    const callToUpdate = crmData.calls.find(call => call.id === id);
+    if (callToUpdate) {
+        callToUpdate.date = date;
+        callToUpdate.person = person;
+        callToUpdate.outcome = outcome;
+        callToUpdate.note = note;
+    }
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddCall').modal('hide');
+    $("#callsList").dxDataGrid("dispose");
+    $("#callsList").empty();
+    loadCalls();
+}
+
+function deleteCall(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            // TODO: DELETE CALL API...
+            crmData.calls = crmData.calls.filter(call => call.id !== id.toString());
+            $("#callsList").dxDataGrid("dispose");
+            $("#callsList").empty();
+            $('#modalConfirmDelete').modal('hide');
+            loadCalls();
+        }
+    });
+}
+/*************************CRM CALLS MANAGEMENT END*************************** */
+
+/*************************CRM APPOINTMENT MANAGEMENT START*************************** */
 async function loadAppointments() {
     // TODO: FETCH APPOINTMENTS DATA FROM API AND LOAD...
     // const response = await fetch('/api/customer/quotes/' + customerId);
@@ -598,10 +659,10 @@ async function loadAppointments() {
                 dataField: "",
                 caption: "Azioni",
                 allowFiltering: true,
-                width: 70,
+                width: 60,
                 cellTemplate: function (container, options) {
                     const html = `
-                            <i class="bi bi-pencil-square me-3" onclick="editAppointment(${options.data.id})"></i>
+                            <i class="bi bi-pencil-square me-2" onclick="showNewAppointmentModal(${options.data.id})"></i>
                             <i class="bi bi-trash3 text-danger" onclick="deleteAppointment(${options.data.id})"></i>
                         `;
                     container.html(html);
@@ -627,11 +688,24 @@ async function loadAppointments() {
     });
 }
 
-function showNewAppointmentModal() {
-    document.getElementById('modalAddAppointmentLabel').innerHTML = `<i class="bi bi-calendar me-3"></i>Nuovo appuntamento`;
-    document.getElementById('txtAppointmentDate').value = '';
-    document.getElementById('txtAppointmentType').value = '';
-    $("#txtAppointmentNote").dxHtmlEditor('instance').option('value', '');
+function showNewAppointmentModal(id = null) {
+    if (id === null) {
+        document.getElementById('modalAddAppointmentLabel').innerHTML = `<i class="bi bi-calendar me-3"></i>Nuovo appuntamento`;
+        document.getElementById('txtAppointmentDate').value = '';
+        document.getElementById('txtAppointmentType').value = '';
+        $("#txtAppointmentNote").dxHtmlEditor('instance').option('value', '');
+        document.getElementById('btnSaveAppointment').classList.remove('d-none');
+        document.getElementById('btnUpdateAppointment').classList.add('d-none');
+    } else {
+        const appointment = crmData.appointments.find(a => a.id === id.toString());
+        document.getElementById('modalAddAppointmentLabel').innerHTML = `<i class="bi bi-calendar me-3"></i>Modifica appuntamento`;
+        document.getElementById('hAppointmentId').value = id;
+        document.getElementById('txtAppointmentDate').value = appointment.date;
+        document.getElementById('txtAppointmentType').value = appointment.type;
+        $("#txtAppointmentNote").dxHtmlEditor('instance').option('value', appointment.note);
+        document.getElementById('btnSaveAppointment').classList.add('d-none');
+        document.getElementById('btnUpdateAppointment').classList.remove('d-none');
+    }
     const modalElement = document.getElementById("modalAddAppointment");
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
@@ -647,18 +721,60 @@ function saveAppointment(btn) {
         if (note === '') { showMessage('Il campo note è obbligatorio', 'crmAppointmentResult', 'text-danger'); return; }
     }
     btn.disabled = true;
-    btn.lastElementChild.classList.add('d-none');
+    btn.lastElementChild.classList.remove('d-none');
     // TODO: SEND CALL DATA TO API AND SAVE...
     const id = Date.now().toString();
     crmData.appointments.push({ id: id, date: date, type: type, note: note });
     btn.disabled = false;
-    btn.lastElementChild.classList.remove('d-none');
+    btn.lastElementChild.classList.add('d-none');
     $('#modalAddAppointment').modal('hide');
     $("#appointmentsList").dxDataGrid("dispose");
     $("#appointmentsList").empty();
     loadAppointments();
 }
 
+function updateAppointment(btn) {
+    const id = document.getElementById('hAppointmentId').value;
+    const date = document.getElementById('txtAppointmentDate').value;
+    const type = document.getElementById('txtAppointmentType').value;
+    const note = $("#txtAppointmentNote").dxHtmlEditor('instance').option('value');
+    if (!date || !type || !note) {
+        if (date === '') { showMessage('Il campo data è obbligatorio', 'crmAppointmentResult', 'text-danger'); return; }
+        if (type === '') { showMessage('Il campo tipo è obbligatorio', 'crmAppointmentResult', 'text-danger'); return; }
+        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmAppointmentResult', 'text-danger'); return; }
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    // TODO: SEND APPOINTMENT DATA TO API AND UPDATE...
+    const appointmentToUpdate = crmData.appointments.find(appointment => appointment.id === id);
+    if (appointmentToUpdate) {
+        appointmentToUpdate.date = date;
+        appointmentToUpdate.type = type;
+        appointmentToUpdate.note = note;
+    }
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddAppointment').modal('hide');
+    $("#appointmentsList").dxDataGrid("dispose");
+    $("#appointmentsList").empty();
+    loadAppointments();
+}
+
+function deleteAppointment(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            // TODO: DELETE APPOINTMENT API...
+            crmData.appointments = crmData.appointments.filter(appointment => appointment.id !== id.toString());
+            $("#appointmentsList").dxDataGrid("dispose");
+            $("#appointmentsList").empty();
+            $('#modalConfirmDelete').modal('hide');
+            loadAppointments();
+        }
+    });
+}
+/*************************CRM APPOINTMENT MANAGEMENT END*************************** */
+
+/*************************CRM EMAILS MANAGEMENT START*************************** */
 async function loadEmails() {
     // TODO: FETCH APPOINTMENTS DATA FROM API AND LOAD...
     // const response = await fetch('/api/customer/quotes/' + customerId);
@@ -685,7 +801,7 @@ async function loadEmails() {
                 dataField: "id",
                 caption: "ID",
                 alignment: "left",
-                width: 100,
+                width: 120,
             },
             {
                 dataField: "date",
@@ -722,10 +838,10 @@ async function loadEmails() {
                 dataField: "",
                 caption: "Azioni",
                 allowFiltering: true,
-                width: 70,
+                width: 60,
                 cellTemplate: function (container, options) {
                     const html = `
-                            <i class="bi bi-pencil-square me-3" onclick="editEmail(${options.data.id})"></i>
+                            <i class="bi bi-pencil-square me-2" onclick="showNewEmailModal(${options.data.id})"></i>
                             <i class="bi bi-trash3 text-danger" onclick="deleteEmail(${options.data.id})"></i>
                         `;
                     container.html(html);
@@ -751,12 +867,27 @@ async function loadEmails() {
     });
 }
 
-function showNewEmailModal() {
-    document.getElementById('modalAddEmailLabel').innerHTML = `<i class="bi bi-envelope me-3"></i>Nuova email`;
-    document.getElementById('txtEmailDate').value = '';
-    document.getElementById('txtEmailSubject').value = '';
-    document.getElementById('txtEmailRecipients').value = '';
-    $("#txtEmailContent").dxHtmlEditor('instance').option('value', '');
+function showNewEmailModal(id = null) {
+    if (id === null) {
+        document.getElementById('modalAddEmailLabel').innerHTML = `<i class="bi bi-envelope me-3"></i>Nuova email`;
+        document.getElementById('txtEmailDate').value = '';
+        document.getElementById('txtEmailSubject').value = '';
+        document.getElementById('txtEmailRecipients').value = '';
+        $("#txtEmailContent").dxHtmlEditor('instance').option('value', '');
+        document.getElementById('btnSaveEmail').classList.remove('d-none');
+        document.getElementById('btnUpdateEmail').classList.add('d-none');
+    } else {
+        const email = crmData.emails.find(e => e.id === id.toString());
+        document.getElementById('modalAddEmailLabel').innerHTML = `<i class="bi bi-envelope me-3"></i>Modifica email`;
+        document.getElementById('hEmailId').value = id;
+        const formatedDate = toDatetimeLocal(email.date);
+        document.getElementById('txtEmailDate').value = formatedDate;
+        document.getElementById('txtEmailSubject').value = email.subject;
+        document.getElementById('txtEmailRecipients').value = email.recipients;
+        $("#txtEmailContent").dxHtmlEditor('instance').option('value', email.content);
+        document.getElementById('btnSaveEmail').classList.add('d-none');
+        document.getElementById('btnUpdateEmail').classList.remove('d-none');
+    }
     const modalElement = document.getElementById("modalAddEmail");
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
@@ -778,14 +909,62 @@ function saveEmail(btn) {
         return;
     }
     btn.disabled = true;
-    btn.lastElementChild.classList.add('d-none');
+    btn.lastElementChild.classList.remove('d-none');
     // TODO: SEND CALL DATA TO API AND SAVE...
     const id = Date.now().toString();
     crmData.emails.push({ id: id, date: date, subject: subject, recipients: recipients, content: content });
     btn.disabled = false;
-    btn.lastElementChild.classList.remove('d-none');
+    btn.lastElementChild.classList.add('d-none');
     $('#modalAddEmail').modal('hide');
     $("#emailsList").dxDataGrid("dispose");
     $("#emailsList").empty();
     loadEmails();
 }
+
+function updateEmail(btn) {
+    const id = document.getElementById('hEmailId').value;
+    const date = document.getElementById('txtEmailDate').value;
+    const subject = document.getElementById('txtEmailSubject').value;
+    const recipients = document.getElementById('txtEmailRecipients').value;
+    const content = $("#txtEmailContent").dxHtmlEditor('instance').option('value');
+    if (!date || !subject || !recipients || !content) {
+        if (date === '') { showMessage('Il campo data è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+        if (subject === '') { showMessage('Il campo soggetto è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+        if (recipients === '') { showMessage('Il campo destinatari è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+        if (content === '') { showMessage('Il campo contenuto è obbligatorio', 'crmEmailResult', 'text-danger'); return; }
+    }
+    if (!isValidEmail(recipients)) {
+        showMessage('Uno o più indirizzi email non sono validi', 'crmEmailResult', 'text-danger');
+        return;
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    // TODO: SEND CALL DATA TO API AND UPDATE...
+    const emailToUpdate = crmData.emails.find(email => email.id === id);
+    if (emailToUpdate) {
+        emailToUpdate.date = date;
+        emailToUpdate.subject = subject;
+        emailToUpdate.recipients = recipients;
+        emailToUpdate.content = content;
+    }
+    btn.disabled = false;
+    btn.lastElementChild.classList.add('d-none');
+    $('#modalAddEmail').modal('hide');
+    $("#emailsList").dxDataGrid("dispose");
+    $("#emailsList").empty();
+    loadEmails();
+}
+
+function deleteEmail(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            // TODO: DELETE EMAIL API...
+            crmData.emails = crmData.emails.filter(email => email.id !== id.toString());
+            $("#emailsList").dxDataGrid("dispose");
+            $("#emailsList").empty();
+            $('#modalConfirmDelete').modal('hide');
+            loadEmails();
+        }
+    });
+}
+/*************************CRM EMAILS MANAGEMENT END*************************** */

@@ -230,6 +230,20 @@ function initProjectAutocomplete(ctr_id, hidden_id, source = null) {
     });
 }
 
+function toDatetimeLocal(val) {
+    const [datePart, timePart] = val.split("T");
+    const [year, month, day] = datePart.split("-");
+    const [hour, minute] = timePart.split(":");
+    const pad = n => String(n).padStart(2, "0");
+    return (
+        year + "-" +
+        pad(month) + "-" +
+        pad(day) + "T" +
+        pad(hour) + ":" +
+        pad(minute)
+    );
+}
+
 function showMessage(msg, id, cls) {
     const result = document.getElementById(id);
     result.innerHTML = msg;
