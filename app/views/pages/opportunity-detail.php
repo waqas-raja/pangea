@@ -185,7 +185,7 @@ require_once __DIR__ . "/../modals/add-project-note.php";
                         <button class="nav-link" id="development-project-quotes-tab" data-bs-toggle="tab" data-bs-target="#development-project-quotes" type="button" role="tab" aria-controls="development-project-quotes" aria-selected="false">Preventivi</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="development-project-notes-tab" data-bs-toggle="tab" data-bs-target="#development-project-notes" type="button" role="tab" aria-controls="development-project-notes" aria-selected="false">Notes</button>
+                        <button class="nav-link" id="development-project-notes-tab" data-bs-toggle="tab" data-bs-target="#development-project-notes" type="button" role="tab" aria-controls="development-project-notes" aria-selected="false">Note</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="developmentProjectTabsContent">
@@ -205,8 +205,8 @@ require_once __DIR__ . "/../modals/add-project-note.php";
                     </div>
                     <div class="tab-pane fade border border-top-0 p-3" id="development-project-notes" role="tabpanel" aria-labelledby="development-project-profile-tab">
                         <div class="d-flex align-items-center justify-content-between">
-                            <div class="pai-title">Notes</div>
-                            <button class="btn btn-blue" onclick="showNewNoteModal()">Aggiungi notes</button>
+                            <div class="pai-title">Note</div>
+                            <button class="btn btn-blue" onclick="showNewNoteModal()">Aggiungi note</button>
                         </div>
                         <div id="developmentProjectNotesList"></div>
                     </div>
