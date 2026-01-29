@@ -113,12 +113,14 @@ body { font-family:"Lato", serif; font-size: 16px; }
 #page-list-estimates .nav-item .nav-link,
 #opportunity_detail .nav-item .nav-link,
 #crmActivityCardTabs .nav-item .nav-link,
-#settings .nav-item .nav-link { color: #212529 !important; }
+#settings .nav-item .nav-link,
+#land-overview .nav-item .nav-link { color: #212529 !important; }
 #page-properties .nav-item .nav-link.active,
 #page-list-estimates .nav-item .nav-link.active,
 #opportunity_detail .nav-item .nav-link.active,
 #crmActivityCardTabs .nav-item .nav-link.active,
-#settings .nav-item .nav-link.active { color: var(--primary-blue) !important; }
+#settings .nav-item .nav-link.active,
+#land-overview .nav-item .nav-link.active { color: var(--primary-blue) !important; }
 #propertyDocumentList .docSection:hover .delDocument,
 #propertyValuationDocumentList .docSection:hover .delDocument { display: block !important; }
 #previewProfilePhoto:hover div { display: block !important; cursor: pointer; }

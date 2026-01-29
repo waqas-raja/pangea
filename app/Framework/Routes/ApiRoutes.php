@@ -9,6 +9,7 @@ use App\Framework\Models\Customer;
 use App\Framework\Models\Property;
 use App\Framework\Models\Estimate;
 use App\Framework\Models\Opportunity;
+use App\Framework\Models\Land;
 use Slim\App;
 use Slim\Exception\HttpNotImplementedException;
 use Slim\Routing\RouteCollectorProxy;
@@ -148,6 +149,11 @@ class ApiRoutes {
             $opportunityRoutes = new OpportunityRoutes($this->authMiddleware, $this->jwtMiddleware);
             $group->group('/opportunity', function (RouteCollectorProxy $opportunityGroup) use ($opportunityRoutes) {
                 $opportunityRoutes->register($opportunityGroup);
+            });
+            
+            $landRoutes = new LandRoutes($this->authMiddleware, $this->jwtMiddleware);
+            $group->group('/land', function (RouteCollectorProxy $landGroup) use ($landRoutes) {
+                $landRoutes->register($landGroup);
             });
 
         });

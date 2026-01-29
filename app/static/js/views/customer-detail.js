@@ -1,6 +1,6 @@
 let _customerDetail = [];
 const crmData = {
-    calls: [{ id: "1769575418394", date: "2026-01-28T10:34", person: "subject", outcome: "test@mail.com", note: "this is test content" }],
+    calls: [{ id: "1769575418394", date: "2026-01-28T10:34", person: "subject", type: "In entrata", outcome: "test@mail.com", note: "this is test content" }],
     appointments: [{ id: "1769575418395", date: "2026-01-28T10:34", type: "Type A", note: "this is test content" }],
     emails: [{ id: "1769575418396", date: "2026-01-28T10:34", subject: "subject", recipients: "test@mail.com", content: "this is test content" }]
 };
@@ -511,6 +511,7 @@ function showNewCallModal(id = null) {
     if (id === null) {
         document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Nuova chiamata`;
         document.getElementById('txtCallDate').value = '';
+        document.getElementById('ddlCallType').value = '';
         document.getElementById('txtCallWith').value = '';
         document.getElementById('txtCallOutcome').value = '';
         $("#txtCallNote").dxHtmlEditor('instance').option('value', '');
@@ -522,6 +523,7 @@ function showNewCallModal(id = null) {
         document.getElementById('hCallId').value = id;
         document.getElementById('txtCallDate').value = call.date;
         document.getElementById('txtCallWith').value = call.person;
+        document.getElementById('ddlCallType').value = call.type;
         document.getElementById('txtCallOutcome').value = call.outcome;
         $("#txtCallNote").dxHtmlEditor('instance').option('value', call.note);
         document.getElementById('btnSaveCall').classList.add('d-none');
@@ -535,19 +537,21 @@ function showNewCallModal(id = null) {
 function saveCall(btn) {
     const date = document.getElementById('txtCallDate').value;
     const person = document.getElementById('txtCallWith').value;
+    const type = document.getElementById('ddlCallType').value;
     const outcome = document.getElementById('txtCallOutcome').value;
     const note = $("#txtCallNote").dxHtmlEditor('instance').option('value');
-    if (!date || !outcome || !note) {
+    if (!date || !outcome || !note || !type) {
         if (date === '') { showMessage('Il campo data è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         // if (person === '') { showMessage('Il campo persona è obbligatorio', 'crmCallResult', 'text-danger'); return; }
-        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (type === '') { showMessage('Il campo tipo di chiamata è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         if (outcome === '') { showMessage('Il campo esito è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmCallResult', 'text-danger'); return; }
     }
     btn.disabled = true;
     btn.lastElementChild.classList.add('d-none');
     // TODO: SEND CALL DATA TO API AND SAVE...
     const id = Date.now().toString();
-    crmData.calls.push({ id: id, date: date, person: person, outcome: outcome, note: note });
+    crmData.calls.push({ id: id, date: date, person: person, type: type, outcome: outcome, note: note });
     btn.disabled = false;
     btn.lastElementChild.classList.remove('d-none');
     $('#modalAddCall').modal('hide');
@@ -560,11 +564,12 @@ function updateCall(btn) {
     const id = document.getElementById('hCallId').value;
     const date = document.getElementById('txtCallDate').value;
     const person = document.getElementById('txtCallWith').value;
+    const type = document.getElementById('ddlCallType').value;
     const outcome = document.getElementById('txtCallOutcome').value;
     const note = $("#txtCallNote").dxHtmlEditor('instance').option('value');
-    if (!date || !person || !outcome || !note) {
+    if (!date || !type || !outcome || !note) {
         if (date === '') { showMessage('Il campo data è obbligatorio', 'crmCallResult', 'text-danger'); return; }
-        if (person === '') { showMessage('Il campo persona è obbligatorio', 'crmCallResult', 'text-danger'); return; }
+        if (type === '') { showMessage('Il campo tipo di chiamata è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         if (outcome === '') { showMessage('Il campo esito è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         if (note === '') { showMessage('Il campo note è obbligatorio', 'crmCallResult', 'text-danger'); return; }
     }
@@ -575,6 +580,7 @@ function updateCall(btn) {
     if (callToUpdate) {
         callToUpdate.date = date;
         callToUpdate.person = person;
+        callToUpdate.type = type;
         callToUpdate.outcome = outcome;
         callToUpdate.note = note;
     }

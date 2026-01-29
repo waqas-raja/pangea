@@ -21,6 +21,16 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <label for="ddlCallType" class="col-sm-3 col-form-label">Tipo di chiamata<span class="text-danger ms-2">*</span></label>
+                        <div class="col-sm-9">
+                            <select id="ddlCallType" class="form-select">
+                                <option value="">Seleziona tipo</option>
+                                <option value="In entrata">In entrata</option>
+                                <option value="In uscita">In uscita</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <label for="txtCallOutcome" class="col-sm-3 col-form-label">Esito della chiamata<span class="text-danger ms-2">*</span></label>
                         <div class="col-sm-9">
                             <input type="text" id="txtCallOutcome" class="form-control" required>
