@@ -116,14 +116,11 @@ final class Land
     /**
      * @throws Exception
      */
-    public static function Delete($request, $response)
-    {
+    public static function Delete($request, $response) {
         try {
             $id = (int)$request->getAttribute('id');
-            DB::Execute("DELETE FROM estimate_fixed_costs WHERE estimate_id = ?", [$id]);
-            DB::Execute("DELETE FROM estimate_monthly WHERE estimate_id = ?", [$id]);
-            $row_affected = DB::Execute("DELETE FROM estimate WHERE id = ?", [$id]);
-            if ($row_affected == 0) throw new Exception("Error while deleting estimate", 500);
+            $row_affected = DB::Execute("DELETE FROM land WHERE id = ?", [$id]);
+            if ($row_affected == 0) throw new Exception("Error while deleting land", 500);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (\Exception $e) {

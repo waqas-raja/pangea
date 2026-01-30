@@ -54,6 +54,31 @@ class CustomerRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        // APPOINTMENT MANAGEMENT SECTION...
+        $group->get('/{id}/crm/appointments', function (Request $request, Response $response) {
+            return Customer::GetAllAppointmentByCustomer($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->get('/crm/appointment/{id}', function (Request $request, Response $response) {
+            return Customer::GetAppointmentById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->post('/crm/appointment', function (Request $request, Response $response) {
+            return Customer::AddCustomerAppointment($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->patch('/crm/appointment/{id}', function (Request $request, Response $response) {
+            return Customer::UpdateCustomerAppointment($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 

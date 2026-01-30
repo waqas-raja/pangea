@@ -608,11 +608,10 @@ function deleteCall(id) {
 
 /*************************CRM APPOINTMENT MANAGEMENT START*************************** */
 async function loadAppointments() {
-    // TODO: FETCH APPOINTMENTS DATA FROM API AND LOAD...
-    // const response = await fetch('/api/customer/quotes/' + customerId);
-    // const r = await response.json();
+    const response = await fetch(`/api/customer/${customerId}/crm/appointments`);
+    const r = await response.json();
     $("#appointmentsList").dxDataGrid({
-        dataSource: crmData.appointments,
+        dataSource: r.payload,
         keyExpr: "id",
         showBorders: true,
         columnAutoWidth: true,
@@ -633,23 +632,23 @@ async function loadAppointments() {
                 dataField: "id",
                 caption: "ID",
                 alignment: "left",
-                width: 120,
+                width: 100,
             },
             {
-                dataField: "date",
+                dataField: "dt",
                 caption: "Data creazione",
                 allowFiltering: true,
-                width: 130,
+                width: 150,
                 // sortIndex: 5, sortOrder: "asc",
                 cellTemplate: function (container, options) {
                     const data = options.data;
-                    let date = data.date.split('T')[0];
+                    let date = data.dt.split(' ')[0];
                     date = date.split('-');
-                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.date.split('T')[1]);
+                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.dt.split(' ')[1]);
                 }
             },
             {
-                dataField: "type",
+                dataField: "location",
                 caption: "Tipo",
                 // allowFiltering: true,
             },
@@ -694,7 +693,7 @@ async function loadAppointments() {
     });
 }
 
-function showNewAppointmentModal(id = null) {
+async function showNewAppointmentModal(id = null) {
     if (id === null) {
         document.getElementById('modalAddAppointmentLabel').innerHTML = `<i class="bi bi-calendar me-3"></i>Nuovo appuntamento`;
         document.getElementById('txtAppointmentDate').value = '';
@@ -703,12 +702,13 @@ function showNewAppointmentModal(id = null) {
         document.getElementById('btnSaveAppointment').classList.remove('d-none');
         document.getElementById('btnUpdateAppointment').classList.add('d-none');
     } else {
-        const appointment = crmData.appointments.find(a => a.id === id.toString());
+        const response = await fetch(`/api/customer/crm/appointment/${id}`);
+        const r = await response.json();
         document.getElementById('modalAddAppointmentLabel').innerHTML = `<i class="bi bi-calendar me-3"></i>Modifica appuntamento`;
         document.getElementById('hAppointmentId').value = id;
-        document.getElementById('txtAppointmentDate').value = appointment.date;
-        document.getElementById('txtAppointmentType').value = appointment.type;
-        $("#txtAppointmentNote").dxHtmlEditor('instance').option('value', appointment.note);
+        document.getElementById('txtAppointmentDate').value = r.payload[0].dt;
+        document.getElementById('txtAppointmentType').value = r.payload[0].location;
+        $("#txtAppointmentNote").dxHtmlEditor('instance').option('value', r.payload[0].note);
         document.getElementById('btnSaveAppointment').classList.add('d-none');
         document.getElementById('btnUpdateAppointment').classList.remove('d-none');
     }
@@ -717,7 +717,7 @@ function showNewAppointmentModal(id = null) {
     modal.show();
 }
 
-function saveAppointment(btn) {
+async function saveAppointment(btn) {
     const date = document.getElementById('txtAppointmentDate').value;
     const type = document.getElementById('txtAppointmentType').value;
     const note = $("#txtAppointmentNote").dxHtmlEditor('instance').option('value');
@@ -728,18 +728,34 @@ function saveAppointment(btn) {
     }
     btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
-    // TODO: SEND CALL DATA TO API AND SAVE...
-    const id = Date.now().toString();
-    crmData.appointments.push({ id: id, date: date, type: type, note: note });
-    btn.disabled = false;
-    btn.lastElementChild.classList.add('d-none');
-    $('#modalAddAppointment').modal('hide');
-    $("#appointmentsList").dxDataGrid("dispose");
-    $("#appointmentsList").empty();
-    loadAppointments();
+    try {
+        const response = await fetch("/api/customer/crm/appointment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "customer_id": customerId, "date": date, "location": type, "note": note })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddAppointment').modal('hide');
+            $("#appointmentsList").dxDataGrid("dispose");
+            $("#appointmentsList").empty();
+            loadAppointments();
+        } else {
+            showMessage("Si sono verificati degli errori durante il salvataggio", 'crmAppointmentResult', 'text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+        }
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'crmAppointmentResult', 'text-danger');
+        btn.disabled = false;
+        spinner.classList.remove("d-none");
+    }
 }
 
-function updateAppointment(btn) {
+async function updateAppointment(btn) {
     const id = document.getElementById('hAppointmentId').value;
     const date = document.getElementById('txtAppointmentDate').value;
     const type = document.getElementById('txtAppointmentType').value;
@@ -751,19 +767,31 @@ function updateAppointment(btn) {
     }
     btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
-    // TODO: SEND APPOINTMENT DATA TO API AND UPDATE...
-    const appointmentToUpdate = crmData.appointments.find(appointment => appointment.id === id);
-    if (appointmentToUpdate) {
-        appointmentToUpdate.date = date;
-        appointmentToUpdate.type = type;
-        appointmentToUpdate.note = note;
+    try {
+        const response = await fetch(`/api/customer/crm/appointment/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "date": date, "location": type, "note": note })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddAppointment').modal('hide');
+            $("#appointmentsList").dxDataGrid("dispose");
+            $("#appointmentsList").empty();
+            loadAppointments();
+        } else {
+            showMessage("Si sono verificati degli errori durante l'aggiornamento dell'appuntamento", 'crmAppointmentResult', 'text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+        }
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'crmAppointmentResult', 'text-danger');
+        btn.disabled = false;
+        spinner.classList.remove("d-none");
     }
-    btn.disabled = false;
-    btn.lastElementChild.classList.add('d-none');
-    $('#modalAddAppointment').modal('hide');
-    $("#appointmentsList").dxDataGrid("dispose");
-    $("#appointmentsList").empty();
-    loadAppointments();
 }
 
 function deleteAppointment(id) {
