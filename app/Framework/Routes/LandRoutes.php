@@ -25,8 +25,14 @@ class LandRoutes {
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
 
-        $group->get('/land-types', function (Request $request, Response $response) {
+        $group->get('/types', function (Request $request, Response $response) {
             return Land::GetLandTypes($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->delete('/{id}', function (Request $request, Response $response) {
+            return Land::Delete($request, $response);
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);

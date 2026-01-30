@@ -151,5 +151,80 @@ final class Customer {
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public static function GetAllAppointmentByCustomer($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $rows = DB::Query('SELECT * FROM appointment WHERE customer_id = ?', [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function GetAppointmentById($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $rows = DB::Query('SELECT * FROM appointment WHERE id = ?', [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function AddCustomerAppointment($request, $response) {
+        try {
+            $data = json_decode($request->getBody()->getContents(), true);
+            $cid = $data['customer_id'] ?? "";
+            $date = $data['date'] ?? "";
+            $location = $data['location'] ?? "";
+            $note = $data['note'] ?? "";
+            $q = "INSERT INTO appointment (customer_id, dt, location, note) VALUES (?,?,?,?)";
+            $params = [$cid, $date, $location, $note];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante l'inserimento dell'appuntamento del cliente", 500);
+            $last_inserted_id = DB::$LastId;
+            $response->getBody()->write(json_encode(["result" => true, "id" => $last_inserted_id]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function UpdateCustomerAppointment($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $data = json_decode($request->getBody()->getContents(), true);
+            $date = $data['date'] ?? "";
+            $location = $data['location'] ?? "";
+            $note = $data['note'] ?? "";
+            $q = 'UPDATE appointment SET dt = ?, location = ?, note = ? WHERE id = ?';
+            $params = [$date, $location, $note, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento dell'appuntamento del cliente", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
 
 }
