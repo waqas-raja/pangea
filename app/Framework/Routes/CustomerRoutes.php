@@ -55,7 +55,7 @@ class CustomerRoutes {
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
         
-        // APPOINTMENT MANAGEMENT SECTION...
+        // CRM APPOINTMENT MANAGEMENT SECTION...
         $group->get('/{id}/crm/appointments', function (Request $request, Response $response) {
             return Customer::GetAllAppointmentByCustomer($request, $response);
         })
@@ -76,6 +76,43 @@ class CustomerRoutes {
 
         $group->patch('/crm/appointment/{id}', function (Request $request, Response $response) {
             return Customer::UpdateCustomerAppointment($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->delete('/crm/appointment/{id}', function (Request $request, Response $response) {
+            return Customer::DeleteAppointmentById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        // CRM EMAILS MANAGEMENT SECTION...
+        $group->get('/{id}/crm/emails', function (Request $request, Response $response) {
+            return Customer::GetAllEmailsByCustomer($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->get('/crm/email/{id}', function (Request $request, Response $response) {
+            return Customer::GetEmailById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->post('/crm/email', function (Request $request, Response $response) {
+            return Customer::AddCustomerEmail($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->patch('/crm/email/{id}', function (Request $request, Response $response) {
+            return Customer::UpdateCustomerEmail($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->delete('/crm/email/{id}', function (Request $request, Response $response) {
+            return Customer::DeleteEmailById($request, $response);
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);

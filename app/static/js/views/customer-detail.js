@@ -610,6 +610,7 @@ function deleteCall(id) {
 async function loadAppointments() {
     const response = await fetch(`/api/customer/${customerId}/crm/appointments`);
     const r = await response.json();
+    const hasData = r.payload.length > 0;
     $("#appointmentsList").dxDataGrid({
         dataSource: r.payload,
         keyExpr: "id",
@@ -681,6 +682,7 @@ async function loadAppointments() {
         toolbar: {
             items: [
                 {
+                    visible: hasData,
                     name: "searchPanel",
                     location: "before"
                 },
@@ -751,7 +753,7 @@ async function saveAppointment(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmAppointmentResult', 'text-danger');
         btn.disabled = false;
-        spinner.classList.remove("d-none");
+        btn.lastElementChild.classList.remove("d-none");
     }
 }
 
@@ -790,19 +792,27 @@ async function updateAppointment(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmAppointmentResult', 'text-danger');
         btn.disabled = false;
-        spinner.classList.remove("d-none");
+        btn.lastElementChild.classList.remove("d-none");
     }
 }
 
 function deleteAppointment(id) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
-            // TODO: DELETE APPOINTMENT API...
-            crmData.appointments = crmData.appointments.filter(appointment => appointment.id !== id.toString());
-            $("#appointmentsList").dxDataGrid("dispose");
-            $("#appointmentsList").empty();
-            $('#modalConfirmDelete').modal('hide');
-            loadAppointments();
+            try {
+                const response = await fetch(`/api/customer/crm/appointment/${id}`, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#appointmentsList").dxDataGrid("dispose");
+                    $("#appointmentsList").empty();
+                    $('#modalConfirmDelete').modal('hide');
+                    loadAppointments();
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo record.");
+            } catch (error) {
+                // $("#modalConfirmDelete").modal('hide');
+                // spinner.classList.add('d-none');
+                showMessage(error.message, 'deleteErrorMessage', 'text-danger');
+            }
         }
     });
 }
@@ -810,11 +820,11 @@ function deleteAppointment(id) {
 
 /*************************CRM EMAILS MANAGEMENT START*************************** */
 async function loadEmails() {
-    // TODO: FETCH APPOINTMENTS DATA FROM API AND LOAD...
-    // const response = await fetch('/api/customer/quotes/' + customerId);
-    // const r = await response.json();
+    const response = await fetch(`/api/customer/${customerId}/crm/emails`);
+    const r = await response.json();
+    const hasData = r.payload.length > 0;
     $("#emailsList").dxDataGrid({
-        dataSource: crmData.emails,
+        dataSource: r.payload,
         keyExpr: "id",
         showBorders: true,
         columnAutoWidth: true,
@@ -835,29 +845,24 @@ async function loadEmails() {
                 dataField: "id",
                 caption: "ID",
                 alignment: "left",
-                width: 120,
+                width: 100,
             },
             {
-                dataField: "date",
+                dataField: "dt",
                 caption: "Data",
                 allowFiltering: true,
-                width: 130,
+                width: 150,
                 // sortIndex: 5, sortOrder: "asc",
                 cellTemplate: function (container, options) {
                     const data = options.data;
-                    let date = data.date.split('T')[0];
+                    let date = data.dt.split(' ')[0];
                     date = date.split('-');
-                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.date.split('T')[1]);
+                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.dt.split(' ')[1]);
                 }
             },
             {
                 dataField: "subject",
                 caption: "Soggetto",
-                // allowFiltering: true,
-            },
-            {
-                dataField: "recipients",
-                caption: "Destinatari",
                 // allowFiltering: true,
             },
             {
@@ -889,6 +894,7 @@ async function loadEmails() {
         toolbar: {
             items: [
                 {
+                    visible: hasData,
                     name: "searchPanel",
                     location: "before"
                 },
@@ -901,7 +907,7 @@ async function loadEmails() {
     });
 }
 
-function showNewEmailModal(id = null) {
+async function showNewEmailModal(id = null) {
     if (id === null) {
         document.getElementById('modalAddEmailLabel').innerHTML = `<i class="bi bi-envelope me-3"></i>Nuova email`;
         document.getElementById('txtEmailDate').value = '';
@@ -911,14 +917,15 @@ function showNewEmailModal(id = null) {
         document.getElementById('btnSaveEmail').classList.remove('d-none');
         document.getElementById('btnUpdateEmail').classList.add('d-none');
     } else {
-        const email = crmData.emails.find(e => e.id === id.toString());
+        const response = await fetch(`/api/customer/crm/email/${id}`);
+        const r = await response.json();
+        // const email = crmData.emails.find(e => e.id === id.toString());
         document.getElementById('modalAddEmailLabel').innerHTML = `<i class="bi bi-envelope me-3"></i>Modifica email`;
         document.getElementById('hEmailId').value = id;
-        const formatedDate = toDatetimeLocal(email.date);
-        document.getElementById('txtEmailDate').value = formatedDate;
-        document.getElementById('txtEmailSubject').value = email.subject;
-        document.getElementById('txtEmailRecipients').value = email.recipients;
-        $("#txtEmailContent").dxHtmlEditor('instance').option('value', email.content);
+        document.getElementById('txtEmailDate').value = r.payload[0].dt;
+        document.getElementById('txtEmailSubject').value = r.payload[0].subject;
+        // document.getElementById('txtEmailRecipients').value = email.recipients;
+        $("#txtEmailContent").dxHtmlEditor('instance').option('value', r.payload[0].content);
         document.getElementById('btnSaveEmail').classList.add('d-none');
         document.getElementById('btnUpdateEmail').classList.remove('d-none');
     }
@@ -927,7 +934,7 @@ function showNewEmailModal(id = null) {
     modal.show();
 }
 
-function saveEmail(btn) {
+async function saveEmail(btn) {
     const date = document.getElementById('txtEmailDate').value;
     const subject = document.getElementById('txtEmailSubject').value;
     const recipients = document.getElementById('txtEmailRecipients').value;
@@ -944,18 +951,34 @@ function saveEmail(btn) {
     }
     btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
-    // TODO: SEND CALL DATA TO API AND SAVE...
-    const id = Date.now().toString();
-    crmData.emails.push({ id: id, date: date, subject: subject, recipients: recipients, content: content });
-    btn.disabled = false;
-    btn.lastElementChild.classList.add('d-none');
-    $('#modalAddEmail').modal('hide');
-    $("#emailsList").dxDataGrid("dispose");
-    $("#emailsList").empty();
-    loadEmails();
+    try {
+        const response = await fetch("/api/customer/crm/email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "customer_id": customerId, "date": date, "subject": subject, "note": content })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddEmail').modal('hide');
+            $("#emailsList").dxDataGrid("dispose");
+            $("#emailsList").empty();
+            loadEmails();
+        } else {
+            showMessage(res.message || "Si sono verificati degli errori durante il salvataggio", 'crmEmailResult', 'text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+        }
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'crmEmailResult', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.remove("d-none");
+    }
 }
 
-function updateEmail(btn) {
+async function updateEmail(btn) {
     const id = document.getElementById('hEmailId').value;
     const date = document.getElementById('txtEmailDate').value;
     const subject = document.getElementById('txtEmailSubject').value;
@@ -973,31 +996,48 @@ function updateEmail(btn) {
     }
     btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
-    // TODO: SEND CALL DATA TO API AND UPDATE...
-    const emailToUpdate = crmData.emails.find(email => email.id === id);
-    if (emailToUpdate) {
-        emailToUpdate.date = date;
-        emailToUpdate.subject = subject;
-        emailToUpdate.recipients = recipients;
-        emailToUpdate.content = content;
+    try {
+        const response = await fetch(`/api/customer/crm/email/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "date": date, "subject": subject, "content": content })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddEmail').modal('hide');
+            $("#emailsList").dxDataGrid("dispose");
+            $("#emailsList").empty();
+            loadEmails();
+        } else {
+            showMessage(res.message || "Si sono verificati degli errori durante l'aggiornamento dell'email", 'crmEmailResult', 'text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+        }
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'crmEmailResult', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.remove("d-none");
     }
-    btn.disabled = false;
-    btn.lastElementChild.classList.add('d-none');
-    $('#modalAddEmail').modal('hide');
-    $("#emailsList").dxDataGrid("dispose");
-    $("#emailsList").empty();
-    loadEmails();
 }
 
 function deleteEmail(id) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
-            // TODO: DELETE EMAIL API...
-            crmData.emails = crmData.emails.filter(email => email.id !== id.toString());
-            $("#emailsList").dxDataGrid("dispose");
-            $("#emailsList").empty();
-            $('#modalConfirmDelete').modal('hide');
-            loadEmails();
+            try {
+                const response = await fetch(`/api/customer/crm/email/${id}`, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#emailsList").dxDataGrid("dispose");
+                    $("#emailsList").empty();
+                    $('#modalConfirmDelete').modal('hide');
+                    loadEmails();
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo record.");
+            } catch (error) {
+                showMessage(error.message, 'deleteErrorMessage', 'text-danger');
+            }
         }
     });
 }
