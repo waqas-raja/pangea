@@ -226,5 +226,112 @@ final class Customer {
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public static function DeleteAppointmentById($request, $response) {
+        try {
+            $aid = (int)$request->getAttribute('id');
+            $row_affected = DB::Execute("DELETE FROM appointment WHERE id = ?", [$aid]);
+            if ($row_affected == 0) throw new Exception("Error while deleting the appointment", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function GetAllEmailsByCustomer($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $rows = DB::Query('SELECT * FROM customer_email WHERE customer_id = ?', [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function GetEmailById($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $rows = DB::Query('SELECT * FROM customer_email WHERE id = ?', [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function AddCustomerEmail($request, $response) {
+        try {
+            $data = json_decode($request->getBody()->getContents(), true);
+            $cid = $data['customer_id'] ?? "";
+            $date = $data['date'] ?? "";
+            $subject = $data['subject'] ?? "";
+            $content = $data['note'] ?? "";
+            $q = "INSERT INTO customer_email (customer_id, subject, content, dt) VALUES (?,?,?,?)";
+            $params = [$cid, $subject, $content, $date];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante l'inserimento dell'email del cliente", 500);
+            $last_inserted_id = DB::$LastId;
+            $response->getBody()->write(json_encode(["result" => true, "id" => $last_inserted_id]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function UpdateCustomerEmail($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $data = json_decode($request->getBody()->getContents(), true);
+            $date = $data['date'] ?? "";
+            $subject = $data['subject'] ?? "";
+            $content = $data['content'] ?? "";
+            $q = 'UPDATE customer_email SET dt = ?, subject = ?, content = ? WHERE id = ?';
+            $params = [$date, $subject, $content, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento dell'email del cliente", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function DeleteEmailById($request, $response) {
+        try {
+            $aid = (int)$request->getAttribute('id');
+            $row_affected = DB::Execute("DELETE FROM customer_email WHERE id = ?", [$aid]);
+            if ($row_affected == 0) throw new Exception("Error while deleting the email", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
 
 }
