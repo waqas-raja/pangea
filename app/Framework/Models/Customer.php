@@ -155,6 +155,97 @@ final class Customer {
     /**
      * @throws Exception
      */
+    public static function GetAllCallsByCustomer($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $rows = DB::Query('SELECT * FROM customer_call WHERE customer_id = ?', [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function GetCallById($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $rows = DB::Query('SELECT * FROM customer_call WHERE id = ?', [$id]);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function AddCustomerCall($request, $response) {
+        try {
+            $data = json_decode($request->getBody()->getContents(), true);
+            $cid = $data['customer_id'] ?? "";
+            $date = $data['date'] ?? "";
+            $callType = $data['call_type'] ?? "";
+            $note = $data['note'] ?? "";
+            $q = "INSERT INTO customer_call (customer_id, dt, ctype, note) VALUES (?,?,?,?)";
+            $params = [$cid, $date, $callType, $note];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante l'inserimento dell'chiamata del cliente", 500);
+            $last_inserted_id = DB::$LastId;
+            $response->getBody()->write(json_encode(["result" => true, "id" => $last_inserted_id]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function UpdateCustomerCall($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $data = json_decode($request->getBody()->getContents(), true);
+            $date = $data['date'] ?? "";
+            $type = $data['call_type'] ?? "";
+            $note = $data['note'] ?? "";
+            $q = 'UPDATE customer_call SET dt = ?, ctype = ?, note = ? WHERE id = ?';
+            $params = [$date, $type, $note, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento dell'chimata del cliente", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function DeleteCallById($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $row_affected = DB::Execute("DELETE FROM customer_call WHERE id = ?", [$id]);
+            if ($row_affected == 0) throw new Exception("Error while deleting the call", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
     public static function GetAllAppointmentByCustomer($request, $response) {
         try {
             $id = (int)$request->getAttribute('id');

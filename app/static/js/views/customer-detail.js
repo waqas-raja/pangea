@@ -414,11 +414,11 @@ function loadMap() {
 
 /*************************CRM CALLS MANAGEMENT START*************************** */
 async function loadCalls() {
-    // TODO: FETCH CALLS DATA FROM API AND LOAD...
-    // const response = await fetch('/api/customer/quotes/' + customerId);
-    // const r = await response.json();
+    const response = await fetch(`/api/customer/${customerId}/crm/calls`);
+    const r = await response.json();
+    const hasData = r.payload.length > 0;
     $("#callsList").dxDataGrid({
-        dataSource: crmData.calls,
+        dataSource: r.payload,
         keyExpr: "id",
         showBorders: true,
         columnAutoWidth: true,
@@ -439,32 +439,34 @@ async function loadCalls() {
                 dataField: "id",
                 caption: "ID",
                 alignment: "left",
-                width: 120,
+                width: 70,
             },
             {
-                dataField: "date",
+                dataField: "dt",
                 caption: "Data creazione",
                 // allowFiltering: true,
                 width: 150,
                 // sortIndex: 5, sortOrder: "asc",
                 cellTemplate: function (container, options) {
                     const data = options.data;
-                    let date = data.date.split('T')[0];
+                    let date = data.dt.split(' ')[0];
                     date = date.split('-');
-                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.date.split('T')[1]);
+                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.dt.split(' ')[1]);
                 }
             },
             {
-                dataField: "person",
-                caption: "Contatto",
+                dataField: "ctype",
+                caption: "Tipo di chiamata",
                 // allowFiltering: true,
-                width: 100,
-            },
-            {
-                dataField: "outcome",
-                caption: "Esito",
-                // allowFiltering: true,
-                width: 150,
+                width: 120,
+                cellTemplate: function (container, options) {
+                    let txt = '';
+                    switch (options.data.ctype) {
+                        case 'inbound': txt = 'In entrata'; break;
+                        case 'outbound': txt = 'In uscita'; break;
+                    }
+                    container.text(txt);
+                }
             },
             {
                 dataField: "note",
@@ -495,6 +497,7 @@ async function loadCalls() {
         toolbar: {
             items: [
                 {
+                    visible: hasData,
                     name: "searchPanel",
                     location: "before"
                 },
@@ -507,7 +510,7 @@ async function loadCalls() {
     });
 }
 
-function showNewCallModal(id = null) {
+async function showNewCallModal(id = null) {
     if (id === null) {
         document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Nuova chiamata`;
         document.getElementById('txtCallDate').value = '';
@@ -518,14 +521,13 @@ function showNewCallModal(id = null) {
         document.getElementById('btnSaveCall').classList.remove('d-none');
         document.getElementById('btnUpdateCall').classList.add('d-none');
     } else {
-        const call = crmData.calls.find(c => c.id === id.toString());
+        const response = await fetch(`/api/customer/crm/call/${id}`);
+        const r = await response.json();
         document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Modifica chiamata`;
         document.getElementById('hCallId').value = id;
-        document.getElementById('txtCallDate').value = call.date;
-        document.getElementById('txtCallWith').value = call.person;
-        document.getElementById('ddlCallType').value = call.type;
-        document.getElementById('txtCallOutcome').value = call.outcome;
-        $("#txtCallNote").dxHtmlEditor('instance').option('value', call.note);
+        document.getElementById('txtCallDate').value = r.payload[0].dt;
+        document.getElementById('ddlCallType').value = r.payload[0].ctype;
+        $("#txtCallNote").dxHtmlEditor('instance').option('value', r.payload[0].note);
         document.getElementById('btnSaveCall').classList.add('d-none');
         document.getElementById('btnUpdateCall').classList.remove('d-none');
     }
@@ -534,7 +536,7 @@ function showNewCallModal(id = null) {
     modal.show();
 }
 
-function saveCall(btn) {
+async function saveCall(btn) {
     const date = document.getElementById('txtCallDate').value;
     const person = document.getElementById('txtCallWith').value;
     const type = document.getElementById('ddlCallType').value;
@@ -549,18 +551,34 @@ function saveCall(btn) {
     }
     btn.disabled = true;
     btn.lastElementChild.classList.add('d-none');
-    // TODO: SEND CALL DATA TO API AND SAVE...
-    const id = Date.now().toString();
-    crmData.calls.push({ id: id, date: date, person: person, type: type, outcome: outcome, note: note });
-    btn.disabled = false;
-    btn.lastElementChild.classList.remove('d-none');
-    $('#modalAddCall').modal('hide');
-    $("#callsList").dxDataGrid("dispose");
-    $("#callsList").empty();
-    loadCalls();
+    try {
+        const response = await fetch("/api/customer/crm/call", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "customer_id": customerId, "date": date, "call_type": type, "note": note })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddCall').modal('hide');
+            $("#callsList").dxDataGrid("dispose");
+            $("#callsList").empty();
+            loadCalls();
+        } else {
+            showMessage("Si sono verificati degli errori durante il salvataggio", 'crmCallResult', 'text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+        }
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'crmCallResult', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.remove("d-none");
+    }
 }
 
-function updateCall(btn) {
+async function updateCall(btn) {
     const id = document.getElementById('hCallId').value;
     const date = document.getElementById('txtCallDate').value;
     const person = document.getElementById('txtCallWith').value;
@@ -575,32 +593,57 @@ function updateCall(btn) {
     }
     btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
-    // TODO: SEND CALL DATA TO API AND UPDATE...
-    const callToUpdate = crmData.calls.find(call => call.id === id);
-    if (callToUpdate) {
-        callToUpdate.date = date;
-        callToUpdate.person = person;
-        callToUpdate.type = type;
-        callToUpdate.outcome = outcome;
-        callToUpdate.note = note;
+    try {
+        const response = await fetch(`/api/customer/crm/call/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "date": date, "call_type": type, "note": note })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddCall').modal('hide');
+            $("#callsList").dxDataGrid("dispose");
+            $("#callsList").empty();
+            loadCalls();
+        } else {
+            showMessage("Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'crmCallResult', 'text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+        }
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'crmCallResult', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.remove("d-none");
     }
-    btn.disabled = false;
-    btn.lastElementChild.classList.add('d-none');
-    $('#modalAddCall').modal('hide');
-    $("#callsList").dxDataGrid("dispose");
-    $("#callsList").empty();
-    loadCalls();
 }
 
 function deleteCall(id) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
-            // TODO: DELETE CALL API...
-            crmData.calls = crmData.calls.filter(call => call.id !== id.toString());
-            $("#callsList").dxDataGrid("dispose");
-            $("#callsList").empty();
-            $('#modalConfirmDelete').modal('hide');
-            loadCalls();
+            const btn = document.getElementById('btnConfirmDelete');
+            btn.disabled = true;
+            btn.lastElementChild.classList.remove('d-none');
+            try {
+                btn.disabled = true;
+                btn.lastElementChild.classList.remove('d-none');
+                const response = await fetch(`/api/customer/crm/call/${id}`, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#callsList").dxDataGrid("dispose");
+                    $("#callsList").empty();
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                    $('#modalConfirmDelete').modal('hide');
+                    loadCalls();
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo record.");
+            } catch (error) {
+                btn.disabled = false;
+                btn.lastElementChild.classList.add('d-none');
+                showMessage(error.message, 'deleteErrorMessage', 'text-danger');
+            }
         }
     });
 }
@@ -799,18 +842,23 @@ async function updateAppointment(btn) {
 function deleteAppointment(id) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
+            const btn = document.getElementById('btnConfirmDelete');
+            btn.disabled = true;
+            btn.lastElementChild.classList.remove('d-none');
             try {
                 const response = await fetch(`/api/customer/crm/appointment/${id}`, { method: "DELETE" });
                 const res = await response.json();
                 if (res.result) {
                     $("#appointmentsList").dxDataGrid("dispose");
                     $("#appointmentsList").empty();
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
                     $('#modalConfirmDelete').modal('hide');
                     loadAppointments();
                 } else throw new Error("Si è verificato un errore durante l'eliminazione di questo record.");
             } catch (error) {
-                // $("#modalConfirmDelete").modal('hide');
-                // spinner.classList.add('d-none');
+                btn.disabled = false;
+                btn.lastElementChild.classList.add('d-none');
                 showMessage(error.message, 'deleteErrorMessage', 'text-danger');
             }
         }
@@ -1026,16 +1074,23 @@ async function updateEmail(btn) {
 function deleteEmail(id) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
+            const btn = document.getElementById('btnConfirmDelete');
+            btn.disabled = true;
+            btn.lastElementChild.classList.remove('d-none');
             try {
                 const response = await fetch(`/api/customer/crm/email/${id}`, { method: "DELETE" });
                 const res = await response.json();
                 if (res.result) {
                     $("#emailsList").dxDataGrid("dispose");
                     $("#emailsList").empty();
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
                     $('#modalConfirmDelete').modal('hide');
                     loadEmails();
                 } else throw new Error("Si è verificato un errore durante l'eliminazione di questo record.");
             } catch (error) {
+                btn.disabled = true;
+                btn.lastElementChild.classList.add('d-none');
                 showMessage(error.message, 'deleteErrorMessage', 'text-danger');
             }
         }

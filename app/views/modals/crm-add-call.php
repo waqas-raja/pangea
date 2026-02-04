@@ -25,8 +25,8 @@
                         <div class="col-sm-9">
                             <select id="ddlCallType" class="form-select">
                                 <option value="">Seleziona tipo</option>
-                                <option value="In entrata">In entrata</option>
-                                <option value="In uscita">In uscita</option>
+                                <option value="inbound">In entrata</option>
+                                <option value="outbound">In uscita</option>
                             </select>
                         </div>
                     </div>

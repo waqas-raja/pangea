@@ -55,6 +55,37 @@ class CustomerRoutes {
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
         
+        // CRM CALLS MANAGEMENT SECTION...
+        $group->get('/{id}/crm/calls', function (Request $request, Response $response) {
+            return Customer::GetAllCallsByCustomer($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->get('/crm/call/{id}', function (Request $request, Response $response) {
+            return Customer::GetCallById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->post('/crm/call', function (Request $request, Response $response) {
+            return Customer::AddCustomerCall($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->patch('/crm/call/{id}', function (Request $request, Response $response) {
+            return Customer::UpdateCustomerCall($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->delete('/crm/call/{id}', function (Request $request, Response $response) {
+            return Customer::DeleteCallById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
         // CRM APPOINTMENT MANAGEMENT SECTION...
         $group->get('/{id}/crm/appointments', function (Request $request, Response $response) {
             return Customer::GetAllAppointmentByCustomer($request, $response);
