@@ -24,6 +24,18 @@ class LandRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/{id}/lands', function (Request $request, Response $response) {
+            return Land::GetLandsByType($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->get('/detail/{id}', function (Request $request, Response $response) {
+            return Land::GetLandById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
 
         $group->get('/types', function (Request $request, Response $response) {
             return Land::GetLandTypes($request, $response);

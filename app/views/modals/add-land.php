@@ -40,18 +40,7 @@
                     <div id="residentialLandFields" class="d-none"></div>
                     <div id="industrialLandFields" class="d-none">
                         <div class="row mb-3">
-                            <label for="ddlIndustarialLandType" class="col-sm-4 col-form-label">Nome<span class="text-danger ms-2">*</span></label>
-                            <div class="col-sm-8">
-                                <select id="ddlIndustarialLandType" class="form-select">
-                                    <option value="">Seleziona industria</option>
-                                    <option value="1">Tessili</option>
-                                    <option value="2">Agricoltura</option>
-                                    <option value="3">Produzione</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="txtIndustarialLandName" class="col-sm-4 col-form-label">Nome<span class="text-danger ms-2">*</span></label>
+                            <label for="txtIndustarialLandName" class="col-sm-4 col-form-label">Industria<span class="text-danger ms-2">*</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="txtIndustarialLandName" required>
                             </div>
