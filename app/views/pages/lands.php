@@ -2,6 +2,7 @@
 $title = 'Terre';
 ob_start();
 require_once __DIR__ . '/../modals/add-land.php';
+require_once __DIR__ . '/../modals/pdf-draft-land.php';
 require_once __DIR__ . "/../modals/confirm-delete.php";
 ?>
 

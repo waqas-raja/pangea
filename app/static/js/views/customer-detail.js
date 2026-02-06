@@ -574,7 +574,7 @@ async function saveCall(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmCallResult', 'text-danger');
         btn.disabled = false;
-        btn.lastElementChild.classList.remove("d-none");
+        btn.lastElementChild.classList.add("d-none");
     }
 }
 
@@ -616,7 +616,7 @@ async function updateCall(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmCallResult', 'text-danger');
         btn.disabled = false;
-        btn.lastElementChild.classList.remove("d-none");
+        btn.lastElementChild.classList.add("d-none");
     }
 }
 
@@ -796,7 +796,7 @@ async function saveAppointment(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmAppointmentResult', 'text-danger');
         btn.disabled = false;
-        btn.lastElementChild.classList.remove("d-none");
+        btn.lastElementChild.classList.add("d-none");
     }
 }
 
@@ -835,7 +835,7 @@ async function updateAppointment(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmAppointmentResult', 'text-danger');
         btn.disabled = false;
-        btn.lastElementChild.classList.remove("d-none");
+        btn.lastElementChild.classList.add("d-none");
     }
 }
 
@@ -1022,7 +1022,7 @@ async function saveEmail(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmEmailResult', 'text-danger');
         btn.disabled = false;
-        btn.lastElementChild.classList.remove("d-none");
+        btn.lastElementChild.classList.add("d-none");
     }
 }
 
@@ -1067,7 +1067,7 @@ async function updateEmail(btn) {
         console.error(error.message);
         showMessage(error.message, 'crmEmailResult', 'text-danger');
         btn.disabled = false;
-        btn.lastElementChild.classList.remove("d-none");
+        btn.lastElementChild.classList.add("d-none");
     }
 }
 
