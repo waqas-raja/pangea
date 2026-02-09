@@ -42,9 +42,21 @@ class LandRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->patch('/{id}', function (Request $request, Response $response) {
+            return Land::UpdateLandById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
 
         $group->delete('/{id}', function (Request $request, Response $response) {
             return Land::Delete($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->post('/share-pdf-file', function (Request $request, Response $response) {
+            return Land::ShareFile($request, $response);
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
