@@ -44,10 +44,25 @@
                     <i class="bi bi-check-lg"></i> Scarica il PDF
                     <div id="spinnerNewProperty" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
                 </button>
-                <!-- <button id="btnSendQuoteDraftToCustomer" type="button" class="btn btn-blue" onclick="shareLandDraftToCustomer()">
+                <button id="btnSendQuoteDraftToCustomer" type="button" class="btn btn-blue" onclick="showCustomerSelectionDiv(this)">
                     <i class="bi bi-check-lg"></i> Inviare
                     <div id="spinnerNewProperty" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
-                </button> -->
+                </button>
+            </div>
+            <div id="shareToCustomerDiv" class="px-3 d-none">
+                <div class="row mb-3">
+                    <label for="ddlSelectCustomerToSharePdf" class="col-sm-4 col-form-label">Cliente</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <select id="ddlSelectCustomerToSharePdf" class="form-select">
+                            </select>
+                            <button id="" type="button" class="btn btn-blue" onclick="sharePdfToCustomer(this)">
+                                <i class="bi bi-check-lg"></i> Inviare
+                                <div id="" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

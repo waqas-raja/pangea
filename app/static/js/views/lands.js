@@ -6,6 +6,7 @@ let _lands = {
 let _landTypeId = 1;
 document.addEventListener("DOMContentLoaded", async () => {
     await loadLandTypes();
+    loadCustomers();
 });
 
 async function loadLandTypes() {
@@ -19,6 +20,23 @@ async function loadLandTypes() {
     });
     ctrl.innerHTML = opt;
     loadLandTabsAndContent(r.payload);
+}
+
+function showCustomerSelectionDiv(btn) {
+    btn.parentNode.nextElementSibling.classList.remove('d-none');
+}
+
+async function loadCustomers() {
+    const response = await fetch('/api/customers');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlSelectCustomerToSharePdf");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona</option>';
+    r.payload.forEach(customer => {
+        if (customer.bizname !== "" && customer.bizname !== null) opt += `<option value="${customer.id}">${customer.bizname}</option>`;
+        else opt += `<option value="${customer.id}">${customer.name} ${customer.surname}</option>`;
+    });
+    ctrl.innerHTML = opt;
 }
 
 async function loadLandTabsAndContent(data) {
@@ -91,6 +109,12 @@ async function loadAgricultureLands() {
             {
                 dataField: "location",
                 caption: "Ubicazione",
+            },
+            {
+                dataField: "dt",
+                caption: "Data",
+                allowFiltering: true,
+                width: 120
             },
             {
                 dataField: "",
@@ -168,6 +192,12 @@ async function loadIndustarialLands() {
                 caption: "Ubicazione",
             },
             {
+                dataField: "dt",
+                caption: "Data",
+                allowFiltering: true,
+                width: 120
+            },
+            {
                 dataField: "",
                 caption: "Azioni",
                 // allowFiltering: true,
@@ -200,6 +230,7 @@ async function loadIndustarialLands() {
 }
 
 async function showModalLandDraft(id) {
+    document.getElementById('shareToCustomerDiv').classList.add('d-none');
     const response = await fetch(`/api/land/detail/${id}`);
     const r = await response.json();
     document.getElementById('draftLandId').textContent = id;
@@ -418,14 +449,8 @@ async function saveLand(btn) {
     }
 }
 
-function updateLand(btn) {
+async function updateLand(btn) {
     const id = document.getElementById("hLandId").value.trim();
-    // const landType = document.getElementById("ddlLandType").value.trim();
-    // if (landType === '') {
-    //     result.innerText = "È richiesta la selezione del tipo di terreno";
-    //     result.classList.remove("d-none");
-    //     return;
-    // }
     switch (parseInt(_landTypeId)) {
         case 1:
             const agricultureLandName = document.getElementById("txtAgricultureLandName").value.trim();
@@ -447,17 +472,31 @@ function updateLand(btn) {
             }
             btn.disabled = true;
             btn.lastElementChild.classList.remove('d-none');
-            // TODO: SEND LAND DATA TO API AND UPDATE...
-            let d = _lands.agriculture.find(l => l.id === id.toString());
-            d.name = agricultureLandName;
-            d.area = agricultureLandArea;
-            d.location = agricultureLandLocation;
-            btn.disabled = false;
-            btn.lastElementChild.classList.add('d-none');
-            $('#modalAddLand').modal('hide');
-            $("#AgricoloLandGrid").dxDataGrid("dispose");
-            $("#AgricoloLandGrid").empty();
-            loadAgricultureLands();
+            try {
+                const response = await fetch(`/api/land/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ "residence_type": agricultureLandName, "area": agricultureLandArea, "location": agricultureLandLocation })
+                });
+                const res = await response.json();
+                if (res.result) {
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                    $('#modalAddLand').modal('hide');
+                    $("#AgricoloLandGrid").dxDataGrid("dispose");
+                    $("#AgricoloLandGrid").empty();
+                    loadAgricultureLands();
+                } else {
+                    showMessage("Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'spNewLandResult', 'text-danger');
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                }
+            } catch (error) {
+                console.error(error.message);
+                showMessage(error.message, 'spNewLandResult', 'text-danger');
+                btn.disabled = false;
+                btn.lastElementChild.classList.add("d-none");
+            }
             break;
         case 2:
             document.getElementById("residentialLandFields").classList.add('d-none');
@@ -506,29 +545,102 @@ function updateLand(btn) {
 function deleteLand(id) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
-            // TODO: DELETE LAND API...
-            // const response = await fetch("/api/land/${id}"", {
-            //     method: "DELETE"
-            // });
-            // const res = await response.json();
-            switch (parseInt(_landTypeId)) {
-                case 1:
-                    _lands.agriculture = _lands.agriculture.filter(land => land.id !== id.toString());
-                    $("#AgricoloLandGrid").dxDataGrid("dispose");
-                    $("#AgricoloLandGrid").empty();
-                    loadAgricultureLands();
-                    break;
-                case 2:
-                    _lands.residential = _lands.residential.filter(land => land.id !== id.toString());
-                    break;
-                case 3:
-                    _lands.industarial = _lands.industarial.filter(land => land.id !== id.toString());
-                    $("#IndustrialeLandGrid").dxDataGrid("dispose");
-                    $("#IndustrialeLandGrid").empty();
-                    loadIndustarialLands();
-                    break;
+            const btn = document.getElementById('btnConfirmDelete');
+            btn.disabled = true;
+            btn.lastElementChild.classList.remove('d-none');
+            try {
+                const response = await fetch(`/api/land/${id}`, {
+                    method: "DELETE"
+                });
+                const res = await response.json();
+                if (res.result) {
+                    switch (parseInt(_landTypeId)) {
+                        case 1:
+                            // _lands.agriculture = _lands.agriculture.filter(land => land.id !== id.toString());
+                            $("#AgricoloLandGrid").dxDataGrid("dispose");
+                            $("#AgricoloLandGrid").empty();
+                            loadAgricultureLands();
+                            break;
+                        case 2:
+                            _lands.residential = _lands.residential.filter(land => land.id !== id.toString());
+                            break;
+                        case 3:
+                            // _lands.industarial = _lands.industarial.filter(land => land.id !== id.toString());
+                            $("#IndustrialeLandGrid").dxDataGrid("dispose");
+                            $("#IndustrialeLandGrid").empty();
+                            loadIndustarialLands();
+                            break;
+                    }
+                    $('#modalConfirmDelete').modal('hide');
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo record.");
+            } catch (error) {
+                btn.disabled = false;
+                btn.lastElementChild.classList.add('d-none');
+                showMessage(error.message, 'deleteErrorMessage', 'text-danger');
             }
-            $('#modalConfirmDelete').modal('hide');
         }
     });
+}
+
+async function sharePdfToCustomer(btn) {
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    const selectedCustomerId = document.getElementById('ddlSelectCustomerToSharePdf').value;
+    const el = document.getElementById('drftLandToDownloadDiv');
+    // pdf options tuned for A4
+    const opt = {
+        margin: 10,
+        // filename: `${fname || 'land-draft'}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    try {
+        const el = document.getElementById("drftLandToDownloadDiv");
+        const blob = await generatePdfBlob(el);
+        const fileId = Date.now();
+        const fd = new FormData();
+        fd.append("file", blob, `land-draft.pdf`);
+        fd.append("customer_id", selectedCustomerId);
+        fd.append("file_id", fileId);
+        const response = await fetch(`/api/land/share-pdf-file`, {
+            method: "POST",
+            body: fd
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            document.getElementById('shareToCustomerDiv').classList.add('d-none');
+            showMessage('File condiviso correttamente', 'resultLandDraft', 'text-success');
+        } else throw new Error("Download del file non riuscito.");
+    } catch (error) {
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        showMessage(error.message || 'Download del file non riuscito', 'resultLandDraft', 'text-danger');
+    }
+}
+
+async function generatePdfBlob(el) {
+    const opt = {
+        margin: 10,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    // load script if needed
+    if (typeof html2pdf === "undefined") {
+        await new Promise(resolve => {
+            const s = document.createElement("script");
+            s.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js";
+            s.onload = resolve;
+            document.body.appendChild(s);
+        });
+    }
+    const blob = await html2pdf()
+        .set(opt)
+        .from(el)
+        .toPdf()
+        .outputPdf("blob");
+    return blob;
 }

@@ -57,9 +57,11 @@ async function loadCustomers() {
                 // sortIndex: 3, sortOrder: "asc"
             },
             {
-                dataField: "",
+                dataField: "labels",
                 caption: "Etichetta persona",
                 width: 200,
+                allowFiltering: true,
+                cssClass: "text-capitalize"
                 // sortIndex: 3, sortOrder: "asc"
             },
             {
@@ -132,9 +134,10 @@ async function saveCustomer() {
     const email = document.getElementById("txtEmail").value.trim();
     const phone = document.getElementById("txtPhone").value.trim();
     const tag = document.getElementById("ddlTag");
-    const tags = Array.from(tag.options)
+    let tags = Array.from(tag.options)
     .filter(option => option.selected)
     .map(option => option.value);
+    tags = tags.join(", ");
     const isCompany = document.getElementById("ckIsCompany").checked;
     let bizname = document.getElementById("txtBizname").value.trim();
     let vat = document.getElementById("txtVat").value.trim();

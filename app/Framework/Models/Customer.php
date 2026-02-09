@@ -42,8 +42,9 @@ final class Customer {
             $phone = $data['phone'] ?? "";
             $bizname = $data['bizname'] ?? null;
             $vat = $data['vat'] ?? null;
-            $q = "INSERT INTO customer (name, surname, email, phone, bizname, vat) VALUES (?,?,?,?,?,?)";
-            $params = [$name, $surname, $email, $phone, $bizname, $vat];
+            $tags = $data['tags'] ?? null;
+            $q = "INSERT INTO customer (name, surname, email, phone, bizname, vat, labels) VALUES (?,?,?,?,?,?,?)";
+            $params = [$name, $surname, $email, $phone, $bizname, $vat, $tags];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert customer", 500);
             $last_inserted_id = DB::$LastId;
