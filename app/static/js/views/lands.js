@@ -187,7 +187,7 @@ async function loadIndustarialLands() {
             {
                 dataField: "id",
                 caption: "ID",
-                width: 80,
+                width: 50,
                 allowFiltering: false,
                 cellTemplate: function (container, options) {
                     container.html(`<div class="text-start">${options.data.id}</div>`);
@@ -200,7 +200,7 @@ async function loadIndustarialLands() {
             {
                 dataField: "area",
                 caption: "Superficie",
-                width: 200,
+                width: 120,
                 cellTemplate: function (container, options) {
                     const area = formatNumber(parseInt(options.data.surface_area));
                     container.text(area.slice(0, -2) + ' (mq)');
@@ -209,6 +209,25 @@ async function loadIndustarialLands() {
             {
                 dataField: "location",
                 caption: "Ubicazione",
+                width: 200,
+            },
+            {
+                dataField: "",
+                caption: "Documenti",
+                // width: 250,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <div>
+                                <input type="file" id="uploadLandDocument_${options.data.id}" hidden multiple onchange="uploadLanDocuments(this, ${options.data.id})">
+                                <i class="bi bi-file-earmark-arrow-up me-2" title="Carica documenti" onclick="document.getElementById('uploadLandDocument_${options.data.id}').click()"></i>
+                                <span id="spinnerDocumentUpload_${options.data.id}" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></span>
+                                <span id="resultDocumentUpload_${options.data.id}" class="d-none" role="status"></span>
+                            </div>
+                            <div id="land_document_${options.data.id}" class="row">
+                        `;
+                    container.html(html);
+                    loadLandDocuments(options.data.id);
+                }
             },
             {
                 dataField: "dt",
@@ -220,7 +239,7 @@ async function loadIndustarialLands() {
                 dataField: "",
                 caption: "Azioni",
                 // allowFiltering: true,
-                width: 85,
+                width: 90,
                 cellTemplate: function (container, options) {
                     const html = `
                             <i class="bi bi-file-earmark-pdf me-2" onclick="showModalLandDraft(${options.data.id})"></i>
@@ -545,18 +564,32 @@ async function updateLand(btn) {
             }
             btn.disabled = true;
             btn.lastElementChild.classList.remove('d-none');
-            // TODO: SEND LAND DATA TO API AND UPDATE...
-            let industarialData = _lands.industarial.find(l => l.id === id.toString());
-            industarialData.industry_type = industaryType;
-            industarialData.name = industarialLandName;
-            industarialData.area = industarialLandArea;
-            industarialData.location = industarialLandLocation;
-            btn.disabled = false;
-            btn.lastElementChild.classList.add('d-none');
-            $('#modalAddLand').modal('hide');
-            $("#IndustrialeLandGrid").dxDataGrid("dispose");
-            $("#IndustrialeLandGrid").empty();
-            loadIndustarialLands();
+            try {
+                const response = await fetch(`/pai/pangea/api/land/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ "residence_type": industarialLandName, "area": industarialLandArea, "location": industarialLandLocation })
+                });
+                const res = await response.json();
+                if (res.result) {
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                    $('#modalAddLand').modal('hide');
+                    $("#IndustrialeLandGrid").dxDataGrid("dispose");
+                    $("#IndustrialeLandGrid").empty();
+                    loadIndustarialLands();
+                } else {
+                    showMessage("Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'spNewLandResult', 'text-danger');
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                }
+            } catch (error) {
+                console.error(error.message);
+                showMessage(error.message, 'spNewLandResult', 'text-danger');
+                btn.disabled = false;
+                btn.lastElementChild.classList.add("d-none");
+            }
+    
             break;
     }
 }
