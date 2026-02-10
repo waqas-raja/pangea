@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initHtmlEditor('txtAppointmentNote');
     loadEmails();
     initHtmlEditor('txtEmailContent');
+    loadPersonPropertyMargin();
 
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
@@ -1097,3 +1098,94 @@ function deleteEmail(id) {
     });
 }
 /*************************CRM EMAILS MANAGEMENT END*************************** */
+
+function loadPersonPropertyMargin() {
+    $("#personPropertyMargins").dxDataGrid({
+        dataSource: [],
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        searchPanel: {
+            visible: true,
+            width: 300,
+            placeholder: "Cerca..."
+        },
+        noDataText: "Nessun record trovato",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: false, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                alignment: "left",
+                width: 100,
+            },
+            {
+                dataField: "dt",
+                caption: "Data",
+                allowFiltering: true,
+                width: 150,
+                // sortIndex: 5, sortOrder: "asc",
+                cellTemplate: function (container, options) {
+                    const data = options.data;
+                    let date = data.dt.split(' ')[0];
+                    date = date.split('-');
+                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.dt.split(' ')[1]);
+                }
+            },
+            {
+                dataField: "subject",
+                caption: "Soggetto",
+                // allowFiltering: true,
+            },
+            {
+                dataField: "content",
+                caption: "Contenuto",
+                // allowFiltering: true,
+                cellTemplate: function (container, options) {
+                    container.html(options.data.content);
+                }
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                allowFiltering: true,
+                width: 60,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-pencil-square me-2" onclick="showNewEmailModal(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteEmail(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            items: [
+                {
+                    visible: false,
+                    name: "searchPanel",
+                    location: "before"
+                },
+                "groupPanel",
+            ]
+        },
+        onRowClick: function (e) {
+            // if (e.rowType === "data") window.location = `/estimate/${e.data.id}`;
+        },
+    });
+}
+
+function showNewMarginModal() {
+    const modalElement = document.getElementById("modalAddPersonPropertyMargin");
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}

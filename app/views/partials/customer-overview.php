@@ -208,3 +208,14 @@
         </div>
     </div>
 </div>
+<div class="row mb-3">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="pai-card position-relative cardHeight">
+            <div class="d-flex align-items-center justify-content-between">
+                <h3 class="pai-title">Margini immobiliari</h3>
+                <button class="btn btn-blue" onclick="showNewMarginModal()">Nuovi margini</button>
+            </div>
+            <div id="personPropertyMargins"></div>
+        </div>
+    </div>
+</div>
