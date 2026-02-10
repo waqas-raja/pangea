@@ -162,4 +162,73 @@ final class Land
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function UploadLandDocument($request, $response) {
+        try {
+            $landId = $_POST['land_id'];
+            $destinationDir = __DIR__ . "../../../static/imgs/land_".$landId."/";
+            if(!is_dir($destinationDir)) mkdir($destinationDir, 0755, true);
+            $files = $_FILES['documents'];
+            foreach ($_FILES['documents']['name'] as $i => $name) {
+                $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+                // $newName = time() . "_" . basename($name);
+                $path = $destinationDir . basename($name);
+                if (file_exists($path)) unlink($path);
+                move_uploaded_file($_FILES['documents']['tmp_name'][$i], $path);
+            }
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, "error" => 'Impossibile caricare i documenti di immobile']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function GetLandDocuments($request, $response) {
+        try {
+            $landId = (int)$request->getAttribute('id');
+            $destinationDir = __DIR__ . "../../../static/imgs/land_".$landId."/";
+            $files = [];
+            if (is_dir($destinationDir)) {
+                foreach (scandir($destinationDir) as $file) {
+                    if ($file !== '.' && $file !== '..') {
+                        $files[] = [
+                            'name' => $file,
+                            'path' => $destinationDir . $file,
+                            'size' => filesize($destinationDir . $file),
+                            'modified' => date("Y-m-d H:i:s", filemtime($destinationDir . $file))
+                        ];
+                    }
+                }
+            }
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $files]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, "error" => 'Impossibile ottenere i documenti di immobile']));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function DeleteLandDocument($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $fname = $request->getAttribute('name');
+            $destinationDoc = __DIR__ . "../../../static/imgs/land_" . $id . "/" . $fname;
+            if (file_exists($destinationDoc)) unlink($destinationDoc);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, "error" => "Si è verificato un errore durante l'eliminazione di questo documento"]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
 }
