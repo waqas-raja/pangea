@@ -6,6 +6,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
 require_once __DIR__ . "/../modals/crm-add-call.php";
 require_once __DIR__ . "/../modals/crm-add-appointment.php";
 require_once __DIR__ . "/../modals/crm-add-email.php";
+require_once __DIR__ . "/../modals/add-person-property-margin.php";
 ?>
 
 <input id="hCustomerId" type="hidden" value="<?= $cid ?>">
