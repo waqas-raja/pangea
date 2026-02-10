@@ -121,7 +121,7 @@ body { font-family:"Lato", serif; font-size: 16px; }
 #crmActivityCardTabs .nav-item .nav-link.active,
 #settings .nav-item .nav-link.active,
 #land-overview .nav-item .nav-link.active { color: var(--primary-blue) !important; }
-#propertyDocumentList .docSection:hover .delDocument,
+.docSection:hover .delDocument,
 #propertyValuationDocumentList .docSection:hover .delDocument { display: block !important; }
 #previewProfilePhoto:hover div { display: block !important; cursor: pointer; }
 .dx-datagrid-headers .dx-header-row > td { text-align: left !important; }

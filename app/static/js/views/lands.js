@@ -87,7 +87,7 @@ async function loadAgricultureLands() {
             {
                 dataField: "id",
                 caption: "ID",
-                width: 80,
+                width: 50,
                 allowFiltering: false,
                 cellTemplate: function (container, options) {
                     container.html(`<div class="text-start">${options.data.id}</div>`);
@@ -100,7 +100,7 @@ async function loadAgricultureLands() {
             {
                 dataField: "area",
                 caption: "Superficie",
-                width: 200,
+                width: 120,
                 cellTemplate: function (container, options) {
                     const area = formatNumber(parseInt(options.data.surface_area));
                     container.text(area.slice(0, -2) + ' (mq)');
@@ -109,6 +109,25 @@ async function loadAgricultureLands() {
             {
                 dataField: "location",
                 caption: "Ubicazione",
+                width: 200,
+            },
+            {
+                dataField: "",
+                caption: "Documenti",
+                // width: 250,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <div>
+                                <input type="file" id="uploadLandDocument_${options.data.id}" hidden multiple onchange="uploadLanDocuments(this, ${options.data.id})">
+                                <i class="bi bi-file-earmark-arrow-up me-2" title="Carica documenti" onclick="document.getElementById('uploadLandDocument_${options.data.id}').click()"></i>
+                                <span id="spinnerDocumentUpload_${options.data.id}" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></span>
+                                <span id="resultDocumentUpload_${options.data.id}" class="d-none" role="status"></span>
+                            </div>
+                            <div id="land_document_${options.data.id}" class="row">
+                        `;
+                    container.html(html);
+                    loadLandDocuments(options.data.id);
+                }
             },
             {
                 dataField: "dt",
@@ -643,4 +662,113 @@ async function generatePdfBlob(el) {
         .toPdf()
         .outputPdf("blob");
     return blob;
+}
+
+async function uploadLanDocuments(ele, id) {
+    const files = ele.files;
+    const allowedExtensions = ['pdf', 'docx', 'jpg', 'jpeg', 'png'];
+    for (let file of files) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            showMessage(`Tipo di file non consentito: ${file.name}`, `resultDocumentUpload_${id}`, 'text-danger')
+            return;
+        }
+    }
+    ele.parentNode.children[2].classList.remove('d-none');
+    const formData = new FormData();
+    formData.append("land_id", id);
+    for (let file of files) formData.append("documents[]", file);
+    try {
+        const response = await fetch("/api/land/upload-document", {
+            method: "POST",
+            body: formData
+        });
+        const res = await response.json();
+        if (res.result) {
+            await loadLandDocuments(id);
+            ele.parentNode.children[2].classList.add('d-none');
+            showMessage('Documenti caricati con successo', `resultDocumentUpload_${id}`, 'text-success')
+        } else throw new Error("Errore durante il caricamento dei documenti immobiliari.");
+    } catch (error) {
+        ele.parentNode.children[2].classList.add('d-none');
+        showMessage(error.message, `resultDocumentUpload_${id}`, 'text-danger');
+    }
+}
+
+async function loadLandDocuments(id) {
+    try {
+        const div = document.getElementById(`land_document_${id}`);
+        div.innerHTML = '';
+        const response = await fetch(`/api/land/get-document/${id}`);
+        const res = await response.json();
+        if (res.result) {
+            if (res.payload.length === 0) {
+                div.innerHTML = '<p class="w-100 text-black-50 text-center">Nessun documento caricato ancora</p>';
+                return;
+            }
+            const icons = ['bi-file-earmark-pdf', 'bi-filetype-doc', 'bi-filetype-docx', 'bi-file-earmark-image'];
+            let str = '';
+            for (let file of res.payload) {
+                const ext = file.name.split('.').pop().toLowerCase();
+                let icon = '';
+                switch (ext) {
+                    case 'png':
+                    case 'jpg':
+                    case 'jpeg': icon = icons[3]; break;
+                    case 'pdf': icon = icons[0]; break;
+                    case 'doc': icon = icons[1]; break;
+                    case 'docx': icon = icons[2]; break;
+                }
+                const fname = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+                str += `<div class="col-sm-4 mb-3">
+                            <div class="docSection d-flex justify-content-center align-items-center border rounded-3 position-relative" style="height: auto;">
+                                <div class="position-absolute delDocument" style="display:none; right: -16px;top:-10px;">
+                                    <span class="rounded-3 p-1 me-1" role="button" onclick="openInNewTab(${id}, '${file.name}')" title="Scaricamento" style="background-color: #0dcaf020;">
+                                        <i class="bi bi-eye fs-6 text-info"></i>
+                                    </span>
+                                    <span class="rounded-3 p-1" role="button" onclick="deleteDocument(${id}, this)" title="Eliminare" style="background-color: #ff000010;">
+                                        <i class="bi bi-trash3 fs-6 text-danger"></i>
+                                    </span>
+                                </div>
+                                <div class="card-body text-center">
+                                    <i class="bi ${icon} fs-3"></i>
+                                    <p class="d-none" data-filename="${file.name}"></p>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+            div.insertAdjacentHTML("beforeend", str);
+        } else throw new Error(res.error);
+    } catch (error) {
+        showMessage(error.message, `resultDocumentUpload_${id}`, 'text-danger')
+    }
+}
+
+function openInNewTab(id, fileName) {
+    const url = `http://localhost:8080/static/imgs/land_${id}/${fileName}`;
+    window.open(url, '_blank').focus();
+}
+
+async function deleteDocument(id, el) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            const fname = el.parentElement.nextElementSibling.lastElementChild.dataset.filename;
+            const spinner = document.getElementById(`spinnerDocumentUpload_${id}`);
+            spinner.classList.remove('d-none');
+            try {
+                const response = await fetch(`/api/land/delete-document/${id}/${fname}`, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#modalConfirmDelete").modal('hide');
+                    el.parentNode.parentNode.parentNode.remove();
+                    spinner.classList.add('d-none');
+                    showMessage('Documento eliminato con successo', `resultDocumentUpload_${id}`, 'text-success')
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo documento.");
+            } catch (error) {
+                $("#modalConfirmDelete").modal('hide');
+                spinner.classList.add('d-none');
+                showMessage(error.message, `resultDocumentUpload_${id}`, 'text-danger');
+            }
+        }
+    });
 }
