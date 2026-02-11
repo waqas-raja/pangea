@@ -211,7 +211,7 @@
 <div class="row mb-3">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <div class="pai-card position-relative cardHeight">
-            <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center justify-content-between mb-3">
                 <h3 class="pai-title">Margini immobiliari</h3>
                 <button class="btn btn-blue" onclick="showNewMarginModal()">Nuovi margini</button>
             </div>

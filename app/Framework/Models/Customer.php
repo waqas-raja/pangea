@@ -425,5 +425,108 @@ final class Customer {
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public static function GetAllPersonPropertyMargin($request, $response) {
+        try {
+            $q = <<<query
+                select 
+                    ppm.*,
+                    c.name as customer_name,
+                    c.surname as customer_surname,
+                    p.alias as property_alias
+                from person_property_margin as ppm
+                left join customer as c on ppm.customer_id = c.id
+                left join property as p on ppm.property_id = p.id
+            query;
+            $rows = DB::Query($q);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $rows]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function SavePersonPropertyMargin($request, $response) {
+        try {
+            $data = json_decode($request->getBody()->getContents(), true);
+            $person = (int)$data['person'] ?? "";
+            $property = (int)$data['property'] ?? "";
+            $marginValue = (float)$data['margin_value'] ?? 0;
+            $marginValueType = (int)$data['margin_value_type'] ?? 0;
+            $currency = $data['currency'] ?? '';
+            $usageType = $data['usage_type'] ?? '';
+            $priority = (int)$data['priority'] ?? 1;
+            $status = (int)$data['status'] ?? 1;
+            $validFrom = $data['valid_from'] ?? null;
+            $validTo = $data['valid_to'] ?? null;
+            $date = new DateTime("now", new DateTimeZone("Europe/Rome"));
+            $formatedDate = $date->format("Y-m-d H:i:s");
+            $q = "INSERT INTO person_property_margin (customer_id, property_id, is_perc, margin_value, currency, usage_type, priority, is_active, valid_from, valid_to, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            $params = [$person, $property, $marginValueType, $marginValue, $currency, $usageType, $priority, $status, $validFrom, $validTo, $formatedDate, $formatedDate];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Errore durante il salvataggio del margine di proprietà della persona", 500);
+            $last_inserted_id = DB::$LastId;
+            $response->getBody()->write(json_encode(["result" => true, "id" => $last_inserted_id]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function UpdatePersonPropertyMargin($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $data = json_decode($request->getBody()->getContents(), true);
+            $person = (int)$data['person'] ?? "";
+            $property = (int)$data['property'] ?? "";
+            $marginValue = (float)$data['margin_value'] ?? 0;
+            $marginValueType = (int)$data['margin_value_type'] ?? 0;
+            $currency = $data['currency'] ?? '';
+            $usageType = $data['usage_type'] ?? '';
+            $priority = (int)$data['priority'] ?? 1;
+            $status = (int)$data['status'] ?? 1;
+            $validFrom = $data['valid_from'] ?? null;
+            $validTo = $data['valid_to'] ?? null;
+            $date = new DateTime("now", new DateTimeZone("Europe/Rome"));
+            $formatedDate = $date->format("Y-m-d H:i:s");
+            $q = "UPDATE person_property_margin SET customer_id = ?, property_id = ?, is_perc = ?, margin_value = ?, currency = ?, usage_type = ?, priority = ?, is_active = ?, valid_from = ?, valid_to = ?, updated_at = ? WHERE id = ?";
+            $params = [$person, $property, $marginValueType, $marginValue, $currency, $usageType, $priority, $status, $validFrom, $validTo, $formatedDate, $id];
+            $row_affected = DB::Execute($q, $params);
+            if ($row_affected == 0) throw new Exception("Si sono verificati degli errori durante l'aggiornamento del margine di proprietà della persona", 500);
+            $last_inserted_id = DB::$LastId;
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function DeletePersonPropertyMarginById($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $row_affected = DB::Execute("DELETE FROM person_property_margin WHERE id = ?", [$id]);
+            if ($row_affected == 0) throw new Exception("Errore durante l'eliminazione del margine di proprietà della persona", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
 
 }

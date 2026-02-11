@@ -16,12 +16,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     initHtmlEditor('txtAppointmentNote');
     loadEmails();
     initHtmlEditor('txtEmailContent');
+    loadCustomers();
+    loadProperties();
     loadPersonPropertyMargin();
 
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
     document.getElementById("ddlState").addEventListener("change", loadMap);
 });
+
+async function loadCustomers() {
+    const response = await fetch('/api/customers');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlMarginPerson");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona</option>';
+    r.payload.forEach(customer => {
+        if (customer.bizname !== "" && customer.bizname !== null) opt += `<option value="${customer.id}">${customer.bizname}</option>`;
+        else opt += `<option value="${customer.id}">${customer.name} ${customer.surname}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
+
+async function loadProperties() {
+    const response = await fetch('/api/properties');
+    const r = await response.json();
+    let ctrl = document.getElementById("ddlMarginProperty");
+    ctrl.innerHTML = '';
+    let opt = '<option value="" selected>Seleziona</option>';
+    r.payload.forEach(p => {
+        opt += `<option value="${p.id}">${p.alias}</option>`;
+    });
+    ctrl.innerHTML = opt;
+}
 
 async function loadCustomerDetail() {
     const response = await fetch('/api/customer/' + customerId);
@@ -1099,9 +1126,12 @@ function deleteEmail(id) {
 }
 /*************************CRM EMAILS MANAGEMENT END*************************** */
 
-function loadPersonPropertyMargin() {
+async function loadPersonPropertyMargin() {
+    const response = await fetch(`/api/customer/margin/person-property-margin`);
+    const r = await response.json();
+    const hasData = r.payload.length > 0;
     $("#personPropertyMargins").dxDataGrid({
-        dataSource: [],
+        dataSource: r.payload,
         keyExpr: "id",
         showBorders: true,
         columnAutoWidth: true,
@@ -1119,35 +1149,53 @@ function loadPersonPropertyMargin() {
         headerFilter: { visible: false },
         columns: [
             {
-                dataField: "id",
-                caption: "ID",
+                dataField: "property_alias",
+                caption: "Immobili",
                 alignment: "left",
-                width: 100,
+                width: 150,
             },
             {
-                dataField: "dt",
-                caption: "Data",
-                allowFiltering: true,
-                width: 150,
-                // sortIndex: 5, sortOrder: "asc",
+                dataField: "is_perc",
+                caption: "Tipo di margine",
+                alignment: "left",
+                width: 130,
                 cellTemplate: function (container, options) {
-                    const data = options.data;
-                    let date = data.dt.split(' ')[0];
-                    date = date.split('-');
-                    container.text(date[2] + '/' + date[1] + '/' + date[0] + ' ' + data.dt.split(' ')[1]);
+                    container.text(options.data.is_perc === 1 ? 'Percentuale' : 'Valore fisso');
                 }
             },
             {
-                dataField: "subject",
-                caption: "Soggetto",
-                // allowFiltering: true,
+                dataField: "margin_value",
+                caption: "Valore del margine",
+                alignment: "left",
+                width: 140,
+                cellTemplate: function (container, options) {
+                    container.text(formatNumber(options.data.margin_value));
+                }
             },
             {
-                dataField: "content",
-                caption: "Contenuto",
-                // allowFiltering: true,
+                dataField: "usage_type",
+                caption: "Utilizzo",
+                alignment: "left",
+                // width: 100,
+            },
+            {
+                dataField: "valid_from",
+                caption: "Valido dal",
+                alignment: "left",
+                width: 150,
+            },
+            {
+                dataField: "valid_to",
+                caption: "Valido fino al",
+                alignment: "left",
+                width: 150,
+            },
+            {
+                dataField: "is_active",
+                caption: "Stato",
+                width: 60,
                 cellTemplate: function (container, options) {
-                    container.html(options.data.content);
+                    container.html(`<div class='text-center'>${options.data.is_active === 1 ? '<span class="badge p-2 rounded-circle bg-success"> </span>' : '<span class="badge p-2 rounded-circle bg-danger"> </span>'}</div>`);
                 }
             },
             {
@@ -1156,11 +1204,18 @@ function loadPersonPropertyMargin() {
                 allowFiltering: true,
                 width: 60,
                 cellTemplate: function (container, options) {
-                    const html = `
-                            <i class="bi bi-pencil-square me-2" onclick="showNewEmailModal(${options.data.id})"></i>
-                            <i class="bi bi-trash3 text-danger" onclick="deleteEmail(${options.data.id})"></i>
-                        `;
-                    container.html(html);
+                    const editBtn = $("<i>")
+                        .addClass("bi bi-pencil-square me-2 cursor-pointer")
+                        .data("row", options.data)
+                        .on("click", function () {
+                            showNewMarginModal($(this).data("row"));
+                        });
+                    const delBtn = $("<i>")
+                        .addClass("bi bi-trash3 text-danger cursor-pointer")
+                        .on("click", function () {
+                            deleteMargin(options.data.id);
+                        });
+                    container.append(editBtn, delBtn);
                 }
             },
         ],
@@ -1169,9 +1224,10 @@ function loadPersonPropertyMargin() {
         paging: { pageSize: 10 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
+            visible: hasData,
             items: [
                 {
-                    visible: false,
+                    // visible: false,
                     name: "searchPanel",
                     location: "before"
                 },
@@ -1184,8 +1240,150 @@ function loadPersonPropertyMargin() {
     });
 }
 
-function showNewMarginModal() {
+function showNewMarginModal(data = null) {
+    if (data === null) {
+        document.getElementById('modalAddPersonPropertyMarginLabel').innerHTML = `<i class="bi bi-terminal-split me-3"></i></i>Nuovi margini`;
+        document.getElementById('ddlMarginPerson').value = '';
+        document.getElementById('ddlMarginProperty').value = '';
+        document.getElementById('txtMarginValue').value = '';
+        document.getElementById('ddlMarginValueType').value = 1;
+        document.getElementById('ddlMarginCurrency').value = 1;
+        document.getElementById('txtMarginUsageType').value = '';
+        document.getElementById('ddlMarginPriority').value = 1;
+        document.getElementById('swMarginStatus').checked;
+        document.getElementById('txtMarginValidFrom').value = '';
+        document.getElementById('txtMarginValidTo').value = '';
+        document.getElementById('btnSavePersonPropertyMargin').classList.remove('d-none');
+        document.getElementById('btnUpdatePersonPropertyMargin').classList.add('d-none');
+    } else {
+        document.getElementById('modalAddPersonPropertyMarginLabel').innerHTML = `<i class="bi bi-terminal-split me-3"></i></i>Modifica margini`;
+        document.getElementById('hPersonPropertyMarginId').value = data.id;
+        document.getElementById('ddlMarginPerson').value = data.customer_id;
+        document.getElementById('ddlMarginProperty').value = data.property_id;
+        document.getElementById('txtMarginValue').value = parseInt(data.margin_value);
+        document.getElementById('ddlMarginValueType').value = data.is_perc;
+        document.getElementById('ddlMarginCurrency').value = data.currency;
+        document.getElementById('txtMarginUsageType').value = data.usage_type;
+        document.getElementById('ddlMarginPriority').value = data.priority;
+        document.getElementById('swMarginStatus').checked == data.is_active;
+        document.getElementById('txtMarginValidFrom').value = data.valid_from;
+        document.getElementById('txtMarginValidTo').value = data.valid_to;
+        document.getElementById('btnSavePersonPropertyMargin').classList.add('d-none');
+        document.getElementById('btnUpdatePersonPropertyMargin').classList.remove('d-none');
+    }
+
     const modalElement = document.getElementById("modalAddPersonPropertyMargin");
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
+}
+
+async function savePersonPropertyMargin(btn) {
+    const person = document.getElementById('ddlMarginPerson').value;
+    const property = document.getElementById('ddlMarginProperty').value;
+    const marginValue = document.getElementById('txtMarginValue').value;
+    const marginValueType = document.getElementById('ddlMarginValueType').value;
+    const currency = document.getElementById('ddlMarginCurrency').value;
+    const usageType = document.getElementById('txtMarginUsageType').value;
+    const priority = document.getElementById('ddlMarginPriority').value;
+    const status = document.getElementById('swMarginStatus').checked == true ? 1 : 0;
+    const validFrom = document.getElementById('txtMarginValidFrom').value;
+    const validTo = document.getElementById('txtMarginValidTo').value;
+    if (!person || !property || !marginValue || !usageType) {
+        if (person === '') { showMessage('Il campo persona è obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+        if (property === '') { showMessage('Il campo immobili è obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+        if (marginValue === '') { showMessage('Il campo valore è obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+        if (usageType === '') { showMessage('Il campo tipo di utilizzo obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    try {
+        const response = await fetch(`/api/customer/margin/person-property-margin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "person": person, "property": property, "margin_value": marginValue, "margin_value_type": marginValueType, "currency": currency, "usage_type": usageType, "priority": priority, "status": status, "valid_from": validFrom, "valid_to": validTo })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddPersonPropertyMargin').modal('hide');
+            $("#personPropertyMargins").dxDataGrid("dispose");
+            $("#personPropertyMargins").empty();
+            loadPersonPropertyMargin();
+        } else throw new Error(res.message || "Si sono verificati degli errori durante il salvataggio del margine di proprietà della persona.");
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'resultPersonPropertyMargin', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.add("d-none");
+    }
+}
+
+async function updatePersonPropertyMargin(btn) {
+    const id = document.getElementById('hPersonPropertyMarginId').value;
+    const person = document.getElementById('ddlMarginPerson').value;
+    const property = document.getElementById('ddlMarginProperty').value;
+    const marginValue = document.getElementById('txtMarginValue').value;
+    const marginValueType = document.getElementById('ddlMarginValueType').value;
+    const currency = document.getElementById('ddlMarginCurrency').value;
+    const usageType = document.getElementById('txtMarginUsageType').value;
+    const priority = document.getElementById('ddlMarginPriority').value;
+    const status = document.getElementById('swMarginStatus').checked == true ? 1 : 0;
+    const validFrom = document.getElementById('txtMarginValidFrom').value;
+    const validTo = document.getElementById('txtMarginValidTo').value;
+    if (!person || !property || !marginValue || !usageType) {
+        if (person === '') { showMessage('Il campo persona è obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+        if (property === '') { showMessage('Il campo immobili è obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+        if (marginValue === '') { showMessage('Il campo valore è obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+        if (usageType === '') { showMessage('Il campo tipo di utilizzo obbligatorio', 'resultPersonPropertyMargin', 'text-danger'); return; }
+    }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
+    try {
+        const response = await fetch(`/api/customer/margin/person-property-margin/${id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "person": person, "property": property, "margin_value": marginValue, "margin_value_type": marginValueType, "currency": currency, "usage_type": usageType, "priority": priority, "status": status, "valid_from": validFrom, "valid_to": validTo })
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            $('#modalAddPersonPropertyMargin').modal('hide');
+            $("#personPropertyMargins").dxDataGrid("dispose");
+            $("#personPropertyMargins").empty();
+            loadPersonPropertyMargin();
+        } else throw new Error(res.message || "Si sono verificati degli errori durante l'aggiornamento del margine di proprietà della persona.");
+    } catch (error) {
+        console.error(error.message);
+        showMessage(error.message, 'resultPersonPropertyMargin', 'text-danger');
+        btn.disabled = false;
+        btn.lastElementChild.classList.add("d-none");
+    }
+}
+
+function deleteMargin(id) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            const btn = document.getElementById('btnConfirmDelete');
+            btn.disabled = true;
+            btn.lastElementChild.classList.remove('d-none');
+            try {
+                const response = await fetch(`/api/customer/margin/person-property-margin/${id}`, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#personPropertyMargins").dxDataGrid("dispose");
+                    $("#personPropertyMargins").empty();
+                    loadPersonPropertyMargin();
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                    $('#modalConfirmDelete').modal('hide');
+                } else throw new Error(res.message || "Si è verificato un errore durante l'eliminazione di questo record.");
+            } catch (error) {
+                btn.disabled = true;
+                btn.lastElementChild.classList.add('d-none');
+                showMessage(error.message, 'deleteErrorMessage', 'text-danger');
+            }
+        }
+    });
 }

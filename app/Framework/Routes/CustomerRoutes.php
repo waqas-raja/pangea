@@ -147,6 +147,30 @@ class CustomerRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/margin/person-property-margin', function (Request $request, Response $response) {
+            return Customer::GetAllPersonPropertyMargin($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->post('/margin/person-property-margin', function (Request $request, Response $response) {
+            return Customer::SavePersonPropertyMargin($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->patch('/margin/person-property-margin/{id}', function (Request $request, Response $response) {
+            return Customer::UpdatePersonPropertyMargin($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->delete('/margin/person-property-margin/{id}', function (Request $request, Response $response) {
+            return Customer::DeletePersonPropertyMarginById($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 
