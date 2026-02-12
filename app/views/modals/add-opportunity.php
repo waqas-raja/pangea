@@ -78,7 +78,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtNote" class="col-sm-4 col-form-label">Note<span class="text-danger ms-2">*</span></label>
+                                <label for="txtNote" class="col-sm-4 col-form-label">Note</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="txtNote" required>
                                 </div>

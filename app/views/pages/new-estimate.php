@@ -12,7 +12,7 @@ ob_start();
                 <span class="text-muted text-small">Crea un nuovo preventivo per un cliente e un immobile.</span>
             </div>
             <div class="d-flex justify-content-between align-items-center gap-2">
-                <button type="button" id="btnCancel" class="btn btn-light border" onclick="">Annulla</button>
+                <button type="button" id="btnCancel" class="btn btn-light border" onclick="cancelEstimation()">Annulla</button>
                 <button id="btnSaveNewEstimate" type="button" class="btn btn-blue" onclick="saveNewEstimate()" disabled>
                     <i class="bi bi-check-lg"></i> Salva preventivo
                     <div id="spinnerNewEstimate" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></div>
@@ -52,7 +52,7 @@ ob_start();
                             <span class="w-40">Giorni affittati stimati</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center gap-3">
-                            <span style="width: 20%;">Gennio</span>
+                            <span style="width: 20%;">Gennaio</span>
                             <input type="number" id="averageJen" class="form-control w-40" maxlength="5" value="0" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); calculateEstimate()">
                             <input type="number" id="estimatedJen" class="form-control w-40" maxlength="5" value="0" placeholder="0" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); calculateEstimate()">
                         </div>
@@ -152,12 +152,9 @@ ob_start();
             <div class="pai-card">
                 <div class="pai-title mb-3 fw-bold">Dati generali</div>
                 <div class="alert alert-primary text-center p-3">
-                    <span>Rendita annu lorda stimata</span><br>
+                    <span>Rendita annuale lorda stimata</span><br>
                     <span id="calculatedTotal" class="fs-3 fw-bold mt-3">0,00 &euro;</span>
                 </div>
-                <button id="btnCalculateEstimate" class="btn bg-green p-2 text-white w-100 mb-3" onclick="calculateEstimate()">
-                    <i class="bi bi-file-earmark-diff me-2"></i>Calcola rendita
-                </button>
                 <div class="text-center text-body-tertiary">
                     Clicca "Calcola Rendita" per aggiornare la stima. Il pulsante "Salva Preventivo" si attivera dopo il primo calcolo.
                 </div>

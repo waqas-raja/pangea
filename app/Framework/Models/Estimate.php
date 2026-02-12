@@ -111,6 +111,7 @@ final class Estimate
                     e.*,
                     c.name as customer_name,
                     c.surname as customer_surname,
+                    c.bizname as customer_bizname,
                     c.email as customer_email,
                     c.phone as customer_phone,
                     p.address as propert_address,

@@ -157,7 +157,7 @@ async function saveOpportunity() {
     const result = document.getElementById("spNewOpportunityResult");
     result.innerHTML = '';
     result.classList.add("d-none");
-    if (alias === '' || source === '' || propertyType === '' || propertyStatus === '' || size === '' || price === '' || address === '' || city === '' || state === '' || tax === '' || note === '') {
+    if (alias === '' || source === '' || propertyType === '' || propertyStatus === '' || size === '' || price === '' || address === '' || city === '' || state === '' || tax === '') {
         result.classList.remove("d-none");
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
         if (source === '') { result.innerText = "La fonte è obbligatoria"; return; }
@@ -169,7 +169,6 @@ async function saveOpportunity() {
         if (propertyStatus === '') { result.innerText = "È richiesto lo stato dell'opportunità"; return; }
         if (price === '') { result.innerText = "Il prezzo è richiesto con un numero valido"; return; }
         if (tax === '') { result.innerText = "La tassa è richiesta con un numero valido"; return; }
-        if (note === '') { result.innerText = "La nota è obbligatoria"; return; }
     }
     if (refEmail !== "" && !isValidEmail(refEmail)) {
         result.classList.remove("d-none");

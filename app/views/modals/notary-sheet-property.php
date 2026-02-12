@@ -47,10 +47,10 @@
                                 <span>Superficie:</span>
                                 <span id="propertySizeNotary" class="text-end fw-semibold">85 mq</span>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center mb-1">
+                            <!-- <div class="d-flex justify-content-between align-items-center mb-1">
                                 <span>Rif. Catastale:</span>
                                 <span id="propertyRegistryRefNotary" class="text-end fw-semibold">F.23, Part. 123, Sub. 4</span>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

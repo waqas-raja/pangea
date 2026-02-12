@@ -41,6 +41,11 @@ async function loadEstimateDetail(id) {
     }
 }
 
+function cancelEstimation() {
+    if (_editEstimateId === null) window.location = `/estimates`;
+    else window.location = `/estimate/${_editEstimateId}`;
+}
+
 async function saveNewEstimate() {
     if (!_isEstimated) return;
     const btn = document.getElementById("btnSaveNewEstimate");
@@ -96,6 +101,8 @@ async function saveNewEstimate() {
 }
 
 function calculateEstimate() {
+    _estimateFixedCost = [];
+    _estimateMonthly = [];
     const months = ["Jen", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let total = 0, deduct = 0;
     months.forEach(month => {
