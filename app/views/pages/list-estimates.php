@@ -22,6 +22,9 @@ require_once __DIR__ . '/../modals/confirm-delete.php';
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="acquired-tab" data-bs-toggle="tab" data-bs-target="#acquired-tab-content" type="button" role="tab" aria-controls="acquired-tab" aria-selected="false">Acquisito</button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="under-evaluation-tab" data-bs-toggle="tab" data-bs-target="#under-evaluation-tab-content" type="button" role="tab" aria-controls="under-evaluation-tab" aria-selected="false">In valutazione e altri</button>
+            </li>
         </ul>
         <div class="tab-content" id="estimatesTabsContent">
             <!-- <div class="tab-pane fade border border-top-0 p-3 show active" id="estimates-tab-content" role="tabpanel" aria-labelledby="estimates-tab">
@@ -32,6 +35,9 @@ require_once __DIR__ . '/../modals/confirm-delete.php';
             </div>
             <div class="tab-pane fade border border-top-0 p-3" id="acquired-tab-content" role="tabpanel" aria-labelledby="acquired-tab">
                 <div id="estimateAcquiredGrid" class=""></div>
+            </div>
+            <div class="tab-pane fade border border-top-0 p-3" id="under-evaluation-tab-content" role="tabpanel" aria-labelledby="under-evaluation-tab">
+                <div id="estimateUnderEvaluationGrid" class=""></div>
             </div>
         </div>
     </div>

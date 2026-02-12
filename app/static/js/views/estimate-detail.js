@@ -10,14 +10,15 @@ async function loadEstimateDetail() {
     let months = { "Jen": "Gennaio", "Feb": "Febbraio", "Mar": "Marzo", "Apr": "aprile", "May": "maggio", "Jun": "giugno", "Jul": "luglio", "Aug": "agosto", "Sep": "settembre", "Oct": "ottobre", "Nov": "novembre", "Dec": "dicembre" };
     let totalEstimate = 0, totalDeduct = 0;
     if (r.result) {
-        document.getElementById('customerName').textContent = r.payload.estimate.customer_name + " " + r.payload.estimate.customer_surname;
+        const customer = r.payload.estimate.customer_bizname !== null ? r.payload.estimate.customer_bizname : r.payload.estimate.customer_name + ' ' + r.payload.estimate.customer_surname;
+        document.getElementById('customerName').textContent = customer;
         document.getElementById('customerEmail').textContent = r.payload.estimate.customer_email;
         document.getElementById('customerPhone').textContent = r.payload.estimate.customer_phone;
         const fullAddress = r.payload.estimate.propert_address + ', ' + r.payload.estimate.propert_city + ', ' + r.payload.estimate.property_nation;
         document.getElementById('propertyAddress').textContent = fullAddress;
         document.getElementById('propertySize').textContent = r.payload.estimate.property_size + ' mq';
 
-        document.getElementById('customerNameDraft').textContent = r.payload.estimate.customer_name + " " + r.payload.estimate.customer_surname;
+        document.getElementById('customerNameDraft').textContent = customer;
         document.getElementById('customerEmailDraft').textContent = r.payload.estimate.customer_email;
         document.getElementById('customerPhoneDraft').textContent = r.payload.estimate.customer_phone;
         document.getElementById('propertyAddressDraft').textContent = r.payload.estimate.propert_address;
