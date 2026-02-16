@@ -42,6 +42,12 @@ class EstimateRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+
+        $group->post('/share-estimated-pdf-file', function (Request $request, Response $response) {
+            return Estimate::ShareEstimatedPdfFileToCustomer($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 

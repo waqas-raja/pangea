@@ -154,7 +154,6 @@ final class Land
             $name = $fileId . ".pdf";
             move_uploaded_file($_FILES["file"]["tmp_name"], $destinationDir . $name);
             // OR WE CAN SHARE THE FILE THROUGH AN EMAIL...
-            error_log('i am here...');
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (\Exception $e) {

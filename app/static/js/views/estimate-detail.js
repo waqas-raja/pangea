@@ -91,7 +91,7 @@ async function loadCustomers() {
     let opt = '<option value="" selected>Seleziona</option>';
     r.payload.forEach(customer => {
         if (customer.bizname !== "" && customer.bizname !== null) opt += `<option value="${customer.id}">${customer.bizname}</option>`;
-        else opt += `<option value="${customer.id}">${customer.name} ${customer.surname}</option>`;
+        else opt += `<option value="${customer.id}" data-email="${customer.email}">${customer.name} ${customer.surname}</option>`;
     });
     ctrl.innerHTML = opt;
 }
@@ -176,32 +176,48 @@ function downloadQuoteDraft(fname) {
 }
 
 async function shareQuoteToCustomer(fname) {
-    const customer = document.getElementById('ddlCustomer').value;
-    const btn = document.getElementById('btnQuoteDraftDownload');
-    let result = document.getElementById('resultDraft');
-    result.classList.add('d-none');
-    if (customer === '') {
-        result.innerText = "È richiesta la selezione di una persona";
-        result.classList.add("text-danger");
-        result.classList.remove("d-none");
+    const selectElement = document.getElementById("ddlCustomer");
+    const selectedIndex = selectElement.selectedIndex;
+    const selectedOption = selectElement.options[selectedIndex];
+    const email = selectedOption.dataset.email;
+    const btn = document.getElementById('btnSendQuoteDraftToCustomer');
+    if (email === '') {
+        showMessage('È richiesta la selezione di una persona', 'resultDraft', 'text-danger');
         return;
     }
-    result.innerText = "La funzionalità è in fase di elaborazione...";
-    result.classList.remove("text-danger");
-    result.classList.add("text-success");
-    result.classList.remove("d-none");
-    return;
+    btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
-    const el = document.getElementById('quoteToDownloadDiv');
     // pdf options tuned for A4
     const opt = {
         margin: 10,
-        filename: `${fname || 'quote'}.pdf`,
+        // filename: `${fname || 'land-draft'}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    btn.disabled = true;
+    try {
+        const el = document.getElementById('quoteToDownloadDiv');
+        const blob = await generatePdfBlob(el);
+        const fileId = Date.now();
+        const fd = new FormData();
+        fd.append("file", blob, `quote-draft.pdf`);
+        fd.append("customer_email", email);
+        fd.append("file_id", fileId);
+        const response = await fetch(`/api/estimate/share-estimated-pdf-file`, {
+            method: "POST",
+            body: fd
+        });
+        const res = await response.json();
+        if (res.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
+            showMessage('File condiviso correttamente', 'resultDraft', 'text-success');
+        } else throw new Error("Download del file non riuscito.");
+    } catch (error) {
+        btn.disabled = false;
+        btn.lastElementChild.classList.add('d-none');
+        showMessage(error.message || 'Download del file non riuscito', 'resultDraft', 'text-danger');
+    }
 }
 
 function loadMap() {
