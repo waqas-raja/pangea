@@ -117,7 +117,6 @@ final class Property {
         $city = $data['city'] ?? null;
         $address = $data['address'] ?? null;
         $zip = $data['zip'] ?? null;
-        $street = $data['street'] ?? null;
         $district = $data['district'] ?? null;
         $propertyStatus = $data['propertyStatus'] ?? null;
         $size = (float)$data['size'] ?? 0;

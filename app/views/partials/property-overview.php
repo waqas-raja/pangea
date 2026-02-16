@@ -3,7 +3,7 @@
         <div class="pai-card position-relative cardHeight">
             <div id="divInfo">
                 <div class="row mb-0 align-items-center">
-                    <label for="ddlCustomer" class="col-sm-5 col-form-label">Contatto:</label>
+                    <label for="ddlCustomer" class="col-sm-5 col-form-label">Lead:</label>
                     <div class="col-sm-7">
                         <span id="spCustomer" class="valueControl"></span>
                         <select id="ddlCustomer" class="form-select editControl d-none mb-1">
@@ -50,14 +50,7 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
-                    <label for="txtStreet" class="col-sm-5 col-form-label">Strada:<span class="text-danger ms-2 editControl d-none">*</span></label>
-                    <div class="col-sm-7">
-                        <span id="spStreet" class="valueControl"></span>
-                        <input type="text" id="txtStreet" class="form-control editControl d-none mb-1" value="">
-                    </div>
-                </div>
-                <div class="row mb-0 align-items-center">
-                    <label for="txtDistrict" class="col-sm-5 col-form-label">Distretto:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <label for="txtDistrict" class="col-sm-5 col-form-label">Provincia:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spDistrict" class="valueControl"></span>
                         <input type="text" id="txtDistrict" class="form-control editControl d-none mb-1" value="">
@@ -166,7 +159,7 @@
                 </div>
             </div>
             <div class="row mb-0 align-items-center">
-                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Costo aggiuntivo:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Costo aggiuntivi:<span class="text-danger ms-2 editControl d-none">*</span></label>
                 <div class="col-sm-7">
                     <span id="spExtraPrice" class="valueControl"></span>
                     <input type="number" id="txtExtraPrice" class="form-control editControl d-none mb-1" value="">

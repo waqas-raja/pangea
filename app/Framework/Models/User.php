@@ -114,12 +114,10 @@ final class User
             $user_id = $token_info['id'];
             $parsedBody = json_decode($request->getBody()->getContents(), true);
             $email = $parsedBody['email'] ?? "";
-            error_log($email);
             if ($email === "") throw new Exception("L'e-mail è obbligatoria", 400);
             $query = 'SELECT id FROM user WHERE email = ?';
             $row = DB::Query($query, [$email]);
             if (count($row) == 0) throw new Exception("E-mail non trovata", 404);
-            $email = 'waqasraja9@gmail.com';
             $pin = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
             $mail = new PHPMailer(true);
             $mail->isSMTP();

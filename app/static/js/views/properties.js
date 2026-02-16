@@ -394,7 +394,7 @@ async function saveProperty() {
     const result = document.getElementById("spNewPropertyResult");
     result.innerHTML = '';
     result.classList.add("d-none");
-    if (alias === '' || customer === '' || nation === '' || address === '' || city === '' || zip === '' || size === "" || floor === "" || acqPrice === "" || renPrice === "" || extraPrice === "" || sellPrice === "" || propertyType === "") {
+    if (alias === '' || customer === '' || nation === '' || address === '' || city === '' || zip === '' || size === "" || floor === "" || acqPrice === "" || propertyType === "") {
         result.classList.remove("d-none");
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
         if (customer === '') { result.innerText = "Il cliente è obbligatorio"; return; }
@@ -405,9 +405,6 @@ async function saveProperty() {
         if (size === '') { result.innerText = "La Taglia è obbligatoria con un numero valido"; return; }
         if (floor === '') { result.innerText = "Il pavimento è obbligatorio con un numero valido"; return; }
         if (acqPrice === '') { result.innerText = "Il prezzo di acquisizione è richiesto con un numero valido"; return; }
-        if (renPrice === '') { result.innerText = "Il prezzo di ristrutturazione è richiesto con un numero valido"; return; }
-        if (extraPrice === '') { result.innerText = "Il prezzo di extra è richiesto con un numero valido"; return; }
-        if (sellPrice === '') { result.innerText = "Il prezzo di vendita è obbligatorio con un numero valido"; return; }
     }
     if ((size !== '' && !isValidateNumber(parseInt(size))) || parseInt(size) <= 0) {
         result.classList.remove("d-none");
