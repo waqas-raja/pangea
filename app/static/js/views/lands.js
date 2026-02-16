@@ -673,30 +673,6 @@ async function sharePdfToCustomer(btn) {
     }
 }
 
-async function generatePdfBlob(el) {
-    const opt = {
-        margin: 10,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    // load script if needed
-    if (typeof html2pdf === "undefined") {
-        await new Promise(resolve => {
-            const s = document.createElement("script");
-            s.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js";
-            s.onload = resolve;
-            document.body.appendChild(s);
-        });
-    }
-    const blob = await html2pdf()
-        .set(opt)
-        .from(el)
-        .toPdf()
-        .outputPdf("blob");
-    return blob;
-}
-
 async function uploadLanDocuments(ele, id) {
     const files = ele.files;
     const allowedExtensions = ['pdf', 'docx', 'jpg', 'jpeg', 'png'];

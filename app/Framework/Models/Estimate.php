@@ -10,6 +10,8 @@ use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Random\RandomException;
+use PHPMailer\PHPMailer\PHPMailer;
+use App\Framework\Tools\BrevoManager;
 
 final class Estimate
 {
@@ -209,6 +211,59 @@ final class Estimate
             DB::Execute("DELETE FROM estimate_monthly WHERE estimate_id = ?", [$id]);
             $row_affected = DB::Execute("DELETE FROM estimate WHERE id = ?", [$id]);
             if ($row_affected == 0) throw new Exception("Error while deleting estimate", 500);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function ShareEstimatedPdfFileToCustomer($request, $response)
+    {
+        try {
+            $email = $_POST["customer_email"] ?? '';
+            $fileId = $_POST["file_id"];
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host       = getenv('BREVO_SMTP');
+            $mail->SMTPAuth   = true;
+            $mail->Username   = getenv('BREVO_USER');
+            $mail->Password   = getenv('BREVO_PSW');
+            $mail->Port       = (int)getenv('BREVO_PORT');
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => true,
+                    'verify_peer_name' => true,
+                    'allow_self_signed' => false,
+                ],
+            ];
+            $mail->setFrom(getenv('DEFAULT_MAIL_FROM'), getenv('APPLICATION_NAME'));
+            $mail->addAddress('waqasraja9@gmail.com');
+
+            $tmpPath = $_FILES["file"]["tmp_name"];
+            $originalName = $_FILES["file"]["name"];
+            if (!file_exists($tmpPath)) throw new Exception("File caricato non trovato.");
+
+            $pdfContent = file_get_contents($tmpPath);
+            $mail->addStringAttachment(
+                $pdfContent,
+                $originalName,
+                'base64',
+                'application/pdf'
+            );
+            $mail->isHTML(true);
+            $mail->Subject = 'Your PDF Document';
+            $mail->Body = "
+                <p>Hello,</p>
+                <p>Please find your document attached.</p>
+            ";
+            $mail->AltBody = "Please find your document attached.";
+            $mail->send();
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (\Exception $e) {
