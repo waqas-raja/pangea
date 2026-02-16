@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadPropertyDocuments();
     loadMap();
 
-    document.getElementById("txtStreet").addEventListener("focusout", loadMap);
     document.getElementById("txtDistrict").addEventListener("focusout", loadMap);
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
@@ -138,7 +137,6 @@ async function loadPropertyDetail() {
     document.getElementById("spCity").innerText = r.payload.city ?? 'n.d.';
     document.getElementById("spAddress").innerText = r.payload.address ?? 'n.d.';
     document.getElementById("spZip").innerText = r.payload.cap ?? 'n.d.';
-    document.getElementById("spStreet").innerText = 'n.d.';
     document.getElementById("spDistrict").innerText = 'n.d.';
     document.getElementById("spPropertyStatus").innerText = r.payload.property_status_name ?? 'n.d.';
     const s = formatNumber(parseInt(r.payload.size));
@@ -280,7 +278,6 @@ async function updateGenericInfo() {
     const city = document.getElementById("txtCity").value.trim();
     const address = document.getElementById("txtAddress").value.trim();
     const zip = document.getElementById("txtZip").value.trim();
-    const street = document.getElementById("txtStreet").value.trim();
     const district = document.getElementById("txtDistrict").value.trim();
     const propertyStatus = document.getElementById("ddlPropertyStatus").value;
     const size = document.getElementById("txtSize").value.trim();
@@ -294,14 +291,13 @@ async function updateGenericInfo() {
     const renPrice = document.getElementById("txtRenPrice").value.trim();
     const extraPrice = document.getElementById("txtExtraPrice").value.trim();
     const sellPrice = document.getElementById("txtSellPrice").value.trim();
-    if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === '' || sellPrice === '' || street === '' || district === '' || propertyType === '') {
+    if (alias === '' || nation === '' || city === '' || address === '' || size === '' || zip === '' || propertyStatus === '' || floor === '' || acqPrice === '' || renPrice === '' || extraPrice === '' || sellPrice === '' || district === '' || propertyType === '') {
         btn.disabled = false;
         if (alias === '') { result.innerText = "L'alias è obbligatorio"; return; }
         if (nation === '') { result.innerText = "La nazione è obbligatoria"; return; }
         if (address === '') { result.innerText = "L'indirizzo è obbligatorio"; return; }
         if (city === '') { result.innerText = "La città è obbligatoria"; return; }
         if (zip === '') { result.innerText = "Il codice postale è obbligatorio con un numero valido"; return; }
-        if (street === '') { result.innerText = "La strada è obbligatoria"; return; }
         if (district === '') { result.innerText = "È necessario il distretto"; return; }
         if (propertyStatus === '') { result.innerText = "Lo stato della proprietà è obbligatorio"; return; }
         if (propertyType === '') { result.innerText = "Il tipo di proprietà è obbligatorio"; return; }
@@ -394,7 +390,6 @@ async function updateGenericInfo() {
                 city: city,
                 address: address,
                 zip: zip,
-                street: street,
                 district: district,
                 propertyStatus: parseInt(propertyStatus),
                 propertyType: parseInt(propertyType),
@@ -617,12 +612,11 @@ async function deleteModal() {
 }
 
 function loadMap() {
-    const street = document.getElementById("txtStreet").value.trim();
     const district = document.getElementById("txtDistrict").value.trim();
     const address = document.getElementById("txtAddress").value.trim();
     const city = document.getElementById("txtCity").value.trim();
     const state = $("#ddlState option:selected").text();
-    const addressCombined = street + ' ' + address + ' ' + district + ' ' + city + ' ' + state;
+    const addressCombined = address + ' ' + district + ' ' + city + ' ' + state;
     if (!addressCombined) return;
     const url = "https://www.google.com/maps?q=" + encodeURIComponent(addressCombined) + "&output=embed";
     document.getElementById("mapContainer").innerHTML = `

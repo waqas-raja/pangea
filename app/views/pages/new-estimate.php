@@ -152,11 +152,8 @@ ob_start();
             <div class="pai-card">
                 <div class="pai-title mb-3 fw-bold">Dati generali</div>
                 <div class="alert alert-primary text-center p-3">
-                    <span>Rendita annuale lorda stimata</span><br>
+                    <span>Rendita Annuale Lorda Stimata</span><br>
                     <span id="calculatedTotal" class="fs-3 fw-bold mt-3">0,00 &euro;</span>
-                </div>
-                <div class="text-center text-body-tertiary">
-                    Clicca "Calcola Rendita" per aggiornare la stima. Il pulsante "Salva Preventivo" si attivera dopo il primo calcolo.
                 </div>
             </div>
         </div>

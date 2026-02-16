@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function showForgotPassword() {
+    document.getElementById('txtRecoveryEmail').value = '';
     document.getElementById('login-card').classList.add('d-none');
     document.getElementById('forgot-password-card').classList.remove('d-none');
     document.getElementById('txtRecoveryEmail').focus();
@@ -74,7 +75,7 @@ async function signIn() {
     }
 }
 
-async function recoverPassword() {
+async function recoverPassword(btn) {
     const email = document.getElementById('txtRecoveryEmail').value.trim();
     const msg = document.getElementById('spRecoveryResult');
     msg.textContent = '';
@@ -88,6 +89,8 @@ async function recoverPassword() {
         msg.classList.add('text-danger');
         return;
     }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
     try {
         const response = await fetch('/api/reset-psw', {
             method: 'POST',
@@ -98,12 +101,16 @@ async function recoverPassword() {
             const error = await response.json();
             msg.textContent = error.message || 'Recupero password fallito.';
             msg.classList.add('text-danger');
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
             return;
         }
         const data = await response.json();
         if (data.result) {
             _pin = data.pin;
             _userId = data.userId;
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
             document.getElementById('forgot-password-card').classList.add('d-none');
             document.getElementById('insert-pin-card').classList.remove('d-none');
             let timeLeft = 3 * 60;
@@ -152,7 +159,7 @@ function checkPin() {
     document.getElementById('change-password-card').classList.remove('d-none');
 }
 
-async function changePassword() {
+async function changePassword(btn) {
     const newPsw = document.getElementById('txtNewPsw').value.trim();
     const confNewPsw = document.getElementById('txtConfirmNewPsw').value.trim();
     let result = document.getElementById('spChangePswResult');
@@ -169,6 +176,8 @@ async function changePassword() {
         result.classList.add('text-danger');
         return;
     }
+    btn.disabled = true;
+    btn.lastElementChild.classList.remove('d-none');
     try {
         const response = await fetch('/api/reset-new-psw/' + _userId, {
             method: 'PATCH',
@@ -177,6 +186,8 @@ async function changePassword() {
         });
         const data = await response.json();
         if (data.result) {
+            btn.disabled = false;
+            btn.lastElementChild.classList.add('d-none');
             result.textContent = 'La nuova password è stata aggiornata con successo.';
             result.classList.add('text-success');
             setTimeout(() => {

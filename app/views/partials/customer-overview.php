@@ -101,7 +101,7 @@
         <div class="pai-card position-relative cardHeight">
             <div id="">
                 <div class="row mb-0 align-items-enter">
-                    <label for="txtAddress" class="col-sm-5 col-form-label">Indirizzo:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <label for="txtAddress" class="col-sm-5 col-form-label">Indirizzo:</label>
                     <div class="col-sm-7">
                         <span id="spAddress" class="valueControl"></span>
                         <input type="text" id="txtAddress" class="form-control editControl d-none mb-1" value="">

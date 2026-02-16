@@ -140,6 +140,7 @@ function addCostVariant() {
 
 function removeCostSection(ele) {
     ele.parentNode.remove();
+    calculateEstimate();
 }
 
 async function loadCustomers() {

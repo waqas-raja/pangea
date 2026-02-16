@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="row mb-3">
-                                <label for="ddlCustomer" class="col-sm-4 col-form-label">Contatto<span class="text-danger ms-2">*</span></label>
+                                <label for="ddlCustomer" class="col-sm-4 col-form-label">Lead<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
                                     <select id="ddlCustomer" class="form-select">
                                     </select>
@@ -55,7 +55,7 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtSize" class="col-sm-4 col-form-label">Size<span class="text-danger ms-2">*</span></label>
+                                <label for="txtSize" class="col-sm-4 col-form-label">Dimensione<span class="text-danger ms-2">*</span></label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <input type="number" id="txtSize" class="form-control" required>
@@ -116,19 +116,19 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtRenPrice" class="col-sm-5 col-form-label">Costo di ristrutturazione<span class="text-danger ms-2">*</span></label>
+                                <label for="txtRenPrice" class="col-sm-5 col-form-label">Costo di ristrutturazione</label>
                                 <div class="col-sm-7">
                                     <input type="number" class="form-control" id="txtRenPrice" min="0" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Costo aggiuntivo<span class="text-danger ms-2">*</span></label>
+                                <label for="txtExtraPrice" class="col-sm-5 col-form-label">Costo aggiuntivi</label>
                                 <div class="col-sm-7">
                                     <input type="number" class="form-control" id="txtExtraPrice" min="0" required>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="txtSellPrice" class="col-sm-5 col-form-label">Prezzo di vendita<span class="text-danger ms-2">*</span></label>
+                                <label for="txtSellPrice" class="col-sm-5 col-form-label">Prezzo di vendita</label>
                                 <div class="col-sm-7">
                                     <input type="number" class="form-control" id="txtSellPrice" min="0" required>
                                 </div>
