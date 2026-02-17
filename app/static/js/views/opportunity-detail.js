@@ -330,6 +330,12 @@ async function loadOpportunityDetail() {
     document.getElementById("spRefSurname").innerText = r.payload.reference_surname ?? 'n.d.';
     document.getElementById("spRefEmail").innerText = r.payload.reference_email ?? 'n.d.';
     document.getElementById("spRefPhone").innerText = r.payload.reference_phone ?? 'n.d.';
+    let cc = '', phone = r.payload.reference_phone ?? '';
+    if (phone !== '' && (phone.charAt(0) === '+' || phone.charAt(0) === '-')) {
+        cc = phone.substring(0, 3);
+        phone = phone.substring(3, phone.length);
+    }
+    document.getElementById("ddlCountryCode").value = cc.trim() ?? '';
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price !== null ? r.payload.acquisition_price : 0));
     document.getElementById("spEstimatedSellPrice").innerText = formatNumber(0);
     document.getElementById("spNote").innerHTML = r.payload.note ?? 'n.d.';
@@ -351,7 +357,7 @@ async function loadOpportunityDetail() {
     document.getElementById("txtRefName").value = r.payload.reference_name ?? '';
     document.getElementById("txtRefSurname").value = r.payload.reference_surname ?? '';
     document.getElementById("txtRefEmail").value = r.payload.reference_email ?? '';
-    document.getElementById("txtRefPhone").value = r.payload.reference_phone ?? '';
+    document.getElementById("txtRefPhone").value = phone;
     document.getElementById("txtAcqPrice").value = r.payload.acquisition_price ?? '';
     document.getElementById("txtEstimatedSellPrice").value = 0;
     $("#txtNote").dxHtmlEditor('instance').option('value', r.payload.note ?? '');
@@ -455,7 +461,8 @@ async function updateGenericInfo(btn) {
     const refName = document.getElementById("txtRefName").value.trim();
     const refSurname = document.getElementById("txtRefSurname").value.trim();
     const refEmail = document.getElementById("txtRefEmail").value.trim();
-    const refPhone = document.getElementById("txtRefPhone").value.trim();
+    let refPhone = document.getElementById("txtRefPhone").value.trim();
+    const refCountryCode = document.getElementById("ddlCountryCode").value;
     const propertyStatus = document.getElementById("ddlPropertyStatus").value;
     const floor = document.getElementById("txtFloor").value.trim();
     const room = parseInt(document.getElementById("txtRoom").value.trim());
@@ -485,10 +492,22 @@ async function updateGenericInfo(btn) {
         btn.disabled = false;
         return;
     }
-    if (refPhone !== "" && !isValidPhone(refPhone)) {
+    if (refPhone !== "" && !isValidPhoneNumber(refPhone)) {
         result.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;
         return;
+    }
+    if (refPhone !== "") {
+        if (refCountryCode === '') { 
+            result.innerText = 'Il codice paese è obbligatorio';
+            btn.disabled = false;
+            return;
+        }
+        if (refPhone.charAt(0) === '0') {
+            refPhone = refPhone.slice(1);
+            document.getElementById("txtRefPhone").value = refPhone;
+        }
+        refPhone = refCountryCode + refPhone;
     }
     try {
         const response = await fetch("/api/opportunity/" + opportunityId, {

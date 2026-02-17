@@ -37,7 +37,29 @@
                             </div>
                         </div>
                     </div>
-                    <div id="residentialLandFields" class="d-none"></div>
+                    <div id="residentialLandFields" class="d-none">
+                        <div class="row mb-3">
+                            <label for="txtResidentialLandName" class="col-sm-4 col-form-label">Nome<span class="text-danger ms-2">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtResidentialLandName" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="txtResidentialLandArea" class="col-sm-4 col-form-label">Superficie<span class="text-danger ms-2">*</span></label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type="number" id="txtResidentialLandArea" class="form-control" required="" min="0">
+                                    <span class="input-group-text">(mq)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="txtResidentialLandLocation" class="col-sm-4 col-form-label">Ubicazione<span class="text-danger ms-2">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtResidentialLandLocation" required>
+                            </div>
+                        </div>
+                    </div>
                     <div id="industrialLandFields" class="d-none">
                         <div class="row mb-3">
                             <label for="txtIndustarialLandName" class="col-sm-4 col-form-label">Industria<span class="text-danger ms-2">*</span></label>

@@ -153,7 +153,8 @@ async function saveOpportunity() {
     const refName = document.getElementById("txtRefName").value.trim();
     const refSurname = document.getElementById("txtRefSurname").value.trim();
     const refEmail = document.getElementById("txtRefEmail").value.trim();
-    const refPhone = document.getElementById("txtRefPhone").value.trim();
+    let refCountryCode = document.getElementById("ddlCountryCode").value.trim();
+    let refPhone = document.getElementById("txtRefPhone").value.trim();
     const result = document.getElementById("spNewOpportunityResult");
     result.innerHTML = '';
     result.classList.add("d-none");
@@ -176,11 +177,24 @@ async function saveOpportunity() {
         btn.disabled = false;
         return;
     }
-    if (refPhone !== "" && !isValidPhone(refPhone)) {
+    if (refPhone !== "" && !isValidPhoneNumber(refPhone)) {
         result.classList.remove("d-none");
         result.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;
         return;
+    }
+    if (refPhone !== "") {
+        if (refCountryCode === '') { 
+            result.classList.remove("d-none");
+            result.innerText = 'Il codice paese è obbligatorio';
+            btn.disabled = false;
+            return;
+        }
+        if (refPhone.charAt(0) === '0') {
+            refPhone = refPhone.slice(1);
+            document.getElementById("txtRefPhone").value = refPhone;
+        }
+        refPhone = refCountryCode + refPhone;
     }
     if ((acqPrice !== "" && !isValidateNumber(acqPrice)) || parseInt(acqPrice) < 0) {
         result.classList.remove("d-none");
@@ -194,7 +208,8 @@ async function saveOpportunity() {
         const response = await fetch("/api/opportunity", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note,
+            body: JSON.stringify({
+                "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note,
                 "acuisitionPrice": acqPrice,
                 // "professionalService": proService,
                 "url": url,
@@ -202,7 +217,7 @@ async function saveOpportunity() {
                 "referenceSurname": refSurname,
                 "referenceEmail": refEmail,
                 "referencePhone": refPhone,
-             })
+            })
         });
         const res = await response.json();
         if (res.result) {

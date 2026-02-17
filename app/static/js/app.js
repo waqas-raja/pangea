@@ -104,6 +104,11 @@ function isValidPhone(phone) {
     return regx.test(phone);
 }
 
+function isValidPhoneNumber(num) {
+    const regx = /^\d{10}$/;
+    return regx.test(num);
+}
+
 function isValidZip(zip) {
     const regx = /^\d{4,6}$/;
     return regx.test(zip);

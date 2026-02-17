@@ -27,7 +27,15 @@
                     <label for="txtPhone" class="col-sm-5 col-form-label">Telefono:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spPhone" class="valueControl"></span>
-                        <input type="tell" id="txtPhone" class="form-control editControl d-none mb-1" maxlength="16" value="">
+                        <!-- <input type="tell" id="txtPhone" class="form-control editControl d-none mb-1" maxlength="16" value=""> -->
+                        <div class="input-group editControl d-none">
+                            <select id="ddlCountryCode" class="text-start form-select input-group-text mb-1 w-35">
+                                <option value=""></option>
+                                <option value="+39" selected>+39</option>
+                                <option value="+92">+92</option>
+                            </select>
+                            <input type="tell" class="form-control mb-1 w-65" id="txtPhone" required>
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">

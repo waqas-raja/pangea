@@ -132,23 +132,25 @@ async function saveCustomer() {
     const firstName = document.getElementById("txtFirstName").value.trim();
     const lastName = document.getElementById("txtLastName").value.trim();
     const email = document.getElementById("txtEmail").value.trim();
-    const phone = document.getElementById("txtPhone").value.trim();
+    let phone = document.getElementById("txtPhone").value.trim();
+    const countryCode = document.getElementById('ddlCountryCode').value;
     const tag = document.getElementById("ddlTag");
     let tags = Array.from(tag.options)
-    .filter(option => option.selected)
-    .map(option => option.value);
+        .filter(option => option.selected)
+        .map(option => option.value);
     tags = tags.join(", ");
     const isCompany = document.getElementById("ckIsCompany").checked;
     let bizname = document.getElementById("txtBizname").value.trim();
     let vat = document.getElementById("txtVat").value.trim();
     const result = document.getElementById("spNewCustomerResult");
     result.innerHTML = '';
-    if (firstName === '' || lastName === "" || email === "" || phone === "" || (tags.length === 0 || tags[0] === '') || (isCompany && (bizname === "" || vat === ""))) {
+    if (firstName === '' || lastName === "" || email === "" || phone === "" || countryCode === '' || (tags.length === 0 || tags[0] === '') || (isCompany && (bizname === "" || vat === ""))) {
         result.classList.remove("d-none");
         if (firstName === '') { result.innerText = 'Il nome è obbligatorio'; return; }
         if (lastName === '') { result.innerText = 'Il cognome è obbligatorio'; return; }
         if (email === '') { result.innerText = 'L\'email è obbligatoria'; return; }
         if (phone === '') { result.innerText = 'Il telefono è obbligatorio'; return; }
+        if (countryCode === '') { result.innerText = 'Il codice paese è obbligatorio'; return; }
         if (tags.length === 0 || tags[0] === '') { result.innerText = 'Seleziona almeno un tag'; return; }
         // result.innerText = "Si prega di compilare tutti i campi richiesti";
     }
@@ -157,11 +159,16 @@ async function saveCustomer() {
         result.classList.remove("d-none");
         return;
     }
-    if (isValidPhone(phone) === false) {
+    if (phone.charAt(0) === '0') {
+        phone = phone.slice(1);
+        document.getElementById("txtPhone").value = phone;
+    }
+    if (isValidPhoneNumber(phone) === false) {
         result.innerText = "Il numero di telefono non è valido";
         result.classList.remove("d-none");
         return;
     }
+    phone = countryCode + phone;
     btn.disabled = true;
     spinner.classList.remove("d-none");
     result.classList.add("d-none");

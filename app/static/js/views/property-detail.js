@@ -11,7 +11,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("txtDistrict").addEventListener("focusout", loadMap);
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
-    document.getElementById("ddlState").addEventListener("change", loadMap);
+    document.getElementById("ddlState").addEventListener("change", function() {
+        document.getElementById("txtDistrict").value = '';
+        document.getElementById("txtAddress").value = '';
+        document.getElementById("txtCity").value = '';
+        document.getElementById("txtZip").value = '';
+        loadMap();
+    });
 });
 
 async function loadAssocaitedQuotes() {

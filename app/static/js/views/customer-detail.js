@@ -65,7 +65,13 @@ function loadDetail(d = null) {
     document.getElementById("spEmail").innerText = _customerDetail.email ?? 'n.d.';
     document.getElementById("txtEmail").value = _customerDetail.email ?? '';
     document.getElementById("spPhone").innerText = _customerDetail.phone ?? 'n.d.';
-    document.getElementById("txtPhone").value = _customerDetail.phone ?? '';
+    let cc = '', phone = _customerDetail.phone ?? '';
+    if (phone !== '' && (phone.charAt(0) === '+' || phone.charAt(0) === '-')) {
+        cc = phone.substring(0, 3);
+        phone = phone.substring(3, phone.length);
+    }
+    document.getElementById("ddlCountryCode").value = cc.trim() ?? '';
+    document.getElementById("txtPhone").value = phone.trim() ?? '';
     if (_customerDetail.bizname !== null && _customerDetail.bizname !== '') document.getElementById('divCompanyFields').classList.remove("d-none");
     if (d === null) {
         document.getElementById("ckIsCompany").checked = _customerDetail.bizname !== null;
@@ -303,7 +309,8 @@ async function updateGenericInfo() {
     const name = document.getElementById("txtFirstName").value.trim();
     const surname = document.getElementById("txtLastName").value.trim();
     const email = document.getElementById("txtEmail").value.trim();
-    const phone = document.getElementById("txtPhone").value.trim();
+    const countryCode = document.getElementById("ddlCountryCode").value.trim();
+    let phone = document.getElementById("txtPhone").value.trim();
     const tag = document.getElementById("ddlTag");
     const tags = Array.from(tag.options)
         .filter(option => option.selected)
@@ -321,11 +328,12 @@ async function updateGenericInfo() {
     const note = document.getElementById("txtNote").value.trim();
     let err = document.getElementById('errEditCustomer');
     err.innerText = '';
-    if (name === "" || surname === "" || email === "" || phone === "" || (tags.length === 0 || tags[0] === '') || city === "" || zip === "" || state === "") {
+    if (name === "" || surname === "" || email === "" || phone === "" || countryCode === '' || (tags.length === 0 || tags[0] === '') || city === "" || zip === "" || state === "") {
         btn.disabled = false;
         if (name === "") { err.textContent = "Il campo Nome è obbligatorio"; return; }
         if (surname === "") { err.textContent = "Il campo Cognome è obbligatorio"; return; }
         if (email === "") { err.textContent = "L'e-mail è obbligatoria"; return; }
+        if (countryCode === '') { err.innerText = 'Il codice paese è obbligatorio'; return; }
         if (phone === "") { err.textContent = "È richiesto il telefono con un numero valido"; return; }
         if (city === "") { err.textContent = "La città è obbligatoria"; return; }
         if (zip === "") { err.textContent = "È richiesto il codice postale con un numero valido"; return; }
@@ -337,11 +345,16 @@ async function updateGenericInfo() {
         btn.disabled = false;
         return;
     }
-    if (phone !== "" && !isValidPhone(phone)) {
-        err.textContent = "Il numero di telefono fornito non è valido.";
-        btn.disabled = false;
+    if (phone.charAt(0) === '0') {
+        phone = phone.slice(1);
+        document.getElementById("txtPhone").value = phone;
+    }
+    if (isValidPhoneNumber(phone) === false) {
+        result.innerText = "Il numero di telefono non è valido";
+        result.classList.remove("d-none");
         return;
     }
+    phone = countryCode + phone;
     if (zip !== "" && !isValidZip(zip)) {
         err.textContent = "È richiesto il codice postale con un numero valido.";
         btn.disabled = false;
