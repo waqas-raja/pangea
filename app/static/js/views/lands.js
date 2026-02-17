@@ -65,6 +65,7 @@ async function loadLands() {
     // const r = await response.json();
     loadAgricultureLands();
     loadIndustarialLands();
+    loadResidentialLands();
 }
 
 async function loadAgricultureLands() {
@@ -267,6 +268,106 @@ async function loadIndustarialLands() {
     });
 }
 
+async function loadResidentialLands() {
+    const response = await fetch(`/api/land/2/lands`);
+    const r = await response.json();
+    const hasData = r.payload.length > 0;
+    $(`#ResidenzialeLandGrid`).dxDataGrid({
+        dataSource: r.payload,
+        keyExpr: "id",
+        showBorders: true,
+        columnAutoWidth: true,
+        showBorders: true,
+        noDataText: "Non ci sono terreni registrati.",
+        rowAlternationEnabled: false,
+        grouping: { autoExpandAll: false },
+        groupPanel: { visible: false, emptyPanelText: "Trascina qui le colonne per raggruppare" },
+        filterRow: { visible: hasData, applyFilter: "auto" },
+        headerFilter: { visible: false },
+        columns: [
+            {
+                dataField: "id",
+                caption: "ID",
+                width: 50,
+                allowFiltering: false,
+                cellTemplate: function (container, options) {
+                    container.html(`<div class="text-start">${options.data.id}</div>`);
+                }
+            },
+            {
+                dataField: "residence_type",
+                caption: "Tipo",
+            },
+            {
+                dataField: "area",
+                caption: "Superficie",
+                width: 120,
+                cellTemplate: function (container, options) {
+                    const area = formatNumber(parseInt(options.data.surface_area));
+                    container.text(area.slice(0, -2) + ' (mq)');
+                }
+            },
+            {
+                dataField: "location",
+                caption: "Ubicazione",
+                width: 200,
+            },
+            {
+                dataField: "",
+                caption: "Documenti",
+                // width: 250,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <div>
+                                <input type="file" id="uploadLandDocument_${options.data.id}" hidden multiple onchange="uploadLanDocuments(this, ${options.data.id})">
+                                <i class="bi bi-file-earmark-arrow-up me-2" title="Carica documenti" onclick="document.getElementById('uploadLandDocument_${options.data.id}').click()"></i>
+                                <span id="spinnerDocumentUpload_${options.data.id}" class="spinner-border spinner-border-sm d-none" role="status"><span class="visually-hidden">Loading...</span></span>
+                                <span id="resultDocumentUpload_${options.data.id}" class="d-none" role="status"></span>
+                            </div>
+                            <div id="land_document_${options.data.id}" class="row">
+                        `;
+                    container.html(html);
+                    loadLandDocuments(options.data.id);
+                }
+            },
+            {
+                dataField: "dt",
+                caption: "Data",
+                allowFiltering: true,
+                width: 120
+            },
+            {
+                dataField: "",
+                caption: "Azioni",
+                // allowFiltering: true,
+                width: 90,
+                cellTemplate: function (container, options) {
+                    const html = `
+                            <i class="bi bi-file-earmark-pdf me-2" onclick="showModalLandDraft(${options.data.id})"></i>
+                            <i class="bi bi-pencil-square me-2" onclick="showModalAddLand(${options.data.id})"></i>
+                            <i class="bi bi-trash3 text-danger" onclick="deleteLand(${options.data.id})"></i>
+                        `;
+                    container.html(html);
+                }
+            },
+        ],
+        sorting: { mode: "multiple" },
+        remoteOperations: { paging: true, filtering: true, sorting: false },
+        paging: { pageSize: 10 },
+        pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
+        toolbar: {
+            visible: false,
+            items: [
+                "groupPanel",
+                "searchPanel",
+            ]
+        },
+        onRowClick: function (e) {
+            // if (e.rowType === "data") { window.location = `/land/${e.data.id}`; }
+        },
+    });
+}
+
 async function showModalLandDraft(id) {
     document.getElementById('shareToCustomerDiv').classList.add('d-none');
     const response = await fetch(`/api/land/detail/${id}`);
@@ -285,6 +386,11 @@ async function showModalLandDraft(id) {
             document.getElementById("draftLandLocation").textContent = r.payload[0].location;
             break;
         case 2:
+            area = formatNumber(parseInt(r.payload[0].surface_area));
+            document.getElementById("draftLandType").textContent = 'Residenziale';
+            document.getElementById("draftLandName").textContent = r.payload[0].residence_type;
+            document.getElementById("draftLandArea").textContent = area.slice(0, -2) + ' (mq)';
+            document.getElementById("draftLandLocation").textContent = r.payload[0].location;
             break;
         case 3:
             area = formatNumber(parseInt(r.payload[0].surface_area));
@@ -365,13 +471,16 @@ async function showRelevantFields(landId = null) {
     switch (parseInt(_landTypeId)) {
         case 1:
             document.getElementById("txtAgricultureLandName").value = landId === null ? '' : data.residence_type;
-            document.getElementById("txtAgricultureLandArea").value = landId === null ? '' : data.surface_area
-            document.getElementById("txtAgricultureLandLocation").value = landId === null ? '' : data.location
+            document.getElementById("txtAgricultureLandArea").value = landId === null ? '' : data.surface_area;
+            document.getElementById("txtAgricultureLandLocation").value = landId === null ? '' : data.location;
             document.getElementById("agricultureLandFields").classList.remove('d-none');
             document.getElementById("residentialLandFields").classList.add('d-none');
             document.getElementById("industrialLandFields").classList.add('d-none');
             break;
         case 2:
+            document.getElementById("txtResidentialLandName").value = landId === null ? '' : data.residence_type;
+            document.getElementById("txtResidentialLandArea").value = landId === null ? '' : data.surface_area;
+            document.getElementById("txtResidentialLandLocation").value = landId === null ? '' : data.location;
             document.getElementById("agricultureLandFields").classList.add('d-none');
             document.getElementById("residentialLandFields").classList.remove('d-none');
             document.getElementById("industrialLandFields").classList.add('d-none');
@@ -436,7 +545,50 @@ async function saveLand(btn) {
             }
             break;
         case 2:
-            document.getElementById("residentialLandFields").classList.add('d-none');
+            const residentialLandName = document.getElementById("txtResidentialLandName").value.trim();
+            const residentialLandArea = document.getElementById("txtResidentialLandArea").value.trim();
+            const residentialLandLocation = document.getElementById("txtResidentialLandLocation").value.trim();
+            if (residentialLandName === '' || residentialLandArea === '' || residentialLandLocation === '') {
+                if (residentialLandName === '') {
+                    showMessage("Il nome del terreno residenziale è obbligatorio.", 'spNewLandResult', 'text-danger');
+                    return;
+                }
+                if (residentialLandArea === '') {
+                    showMessage("La superficie del terreno residenziale è obbligatorio.", 'spNewLandResult', 'text-danger');
+                    return;
+                }
+                if (residentialLandLocation === '') {
+                    showMessage("L'ubicazione del terreno residenziale è obbligatorio.", 'spNewLandResult', 'text-danger');
+                    return;
+                }
+            }
+            btn.disabled = true;
+            btn.lastElementChild.classList.remove('d-none');
+            try {
+                const response = await fetch("/api/land", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ "name": _landTypeId, "residence_type": residentialLandName, "area": residentialLandArea, "location": residentialLandLocation })
+                });
+                const res = await response.json();
+                if (res.result) {
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                    $('#modalAddLand').modal('hide');
+                    $("#ResidenzialeLandGrid").dxDataGrid("dispose");
+                    $("#ResidenzialeLandGrid").empty();
+                    loadResidentialLands();
+                } else {
+                    showMessage("Si sono verificati degli errori durante il salvataggio", 'spNewLandResult', 'text-danger');
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                }
+            } catch (error) {
+                console.error(error.message);
+                showMessage(error.message, 'spNewLandResult', 'text-danger');
+                btn.disabled = false;
+                btn.lastElementChild.classList.add("d-none");
+            }
             break;
         case 3:
             const industarialLandName = document.getElementById("txtIndustarialLandName").value.trim();
@@ -537,7 +689,50 @@ async function updateLand(btn) {
             }
             break;
         case 2:
-            document.getElementById("residentialLandFields").classList.add('d-none');
+            const residentialLandName = document.getElementById("txtResidentialLandName").value.trim();
+            const residentialLandArea = document.getElementById("txtResidentialLandArea").value.trim();
+            const residentialLandLocation = document.getElementById("txtResidentialLandLocation").value.trim();
+            if (residentialLandName === '' || residentialLandArea === '' || residentialLandLocation === '') {
+                if (residentialLandName === '') {
+                    showMessage("Il nome del terreno residenziale è obbligatorio.", 'spNewLandResult', 'text-danger');
+                    return;
+                }
+                if (residentialLandArea === '') {
+                    showMessage("La superficie del terreno residenziale è obbligatorio.", 'spNewLandResult', 'text-danger');
+                    return;
+                }
+                if (residentialLandLocation === '') {
+                    showMessage("L'ubicazione del terreno residenziale è obbligatorio.", 'spNewLandResult', 'text-danger');
+                    return;
+                }
+            }
+            btn.disabled = true;
+            btn.lastElementChild.classList.remove('d-none');
+            try {
+                const response = await fetch(`/api/land/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ "residence_type": residentialLandName, "area": residentialLandArea, "location": residentialLandLocation })
+                });
+                const res = await response.json();
+                if (res.result) {
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                    $('#modalAddLand').modal('hide');
+                    $("#ResidenzialeLandGrid").dxDataGrid("dispose");
+                    $("#ResidenzialeLandGrid").empty();
+                    loadResidentialLands();
+                } else {
+                    showMessage("Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'spNewLandResult', 'text-danger');
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
+                }
+            } catch (error) {
+                console.error(error.message);
+                showMessage(error.message, 'spNewLandResult', 'text-danger');
+                btn.disabled = false;
+                btn.lastElementChild.classList.add("d-none");
+            }
             break;
         case 3:
             const industaryType = document.getElementById("ddlIndustarialLandType").value.trim();
@@ -565,7 +760,7 @@ async function updateLand(btn) {
             btn.disabled = true;
             btn.lastElementChild.classList.remove('d-none');
             try {
-                const response = await fetch(`/pai/pangea/api/land/${id}`, {
+                const response = await fetch(`/api/land/${id}`, {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ "residence_type": industarialLandName, "area": industarialLandArea, "location": industarialLandLocation })
@@ -589,7 +784,6 @@ async function updateLand(btn) {
                 btn.disabled = false;
                 btn.lastElementChild.classList.add("d-none");
             }
-    
             break;
     }
 }
@@ -614,7 +808,9 @@ function deleteLand(id) {
                             loadAgricultureLands();
                             break;
                         case 2:
-                            _lands.residential = _lands.residential.filter(land => land.id !== id.toString());
+                            $("#ResidenzialeLandGrid").dxDataGrid("dispose");
+                            $("#ResidenzialeLandGrid").empty();
+                            loadResidentialLands();
                             break;
                         case 3:
                             // _lands.industarial = _lands.industarial.filter(land => land.id !== id.toString());
@@ -623,6 +819,8 @@ function deleteLand(id) {
                             loadIndustarialLands();
                             break;
                     }
+                    btn.disabled = false;
+                    btn.lastElementChild.classList.add('d-none');
                     $('#modalConfirmDelete').modal('hide');
                 } else throw new Error("Si è verificato un errore durante l'eliminazione di questo record.");
             } catch (error) {
@@ -762,18 +960,24 @@ async function deleteDocument(id, el) {
     showDeleteConfirmationModal(async function (confirmed) {
         if (confirmed) {
             const fname = el.parentElement.nextElementSibling.lastElementChild.dataset.filename;
+            const btnConfirm = document.getElementById('btnConfirmDelete');
+            btnConfirm.lastElementChild.classList.remove('d-none');
             const spinner = document.getElementById(`spinnerDocumentUpload_${id}`);
             spinner.classList.remove('d-none');
             try {
                 const response = await fetch(`/api/land/delete-document/${id}/${fname}`, { method: "DELETE" });
                 const res = await response.json();
                 if (res.result) {
+                    btnConfirm.disabled = false;
+                    btnConfirm.lastElementChild.classList.add('d-none');
                     $("#modalConfirmDelete").modal('hide');
                     el.parentNode.parentNode.parentNode.remove();
                     spinner.classList.add('d-none');
                     showMessage('Documento eliminato con successo', `resultDocumentUpload_${id}`, 'text-success')
                 } else throw new Error("Si è verificato un errore durante l'eliminazione di questo documento.");
             } catch (error) {
+                btnConfirm.disabled = false;
+                btnConfirm.lastElementChild.classList.add('d-none')
                 $("#modalConfirmDelete").modal('hide');
                 spinner.classList.add('d-none');
                 showMessage(error.message, `resultDocumentUpload_${id}`, 'text-danger');

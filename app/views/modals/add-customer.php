@@ -28,9 +28,17 @@
                     <div class="row mb-3">
                         <label for="txtPhone" class="col-sm-4 col-form-label">Telefono<span class="text-danger ms-2">*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="txtPhone" placeholder="Con o senza prefisso internazionale" required>
+                            <div class="input-group">
+                                <select id="ddlCountryCode" class="form-select input-group-text editControl w-20">
+                                    <option value=""></option>
+                                    <option value="+39" selected>+39</option>
+                                    <option value="+92">+92</option>
+                                </select>
+                                <input type="tell" class="form-control w-80" id="txtPhone" required>
+                            </div>
                         </div>
                     </div>
+
                     <div class="row mb-0 align-items-center">
                         <label for="ddlTag" class="col-sm-4 col-form-label">Etichetta persona<span class="text-danger ms-2">*</span></label>
                         <div class="col-sm-8">

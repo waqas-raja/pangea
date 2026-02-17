@@ -135,7 +135,15 @@
                     <label for="txtRefPhone" class="col-sm-5 col-form-label">Telefono di riferimento:</label>
                     <div class="col-sm-7">
                         <span id="spRefPhone" class="valueControl"></span>
-                        <input type="text" id="txtRefPhone" class="form-control editControl d-none mb-1" value="">
+                        <!-- <input type="text" id="txtRefPhone" class="form-control editControl d-none mb-1" value=""> -->
+                        <div class="input-group editControl d-none">
+                            <select id="ddlCountryCode" class="text-start form-select input-group-text mb-1 w-35">
+                                <option value=""></option>
+                                <option value="+39" selected>+39</option>
+                                <option value="+92">+92</option>
+                            </select>
+                            <input type="tell" class="form-control mb-1 w-65" id="txtRefPhone" required>
+                        </div>
                     </div>
                 </div>
             </div>
