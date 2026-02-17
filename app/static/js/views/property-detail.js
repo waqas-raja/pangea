@@ -151,6 +151,7 @@ async function loadPropertyDetail() {
     document.getElementById("spGarden").innerText = r.payload.garden ? gr.slice(0, -2) : "No";
     const bx = formatNumber(parseInt(r.payload.box));
     document.getElementById("spBox").innerText = r.payload.box ? bx.slice(0, -2) : "No";
+    document.getElementById("spRegistryRef").innerText = "n.d.";
     document.getElementById("spElevator").innerText = r.payload.elevator ? "Yes" : "No";
     document.getElementById("spAcqPrice").innerText = formatNumber(parseInt(r.payload.acquisition_price)) ?? formatNumber(0);
     document.getElementById("spRenPrice").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
@@ -162,6 +163,7 @@ async function loadPropertyDetail() {
     document.getElementById("customerPhoneNotary").innerText = r.payload.customer_phone ?? 'n.d.';
     document.getElementById("propertyAddressNotary").innerText = r.payload.address + ', ' + r.payload.city + ', ' + r.payload.nation_name;
     document.getElementById("propertySizeNotary").innerText = r.payload.size !== '' ? r.payload.size + ' (mq)' : 'n.d.';
+    document.getElementById("propertyRegistryRefNotary").innerText = 'n.d.';
     document.getElementById("notaryAcqCost").innerText = formatNumber(parseInt(r.payload.acquisition_price)) ?? formatNumber(0);
     document.getElementById("notaryRenCost").innerText = formatNumber(parseInt(r.payload.renovation_price)) ?? formatNumber(0);
     document.getElementById("notaryExtCost").innerText = formatNumber(parseInt(r.payload.extra_price)) ?? formatNumber(0);
@@ -282,6 +284,7 @@ async function updateGenericInfo() {
     const propertyStatus = document.getElementById("ddlPropertyStatus").value;
     const size = document.getElementById("txtSize").value.trim();
     const floor = document.getElementById("txtFloor").value.trim();
+    const registryRef = document.getElementById("txtRegistryRef").value.trim();
     const room = parseInt(document.getElementById("txtRoom").value.trim());
     const bathroom = parseInt(document.getElementById("txtBathroom").value.trim());
     const garden = parseInt(document.getElementById("txtGarden").value.trim());

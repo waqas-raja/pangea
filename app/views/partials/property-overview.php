@@ -99,6 +99,13 @@
                     <input type="number" id="txtFloor" class="form-control editControl d-none mb-1" min="0" value="">
                 </div>
             </div>
+            <div class="row mb-0 align-items-center">
+                <label for="txtRegistryRef" class="col-sm-5 col-form-label">Rif. Catastale:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                <div class="col-sm-7">
+                    <span id="spRegistryRef" class="valueControl"></span>
+                    <input type="text" id="txtRegistryRef" class="form-control editControl d-none mb-1" value="">
+                </div>
+            </div>
             <hr>
             <div class="row mb-1 align-items-center">
                 <label for="txtRoom" class="col-sm-5 col-form-label">Stanze:</label>
