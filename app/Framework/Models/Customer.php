@@ -93,8 +93,10 @@ final class Customer {
         $zip = $data['zip'] ?? null;
         $nation = $data['state'] ?? null;
         $note = $data['note'] ?? null;
-        $q = 'UPDATE customer SET name = ?, surname = ?, phone = ?, email = ?, bizname = ?, vat = ?, fiscal_code = ?, sdi = ?, address = ?, city = ?, cap = ?, nation = ?, note = ? WHERE id = ?';
-        $params = [$name, $surname, $phone, $email, $bizname, $vat, $fiscal, $sdi, $address, $city, $zip, $nation, $note, $aid];
+        $labels = $data['tags'] ?? null;
+        $potentialInvestment = $data['potentialInvestment'] ?? 0;
+        $q = 'UPDATE customer SET name = ?, surname = ?, phone = ?, email = ?, bizname = ?, vat = ?, fiscal_code = ?, sdi = ?, address = ?, city = ?, cap = ?, nation = ?, note = ?, labels = ? WHERE id = ?';
+        $params = [$name, $surname, $phone, $email, $bizname, $vat, $fiscal, $sdi, $address, $city, $zip, $nation, $note, $labels, $aid];
         $row_affected = DB::Execute($q, $params);
         if ($row_affected == 0) throw new Exception("Error while updating customer", 500);
         $response->getBody()->write(json_encode(["result" => true]));

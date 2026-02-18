@@ -95,6 +95,14 @@ function loadDetail(d = null) {
     document.getElementById("ddlState").value = _customerDetail.nation ?? '';
     document.getElementById("spNote").innerText = _customerDetail.note ?? 'n.d.';
     document.getElementById("txtNote").value = _customerDetail.note ?? '';
+    document.getElementById("spTag").innerText = _customerDetail.labels ?? 'n.d.';
+    const labels = _customerDetail.labels ? _customerDetail.labels.split(',').map(l => l.trim()) : [];
+    const select = document.getElementById("ddlTag");
+    for (let option of select.options) {
+        if (labels.includes(option.value)) {
+            option.selected = true;
+        }
+    }
 }
 
 async function loadAssociatedProperties() {
@@ -312,7 +320,7 @@ async function updateGenericInfo() {
     const countryCode = document.getElementById("ddlCountryCode").value.trim();
     let phone = document.getElementById("txtPhone").value.trim();
     const tag = document.getElementById("ddlTag");
-    const tags = Array.from(tag.options)
+    let tags = Array.from(tag.options)
         .filter(option => option.selected)
         .map(option => option.value);
     const isCompany = document.getElementById("ckIsCompany").checked;
@@ -345,15 +353,14 @@ async function updateGenericInfo() {
         btn.disabled = false;
         return;
     }
-    if (phone.charAt(0) === '0') {
-        phone = phone.slice(1);
-        document.getElementById("txtPhone").value = phone;
-    }
+    phone = phone.replaceAll(' ', '');
+    if (phone.charAt(0) === '0') phone = phone.slice(1);
     if (isValidPhoneNumber(phone) === false) {
         result.innerText = "Il numero di telefono non è valido";
         result.classList.remove("d-none");
         return;
     }
+    document.getElementById("txtPhone").value = phone;
     phone = countryCode + phone;
     if (zip !== "" && !isValidZip(zip)) {
         err.textContent = "È richiesto il codice postale con un numero valido.";
@@ -370,6 +377,7 @@ async function updateGenericInfo() {
         if (bizname === "") { err.textContent = "Il nome aziendale è obbligatorio"; return; }
         if (vat === "") { err.textContent = "È richiesta l'Iva"; return; }
     }
+    tags = tags.join(", ");
     try {
         const response = await fetch("/api/customer/" + customerId, {
             method: "PATCH",

@@ -44,10 +44,10 @@
                         <div class="col-sm-8">
                             <select id="ddlTag" class="form-select editControl mb-1" multiple style="height: 75px;">
                                 <option value="" selected>Seleziona il tag della persona</option>
-                                <option value="investor">Investitore</option>
-                                <option value="owner">Proprietario</option>
-                                <option value="client">Cliente</option>
-                                <option value="agent">Agente</option>
+                                <option value="Investitore">Investitore</option>
+                                <option value="Proprietario">Proprietario</option>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Agente">Agente</option>
                             </select>
                         </div>
                     </div>
