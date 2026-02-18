@@ -405,9 +405,9 @@ async function updateGenericInfo() {
         if (res.result) {
             await loadCustomerDetail();
             cancelEditGeneralInfo();
-        } else err.innerText = "Si sono verificati degli errori";
+        } else throw new Error(res.error || "Si sono verificati degli errori");
     } catch (error) {
-        err.innerText = "Si sono verificati degli errori";
+        err.innerText = error.message || "Si sono verificati degli errori";
         console.error(error.message !== undefined ? error.message : error);
     }
 }
