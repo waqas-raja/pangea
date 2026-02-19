@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    loadCustomers();
-    loadPropertyTypes()
-    loadNations();
-    loadAssocaitedQuotes();
-    loadPropertyStatus();
+    await loadCustomers();
+    await loadPropertyTypes()
+    await loadNations();
+    await loadPropertyStatus();
     await loadPropertyDetail();
     await loadPropertyDocuments();
+    loadAssocaitedQuotes();
     loadMap();
 
     document.getElementById("txtDistrict").addEventListener("focusout", loadMap);
@@ -277,6 +277,7 @@ async function loadOpportunityStatus() {
 async function updateGenericInfo() {
     const btn = document.getElementById("iconSaveEditGenericInfo");
     let result = document.getElementById('errMessage');
+    result.classList.add('text-danger');
     result.innerText = '';
     const customer = document.getElementById("ddlCustomer").value;
     const propertyType = document.getElementById("ddlPropertyType").value;
@@ -387,6 +388,7 @@ async function updateGenericInfo() {
         result.innerText = 'Il prezzo di vendita deve essere superiore alla somma di tutti i costi.';
         return;
     }
+    result.classList.remove('text-danger');
     try {
         btn.disabled = true;
         const response = await fetch("/api/property/" + propertyId, {
@@ -418,11 +420,12 @@ async function updateGenericInfo() {
         const res = await response.json();
         btn.disabled = false;
         if (res.result) {
-            await loadPropertyDetail();
             cancelEditGeneralInfo();
-        } else result.innerText = "Si sono verificati degli errori";
+            showMessage('Il record è stato aggiornato con successo', 'errMessage', 'text-success');
+            await loadPropertyDetail();
+        } else showMessage(res.error || 'Il record non è stato aggiornato', 'errMessage', 'text-danger');
     } catch (error) {
-        result.innerText = "Si sono verificati degli errori";
+        showMessage(error.message || "Si sono verificati degli errori", 'errMessage', 'text-danger');
         console.error(error.message !== undefined ? error.message : error);
     }
 }

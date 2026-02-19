@@ -91,15 +91,16 @@ final class Opportunity {
             $price = (int)$data['price'] ?? 0;
             $taxes = (int)$data['taxes'] ?? 0;
             $status = (int)$data['status'] ?? 0;
+            $note = $data['note'] ?? '';
             $url = $data['url'] ?? null;
-            $acqPrice = (int)$data['acuisitionPrice'] ?? null;
+            $acqPrice = (int)$data['acquisitionPrice'] ?? null;
             $professionalService = null;
             $referenceName = $data['referenceName'] ?? null;
             $referenceSurname = $data['referenceSurname'] ?? null;
             $referenceEmail = $data['referenceEmail'] ?? null;
             $referencePhone = $data['referencePhone'] ?? null;
-            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, url, reference_name, reference_surname, reference_email, reference_phone, acquisition_price, professional_services) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $url, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $acqPrice, $professionalService];
+            $q = "INSERT INTO opportunity (alias, source, nation, city, address, property_type, size, opportunity_status, price, taxes, url, reference_name, reference_surname, reference_email, reference_phone, acquisition_price, professional_services, note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $params = [$alias, $source, $nation, $city, $address, $type, $size, $status, $price, $taxes, $url, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $acqPrice, $professionalService, $note];
             $row_affected = DB::Execute($q, $params);
             if ($row_affected == 0) throw new Exception("Error while insert Opportunity", 500);
             $last_inserted_id = DB::$LastId;
@@ -155,7 +156,6 @@ final class Opportunity {
             $price = (int)$data['price'] ?? 0;
             $taxes = (int)$data['taxes'] ?? 0;
             $status = (int)$data['opportunityStatus'] ?? 0;
-            $note = $data['note'] ?? "";
             $url = $data['url'] ?? null;
             $referenceName = $data['referenceName'] ?? null;
             $referenceSurname = $data['referenceSurname'] ?? null;
@@ -163,14 +163,15 @@ final class Opportunity {
             $referencePhone = $data['referencePhone'] ?? null;
             $acqPrice = (int)$data['acqPrice'] ?? 0;
             $professionalService = null;
-            $q = "UPDATE opportunity SET alias = ?, url = ?, source = ?, nation = ?, city = ?, address = ?, property_type = ?, size = ?, reference_name = ?, reference_surname = ?, reference_email = ?, reference_phone = ?, opportunity_status = ?, price = ?, acquisition_price = ?, professional_services = ?, taxes = ?, note = ? WHERE id = ?";
-            $params = [$alias, $url, $source, $nation, $city, $address, $type, $size, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $status, $price, $acqPrice, $professionalService, $taxes, $note, $id];
+            $q = "UPDATE opportunity SET alias = ?, url = ?, source = ?, nation = ?, city = ?, address = ?, property_type = ?, size = ?, reference_name = ?, reference_surname = ?, reference_email = ?, reference_phone = ?, opportunity_status = ?, price = ?, acquisition_price = ?, professional_services = ?, taxes = ? WHERE id = ?";
+            $params = [$alias, $url, $source, $nation, $city, $address, $type, $size, $referenceName, $referenceSurname, $referenceEmail, $referencePhone, $status, $price, $acqPrice, $professionalService, $taxes, $id];
             $row_affected = DB::Execute($q, $params);
-            if ($row_affected == 0) throw new Exception("Error while updating Opportunity", 500);
+            if ($row_affected == 0) throw new Exception("Non sono state apportate modifiche. I dati sono identici", 500);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
-            throw new Exception('Failed to update opportunity: ' . $e->getMessage());
+            $response->getBody()->write(json_encode(["result" => false, "error" => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
 
@@ -214,11 +215,12 @@ final class Opportunity {
             $q = "UPDATE opportunity SET note = ? WHERE id = ?";
             $params = [$note, $id];
             $row_affected = DB::Execute($q, $params);
-            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento della nota", 500);
+            if ($row_affected == 0) throw new Exception("Non sono state apportate modifiche. I dati sono identici");
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
-            throw new Exception('Errore: ' . $e->getMessage());
+            $response->getBody()->write(json_encode(["result" => false, "error" => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
 

@@ -32,7 +32,7 @@ require_once __DIR__ . "/../modals/confirm-delete.php";
                 </button>
             </div>
         </div>
-        <div id="errMessage" class="text-danger"></div>
+        <div id="errMessage" class=""></div>
     </div>
     <?php require_once __DIR__ . "/../partials/property-overview.php"; ?>
 </div>

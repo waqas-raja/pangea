@@ -656,7 +656,7 @@ async function updateCall(btn) {
             $("#callsList").empty();
             loadCalls();
         } else {
-            showMessage("Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'crmCallResult', 'text-danger');
+            showMessage(res.error ||"Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'crmCallResult', 'text-danger');
             btn.disabled = false;
             btn.lastElementChild.classList.add('d-none');
         }
@@ -875,7 +875,7 @@ async function updateAppointment(btn) {
             $("#appointmentsList").empty();
             loadAppointments();
         } else {
-            showMessage("Si sono verificati degli errori durante l'aggiornamento dell'appuntamento", 'crmAppointmentResult', 'text-danger');
+            showMessage(res.error || "Si sono verificati degli errori durante l'aggiornamento dell'appuntamento", 'crmAppointmentResult', 'text-danger');
             btn.disabled = false;
             btn.lastElementChild.classList.add('d-none');
         }
@@ -1107,7 +1107,7 @@ async function updateEmail(btn) {
             $("#emailsList").empty();
             loadEmails();
         } else {
-            showMessage(res.message || "Si sono verificati degli errori durante l'aggiornamento dell'email", 'crmEmailResult', 'text-danger');
+            showMessage(res.error || "Si sono verificati degli errori durante l'aggiornamento dell'email", 'crmEmailResult', 'text-danger');
             btn.disabled = false;
             btn.lastElementChild.classList.add('d-none');
         }
@@ -1373,7 +1373,7 @@ async function updatePersonPropertyMargin(btn) {
             $("#personPropertyMargins").dxDataGrid("dispose");
             $("#personPropertyMargins").empty();
             loadPersonPropertyMargin();
-        } else throw new Error(res.message || "Si sono verificati degli errori durante l'aggiornamento del margine di proprietà della persona.");
+        } else throw new Error(res.error || "Si sono verificati degli errori durante l'aggiornamento del margine di proprietà della persona.");
     } catch (error) {
         console.error(error.message);
         showMessage(error.message, 'resultPersonPropertyMargin', 'text-danger');

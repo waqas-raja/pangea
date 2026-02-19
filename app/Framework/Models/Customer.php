@@ -221,11 +221,11 @@ final class Customer {
             $q = 'UPDATE customer_call SET dt = ?, ctype = ?, note = ? WHERE id = ?';
             $params = [$date, $type, $note, $id];
             $row_affected = DB::Execute($q, $params);
-            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento dell'chimata del cliente", 500);
+            if ($row_affected == 0) throw new Exception("Non sono state apportate modifiche. I dati sono identici", 500);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
-            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            $response->getBody()->write(json_encode(["result" => false, 'error' => $e->getMessage()]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
@@ -312,11 +312,11 @@ final class Customer {
             $q = 'UPDATE appointment SET dt = ?, location = ?, note = ? WHERE id = ?';
             $params = [$date, $location, $note, $id];
             $row_affected = DB::Execute($q, $params);
-            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento dell'appuntamento del cliente", 500);
+            if ($row_affected == 0) throw new Exception("Non sono state apportate modifiche. I dati sono identici", 500);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
-            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            $response->getBody()->write(json_encode(["result" => false, 'error' => $e->getMessage()]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
@@ -403,11 +403,11 @@ final class Customer {
             $q = 'UPDATE customer_email SET dt = ?, subject = ?, content = ? WHERE id = ?';
             $params = [$date, $subject, $content, $id];
             $row_affected = DB::Execute($q, $params);
-            if ($row_affected == 0) throw new Exception("Errore durante l'aggiornamento dell'email del cliente", 500);
+            if ($row_affected == 0) throw new Exception("Non sono state apportate modifiche. I dati sono identici", 500);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
-            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            $response->getBody()->write(json_encode(["result" => false, 'error' => $e->getMessage()]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
@@ -505,12 +505,11 @@ final class Customer {
             $q = "UPDATE person_property_margin SET customer_id = ?, property_id = ?, is_perc = ?, margin_value = ?, currency = ?, usage_type = ?, priority = ?, is_active = ?, valid_from = ?, valid_to = ?, updated_at = ? WHERE id = ?";
             $params = [$person, $property, $marginValueType, $marginValue, $currency, $usageType, $priority, $status, $validFrom, $validTo, $formatedDate, $id];
             $row_affected = DB::Execute($q, $params);
-            if ($row_affected == 0) throw new Exception("Si sono verificati degli errori durante l'aggiornamento del margine di proprietà della persona", 500);
-            $last_inserted_id = DB::$LastId;
+            if ($row_affected == 0) throw new Exception("Si è verificato un errore durante l'aggiornamento del record", 500);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
-            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            $response->getBody()->write(json_encode(["result" => false, 'error' => $e->getMessage()]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
