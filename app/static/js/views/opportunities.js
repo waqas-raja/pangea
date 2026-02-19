@@ -177,6 +177,10 @@ async function saveOpportunity() {
         btn.disabled = false;
         return;
     }
+    if (refPhone !== "" && refPhone.charAt(0) === '0') {
+        refPhone = refPhone.slice(1);
+        document.getElementById("txtRefPhone").value = refPhone;
+    }
     if (refPhone !== "" && !isValidPhoneNumber(refPhone)) {
         result.classList.remove("d-none");
         result.textContent = "Il numero di telefono fornito non è valido.";
@@ -184,15 +188,11 @@ async function saveOpportunity() {
         return;
     }
     if (refPhone !== "") {
-        if (refCountryCode === '') { 
+        if (refCountryCode === '') {
             result.classList.remove("d-none");
             result.innerText = 'Il codice paese è obbligatorio';
             btn.disabled = false;
             return;
-        }
-        if (refPhone.charAt(0) === '0') {
-            refPhone = refPhone.slice(1);
-            document.getElementById("txtRefPhone").value = refPhone;
         }
         refPhone = refCountryCode + refPhone;
     }
@@ -210,7 +210,7 @@ async function saveOpportunity() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 "alias": alias, "source": source, "nation": state, "city": city, "address": address, "propertyType": propertyType, "size": size, "price": price, "taxes": tax, "status": propertyStatus, "note": note,
-                "acuisitionPrice": acqPrice,
+                "acquisitionPrice": acqPrice,
                 // "professionalService": proService,
                 "url": url,
                 "referenceName": refName,

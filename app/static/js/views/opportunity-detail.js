@@ -492,20 +492,22 @@ async function updateGenericInfo(btn) {
         btn.disabled = false;
         return;
     }
+    if (refPhone !== "" && refPhone.charAt(0) === '0') {
+        refPhone = refPhone.slice(1);
+        document.getElementById("txtRefPhone").value = refPhone;
+    }
     if (refPhone !== "" && !isValidPhoneNumber(refPhone)) {
+        result.classList.remove("d-none");
         result.textContent = "Il numero di telefono fornito non è valido.";
         btn.disabled = false;
         return;
     }
     if (refPhone !== "") {
-        if (refCountryCode === '') { 
+        if (refCountryCode === '') {
+            result.classList.remove("d-none");
             result.innerText = 'Il codice paese è obbligatorio';
             btn.disabled = false;
             return;
-        }
-        if (refPhone.charAt(0) === '0') {
-            refPhone = refPhone.slice(1);
-            document.getElementById("txtRefPhone").value = refPhone;
         }
         refPhone = refCountryCode + refPhone;
     }
@@ -538,12 +540,13 @@ async function updateGenericInfo(btn) {
         const res = await response.json();
         btn.disabled = false;
         if (res.result) {
-            await loadOpportunityDetail();
             btn.previousElementSibling.click();
             showMessage('Dati aggiornati con successo.', 'resultGenericInfo', 'text-success');
-        } else throw new Error("Si sono verificati degli errori");
+            await loadOpportunityDetail();
+        } else throw new Error(res.error || "Si sono verificati degli errori");
     } catch (error) {
-        showMessage(`Errore durante l'aggiornamento dei dati.`, 'resultGenericInfo', 'text-danger');
+        btn.disabled = false;
+        showMessage(error.message || `Errore durante l'aggiornamento dei dati.`, 'resultGenericInfo', 'text-danger');
         console.error(error.message !== undefined ? error.message : error);
     }
 }
@@ -569,7 +572,7 @@ async function updateNote(btn) {
     const note = $("#txtNote").dxHtmlEditor('instance').option('value');
     if (note === '') {
         btn.disabled = false;
-        result.innerText = "La nota è obbligatoria";
+        showMessage("La nota è obbligatoria", 'resultNote', 'text-danger');
         return;
     }
     try {
@@ -580,13 +583,13 @@ async function updateNote(btn) {
                 note: note
             })
         });
-        if (response.ok) {
-            const res = await response.json();
+        const res = await response.json();
+        if (res.result) {
             btn.disabled = false;
-            await loadOpportunityDetail();
             btn.previousElementSibling.click();
+            await loadOpportunityDetail();
             showMessage('Dati aggiornati con successo.', 'resultNote', 'text-success');
-        } else throw new Error(`Errore durante l'aggiornamento della nota`);
+        } else throw new Error(res.error || `Errore durante l'aggiornamento della nota`);
     } catch (error) {
         btn.disabled = false;
         showMessage(error.message !== undefined ? error.message : error, 'resultNote', 'text-danger');

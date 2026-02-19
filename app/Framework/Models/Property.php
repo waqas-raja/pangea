@@ -134,7 +134,7 @@ final class Property {
         $q = 'UPDATE property SET customer = ?, alias = ?, nation = ?, city = ?, address = ?, cap = ?, property_status = ?, property_type = ?, size = ?, rooms = ?, bathrooms = ?, garden = ?, box = ?, floor= ?, elevator = ?, acquisition_price = ?, renovation_price = ?, extra_price = ?, sell_price = ? WHERE id = ?';
         $params = [$customer, $alias, $nation, $city, $address, $zip, $propertyStatus, $propertyType, $size, $room, $bathroom, $garden, $box, $floor, $elevator, $acqPrice, $renPrice, $extraPrice, $sellPrice, $id];
         $row_affected = DB::Execute($q, $params);
-        if ($row_affected == 0) throw new Exception("Error while updating property", 500);
+        if ($row_affected == 0) throw new Exception("Non sono state apportate modifiche. I dati sono identici", 500);
         $response->getBody()->write(json_encode(["result" => true]));
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
