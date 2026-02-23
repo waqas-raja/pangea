@@ -230,7 +230,7 @@ final class Opportunity {
     public static function UploadPropertyValuationDocument($request, $response) {
         try {
             $opportunityId = $_POST['opportunity_id'];
-            $destinationDir = __DIR__ . "../../../static/imgs/opportunity_".$opportunityId."/";
+            $destinationDir = __DIR__ . "../../../static/opportunities/".$opportunityId."/";
             if(!is_dir($destinationDir)) mkdir($destinationDir, 0755, true);
             $files = $_FILES['documents'];
             foreach ($_FILES['documents']['name'] as $i => $name) {
@@ -254,7 +254,7 @@ final class Opportunity {
     public static function GetPropertyValuationDocument($request, $response) {
         try {
             $id = (int)$request->getAttribute('id');
-            $destinationDir = __DIR__ . "../../../static/imgs/opportunity_".$id."/";
+            $destinationDir = __DIR__ . "../../../static/opportunities/".$id."/";
             $files = [];
             if (is_dir($destinationDir)) {
                 foreach (scandir($destinationDir) as $file) {
@@ -282,10 +282,10 @@ final class Opportunity {
     public static function DownloadPropertyValuationDocument($request, $response) {
         $id = (int) $request->getAttribute('id');
         $fname = urldecode($request->getAttribute('name'));
-        $basePath = __DIR__ . '../../../static/imgs';
+        $basePath = __DIR__ . '../../../static';
         $baseDir  = realpath($basePath);
         if ($baseDir === false || $baseDir === '') throw new Exception('Directory di base non trovata');
-        $filePath = $baseDir . "/opportunity_$id/" . basename($fname);
+        $filePath = $baseDir . "/opportunities/$id/" . basename($fname);
         if (!file_exists($filePath)) {
             $response->getBody()->write(json_encode([
                 'result' => false,
@@ -316,7 +316,7 @@ final class Opportunity {
         try {
             $id = (int)$request->getAttribute('id');
             $fname = $request->getAttribute('name');
-            $destinationDoc = __DIR__ . "../../../static/imgs/opportunity_" . $id . "/" . $fname;
+            $destinationDoc = __DIR__ . "../../../static/opportunities/" . $id . "/" . $fname;
             if (file_exists($destinationDoc)) unlink($destinationDoc);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);

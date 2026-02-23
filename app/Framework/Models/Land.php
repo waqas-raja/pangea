@@ -170,9 +170,8 @@ final class Land
     public static function UploadLandDocument($request, $response) {
         try {
             $landId = $_POST['land_id'];
-            $destinationDir = __DIR__ . "../../../static/imgs/land_".$landId."/";
+            $destinationDir = __DIR__ . "../../../static/lands/".$landId."/";
             if(!is_dir($destinationDir)) mkdir($destinationDir, 0755, true);
-            $files = $_FILES['documents'];
             foreach ($_FILES['documents']['name'] as $i => $name) {
                 $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
                 // $newName = time() . "_" . basename($name);
@@ -194,7 +193,7 @@ final class Land
     public static function GetLandDocuments($request, $response) {
         try {
             $landId = (int)$request->getAttribute('id');
-            $destinationDir = __DIR__ . "../../../static/imgs/land_".$landId."/";
+            $destinationDir = __DIR__ . "../../../static/lands/".$landId."/";
             $files = [];
             if (is_dir($destinationDir)) {
                 foreach (scandir($destinationDir) as $file) {
@@ -223,7 +222,7 @@ final class Land
         try {
             $id = (int)$request->getAttribute('id');
             $fname = $request->getAttribute('name');
-            $destinationDoc = __DIR__ . "../../../static/imgs/land_" . $id . "/" . $fname;
+            $destinationDoc = __DIR__ . "../../../static/lands/" . $id . "/" . $fname;
             if (file_exists($destinationDoc)) unlink($destinationDoc);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);

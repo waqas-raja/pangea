@@ -101,6 +101,7 @@ async function loadAgricultureLands() {
             {
                 dataField: "area",
                 caption: "Superficie",
+                allowFiltering: false,
                 width: 120,
                 cellTemplate: function (container, options) {
                     const area = formatNumber(parseInt(options.data.surface_area));
@@ -201,6 +202,7 @@ async function loadIndustarialLands() {
             {
                 dataField: "area",
                 caption: "Superficie",
+                allowFiltering: false,
                 width: 120,
                 cellTemplate: function (container, options) {
                     const area = formatNumber(parseInt(options.data.surface_area));
@@ -301,6 +303,7 @@ async function loadResidentialLands() {
             {
                 dataField: "area",
                 caption: "Superficie",
+                allowFiltering: false,
                 width: 120,
                 cellTemplate: function (container, options) {
                     const area = formatNumber(parseInt(options.data.surface_area));
@@ -952,7 +955,7 @@ async function loadLandDocuments(id) {
 }
 
 function openInNewTab(id, fileName) {
-    const url = `http://localhost:8080/static/imgs/land_${id}/${fileName}`;
+    const url = `http://localhost:8080/static/lands/${id}/${fileName}`;
     window.open(url, '_blank').focus();
 }
 

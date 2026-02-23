@@ -193,26 +193,25 @@ async function loadListEstimates() {
                 {
                     dataField: "",
                     caption: "Cliente",
-                    cellTemplate: function (container, options) {
-                        const data = options.data;
-                        const text = data.customer_name + ' ' + data.customer_surname;
-                        container.text(text);
+                    allowFiltering: true,
+                    calculateCellValue: function (data) {
+                        return data.customer_name + ' ' + data.customer_surname;
                     }
                 },
                 {
                     dataField: "property_alias",
                     caption: "Immobile",
+                    allowFiltering: true,
                 },
                 {
                     dataField: "",
                     caption: "Rendita ipotetica",
+                    allowFiltering: true,
+                    alignment: "right",
                     sortIndex: 4,
                     width: 150,
-                    cellTemplate: function (container, options) {
-                        const data = options.data;
-                        const text = formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
-                        container.css('text-align', 'right');
-                        container.html(text);
+                    calculateCellValue: function (data) {
+                        return formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
                     }
                 },
                 {
@@ -232,6 +231,7 @@ async function loadListEstimates() {
             paging: { pageSize: 10 },
             pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
             toolbar: {
+                visible: underManagementEstimates.length > 0,
                 items: [
                     {
                         name: "searchPanel",
@@ -279,26 +279,25 @@ async function loadListEstimates() {
                 {
                     dataField: "",
                     caption: "Cliente",
-                    cellTemplate: function (container, options) {
-                        const data = options.data;
-                        const text = data.customer_name + ' ' + data.customer_surname;
-                        container.text(text);
+                    allowFiltering: true,
+                    calculateCellValue: function (data) {
+                        return data.customer_name + ' ' + data.customer_surname;
                     }
                 },
                 {
                     dataField: "property_alias",
                     caption: "Immobile",
+                    allowFiltering: true,
                 },
                 {
                     dataField: "",
                     caption: "Rendita ipotetica",
+                    allowFiltering: true,
+                    alignment: "right",
                     sortIndex: 4,
                     width: 150,
-                    cellTemplate: function (container, options) {
-                        const data = options.data;
-                        const text = formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
-                        container.css('text-align', 'right');
-                        container.html(text);
+                    calculateCellValue: function (data) {
+                        return formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
                     }
                 },
                 {
@@ -318,6 +317,7 @@ async function loadListEstimates() {
             paging: { pageSize: 10 },
             pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
             toolbar: {
+                visible: acquiredEstimates.length > 0,
                 items: [
                     {
                         name: "searchPanel",
@@ -365,26 +365,25 @@ async function loadListEstimates() {
                 {
                     dataField: "",
                     caption: "Cliente",
-                    cellTemplate: function (container, options) {
-                        const data = options.data;
-                        const text = (data.customer_bizname !== null ? data.customer_bizname : data.customer_name + ' ' + data.customer_surname);
-                        container.text(text);
+                    allowFiltering: true,
+                    calculateCellValue: function (data) {
+                        return data.customer_name + ' ' + data.customer_surname;
                     }
                 },
                 {
                     dataField: "property_alias",
                     caption: "Immobile",
+                    allowFiltering: true,
                 },
                 {
                     dataField: "",
                     caption: "Rendita ipotetica",
+                    allowFiltering: true,
                     sortIndex: 4,
+                    alignment: "right",
                     width: 150,
-                    cellTemplate: function (container, options) {
-                        const data = options.data;
-                        const text = formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
-                        container.css('text-align', 'right');
-                        container.html(text);
+                    calculateCellValue: function (data) {
+                        return formatNumber(parseFloat(data.total_amount) - parseFloat(data.fixed_cost));
                     }
                 },
                 {
@@ -404,6 +403,7 @@ async function loadListEstimates() {
             paging: { pageSize: 10 },
             pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
             toolbar: {
+                visible: underEvalutaionEstimatesAndOthers.length > 0,
                 items: [
                     {
                         name: "searchPanel",
