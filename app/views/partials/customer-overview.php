@@ -227,3 +227,17 @@
         </div>
     </div>
 </div>
+<div class="row mb-3">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="pai-card position-relative cardHeight">
+            <h3 class="pai-title mb-3">
+                Documenti condivisi
+                <span id="spinnerSharedDocs" class="spinner-border spinner-border-sm ms-3 d-none" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </span>
+            </h3>
+            <div id="errorSharedDocs" class="mb-3"></div>
+            <div id="sharedDocumentsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mb-3"></div>
+        </div>
+    </div>
+</div>

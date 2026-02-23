@@ -171,6 +171,25 @@ class CustomerRoutes {
         })
         ->add($this->authMiddleware)
         ->add($this->jwtMiddleware);
+        
+        $group->get('/{id}/shared-documents', function (Request $request, Response $response) {
+            return Customer::GetSharedDocuments($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+
+        $group->delete('/delete-document/{id}/{name}', function (Request $request, Response $response) {
+            return Customer::DeleteSharedDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
+        
+        $group->get('/download-document/{id}/{name}', function (Request $request, Response $response) {
+            error_log('i am here...');
+            return Customer::DownloadSharedDocument($request, $response);
+        })
+        ->add($this->authMiddleware)
+        ->add($this->jwtMiddleware);
     }
 }
 
