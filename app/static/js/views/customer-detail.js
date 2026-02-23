@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loadCustomers();
     loadProperties();
     loadPersonPropertyMargin();
+    loadSharedDocuments();
 
     document.getElementById("txtAddress").addEventListener("focusout", loadMap);
     document.getElementById("txtCity").addEventListener("focusout", loadMap);
@@ -1403,6 +1404,105 @@ function deleteMargin(id) {
                 btn.disabled = true;
                 btn.lastElementChild.classList.add('d-none');
                 showMessage(error.message, 'deleteErrorMessage', 'text-danger');
+            }
+        }
+    });
+}
+
+async function loadSharedDocuments() {
+    try {
+        const div = document.getElementById('sharedDocumentsGrid');
+        div.innerHTML = '';
+        const response = await fetch(`/api/customer/${customerId}/shared-documents`);
+        const res = await response.json();
+        if (res.result) {
+            if (res.payload.length === 0) {
+                div.innerHTML = '<p class="w-100 text-black-50 text-center">Nessun documento trovato</p>';
+                return;
+            }
+            const icons = ['bi-file-earmark-pdf', 'bi-filetype-doc', 'bi-filetype-docx', 'bi-file-earmark-image'];
+            let str = '';
+            for (let file of res.payload) {
+                const ext = file.name.split('.').pop().toLowerCase();
+                let icon = '';
+                switch (ext) {
+                    case 'png':
+                    case 'jpg':
+                    case 'jpeg': icon = icons[3]; break;
+                    case 'pdf': icon = icons[0]; break;
+                    case 'doc': icon = icons[1]; break;
+                    case 'docx': icon = icons[2]; break;
+                }
+                const fname = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+                str += `<div class="col mb-3">
+                            <div class="docSection d-flex justify-content-center align-items-center border rounded-3 position-relative" style="height: 130px;">
+                                <div class="position-absolute delDocument" style="display:none; right: 5px;top:5px;">
+                                    <span class="rounded-3 p-2 me-2" role="button" onclick="downloadSharedDocument('${file.name}')" title="Scaricamento" style="background-color: #0dcaf020;">
+                                        <i class="bi bi-download fs-5 text-info"></i>
+                                    </span>
+                                    <span class="rounded-3 p-2" role="button" onclick="deleteSharedDocument(this)" title="Eliminare" style="background-color: #ff000010;">
+                                        <i class="bi bi-trash3 fs-5 text-danger"></i>
+                                    </span>
+                                </div>
+                                <div class="card-body text-center">
+                                    <i class="bi ${icon} fs-3"></i>
+                                    <p class="card-text px-2" data-filename="${file.name}" style="overflow-wrap: anywhere;">${fname}</p>
+                                </div>
+                            </div>
+                        </div>`;
+            }
+            div.insertAdjacentHTML("beforeend", str);
+        } else throw new Error(res.error);
+    } catch (error) {
+        showMessage(error.message, 'errorSharedDocs', 'text-danger')
+    }
+}
+
+async function downloadSharedDocument(filename) {
+    const spinner = document.getElementById("spinnerSharedDocs");
+    spinner.classList.remove('d-none');
+    debugger;
+    try {
+        const encoded = encodeURIComponent(filename);
+        const response = await fetch(`/api/customer/download-document/${customerId}/${encoded}`);
+        debugger;
+        if (!response.ok) throw new Error("Download failed");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        spinner.classList.add('d-none');
+    } catch (error) {
+        spinner.classList.add('d-none');
+        showMessage(error.message, 'errorSharedDocs', 'text-danger');
+    }
+}
+
+async function deleteSharedDocument(el) {
+    showDeleteConfirmationModal(async function (confirmed) {
+        if (confirmed) {
+            const fname = el.parentElement.nextElementSibling.lastElementChild.dataset.filename;
+            const spinner = document.getElementById("spinnerSharedDocs");
+            spinner.classList.remove('d-none');
+            try {
+                const response = await fetch(`/api/customer/delete-document/${customerId}/${fname}`, { method: "DELETE" });
+                const res = await response.json();
+                if (res.result) {
+                    $("#modalConfirmDelete").modal('hide');
+                    el.parentNode.parentNode.parentNode.remove();
+                    spinner.classList.add('d-none');
+                    showMessage('Documento eliminato con successo', 'errorSharedDocs', 'text-success')
+                } else throw new Error("Si è verificato un errore durante l'eliminazione di questo documento.");
+            } catch (error) {
+                $("#modalConfirmDelete").modal('hide');
+                spinner.classList.add('d-none');
+                showMessage(error.message, 'errorSharedDocs', 'text-danger');
             }
         }
     });

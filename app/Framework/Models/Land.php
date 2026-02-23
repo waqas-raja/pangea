@@ -149,6 +149,8 @@ final class Land
             $fileId = $_POST["file_id"];
             $destinationDir = __DIR__ . "../../../static/docs";
             if (!is_dir($destinationDir)) { mkdir($destinationDir, 0777, true); }
+            $destinationDir = $destinationDir . "/shared";
+            if (!is_dir($destinationDir)) { mkdir($destinationDir, 0777, true); }
             $destinationDir = $destinationDir . "/". $customerId . '/';
             if (!is_dir($destinationDir)) { mkdir($destinationDir, 0777, true); }
             $name = $fileId . ".pdf";

@@ -529,5 +529,83 @@ final class Customer {
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
         }
     }
+    
+    /**
+     * @throws Exception
+     */
+    public static function GetSharedDocuments($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $destinationDir = __DIR__ . "../../../static/docs/shared/".$id."/";
+            $files = [];
+            if (is_dir($destinationDir)) {
+                foreach (scandir($destinationDir) as $file) {
+                    if ($file !== '.' && $file !== '..') {
+                        $files[] = [
+                            'name' => $file,
+                            'path' => $destinationDir . $file,
+                            'size' => filesize($destinationDir . $file),
+                            'modified' => date("Y-m-d H:i:s", filemtime($destinationDir . $file))
+                        ];
+                    }
+                }
+            } else throw new Exception('Directory non trovata', 400);
+            $response->getBody()->write(json_encode(["result" => true, "payload" => $files]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, 'message' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function DeleteSharedDocument($request, $response) {
+        try {
+            $id = (int)$request->getAttribute('id');
+            $fname = $request->getAttribute('name');
+            $destinationDoc = __DIR__ . "../../../static/docs/shared/" . $id . "/" . $fname;
+            if (file_exists($destinationDoc)) unlink($destinationDoc);
+            $response->getBody()->write(json_encode(["result" => true]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+        } catch (Exception $e) {
+            $response->getBody()->write(json_encode(["result" => false, "error" => "Si è verificato un errore durante l'eliminazione di questo documento"]));
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+        }
+    }
+    
+    /**
+     * @throws Exception
+     */
+    public static function DownloadSharedDocument($request, $response) {
+        $id = (int) $request->getAttribute('id');
+        $fname = urldecode($request->getAttribute('name'));
+        $basePath = __DIR__ . '../../../static/';
+        $baseDir  = realpath($basePath);
+        if ($baseDir === false || $baseDir === '') throw new Exception('Directory di base non trovata');
+        $filePath = $baseDir . "/docs/shared/$id/" . basename($fname);
+        if (!file_exists($filePath)) {
+            $response->getBody()->write(json_encode([
+                'result' => false,
+                'error'  => 'Documento non trovato'
+            ]));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(404);
+        }
+
+        $mime = mime_content_type($filePath);
+        $stream = new \Slim\Psr7\Stream(fopen($filePath, 'rb'));
+        return $response
+            ->withHeader('Content-Type', $mime)
+            ->withHeader(
+                'Content-Disposition',
+                'attachment; filename="' . basename($fname) . '"'
+            )
+            ->withHeader('Content-Length', (string) filesize($filePath))
+            ->withHeader('Cache-Control', 'no-cache')
+            ->withBody($stream);
+    }
 
 }
