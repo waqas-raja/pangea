@@ -156,9 +156,8 @@
     </div>
     <div class="col-12 col-sm-6 col-md-8 col-lg-8">
         <div class="pai-card cardHeight">
-            <div class="card-header d-flex justify-content-between align-items-center mb-3">
+            <div class="card-header mb-3">
                 <h5 class="pai-title mb-0">Attività CRM del cliente</h5>
-                <span class="badge btn-blue">Interazioni</span>
             </div>
             <div id="" class="">
                 <ul class="nav nav-tabs" id="crmActivityCardTabs" role="tablist">
@@ -174,27 +173,21 @@
                 </ul>
                 <div class="tab-content" id="crmActivityCardTabsContent">
                     <div class="tab-pane fade border border-top-0 p-3 show active" id="crm-call" role="tabpanel" aria-labelledby="crm-call-tab">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="pai-title">Gestione delle chiamate</div>
+                        <div class="d-flex align-items-center justify-content-end mb-2">
                             <button class="btn btn-blue" onclick="showNewCallModal()">Nuova chiamata</button>
                         </div>
-                        <hr>
                         <div id="callsList"></div>
                     </div>
                     <div class="tab-pane fade border border-top-0 p-3" id="crm-appointment" role="tabpanel" aria-labelledby="crm-appointment-tab">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="pai-title">Gestione degli appuntamenti</div>
+                        <div class="d-flex align-items-center justify-content-end mb-2">
                             <button class="btn btn-blue" onclick="showNewAppointmentModal()">Nuova appuntamento</button>
                         </div>
-                        <hr>
                         <div id="appointmentsList"></div>
                     </div>
                     <div class="tab-pane fade border border-top-0 p-3" id="crm-email" role="tabpanel" aria-labelledby="crm-email-tab">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="pai-title">Gestione della posta elettronica</div>
+                        <div class="d-flex align-items-center justify-content-end mb-2">
                             <button class="btn btn-blue" onclick="showNewEmailModal()">Nuova email</button>
                         </div>
-                        <hr>
                         <div id="emailsList"></div>
                     </div>
                 </div>

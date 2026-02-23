@@ -24,7 +24,7 @@ async function loadCustomers() {
                 caption: "Tipo",
                 width: 50,
                 alignment: "center",
-                // allowFiltering: true,
+                allowFiltering: false,
                 // sortIndex: 0,
                 // sortOrder: "asc",
                 cellTemplate: function (container, options) {
@@ -36,23 +36,23 @@ async function loadCustomers() {
                 caption: "Nome",
                 allowFiltering: true,
                 // sortIndex: 1, sortOrder: "asc",
-                cellTemplate: function (container, options) {
-                    const data = options.data;
-                    const text = data.bizname !== '' && data.bizname !== undefined && data.bizname !== null
-                        ? data.bizname
-                        : `${data.surname} ${data.name}`;
-                    container.text(text);
+                calculateCellValue: function (data) {
+                    return data.bizname && data.bizname !== ''
+                    ? data.bizname
+                    : `${data.surname} ${data.name}`;
                 }
             },
             {
                 dataField: "email",
                 caption: "Email",
+                allowFiltering: true,
                 width: 200,
                 // sortIndex: 2, sortOrder: "asc"
             },
             {
                 dataField: "phone",
                 caption: "Telefono",
+                allowFiltering: true,
                 width: 200,
                 // sortIndex: 3, sortOrder: "asc"
             },
@@ -67,15 +67,12 @@ async function loadCustomers() {
             {
                 dataField: "number_of_properties",
                 caption: "Proprietà",
+                allowFiltering: false,
                 width: 100,
                 alignment: "right",
                 // sortIndex: 4, sortOrder: "asc"
-                cellTemplate: function (container, options) {
-                    const data = options.data;
-                    const text = data.number_of_properties !== '' && data.number_of_properties !== undefined && data.number_of_properties !== null
-                        ? data.number_of_properties
-                        : 0;
-                    container.text(text);
+                calculateCellValue: function (data) {
+                    return data.number_of_properties && data.number_of_properties !== '' ? data.number_of_properties : 0;
                 }
             },
             {

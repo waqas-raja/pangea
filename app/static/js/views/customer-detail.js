@@ -170,6 +170,7 @@ async function loadAssociatedProperties() {
         paging: { pageSize: 10 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
+            visible: hasData,
             items: [
                 {
                     name: "searchPanel",
@@ -259,6 +260,7 @@ async function loadAssociatedQuotes() {
         paging: { pageSize: 10 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
+            visible: r.payload.length > 0,
             items: [
                 {
                     name: "searchPanel",
@@ -544,9 +546,9 @@ async function loadCalls() {
         paging: { pageSize: 5 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
+            visible: hasData,
             items: [
                 {
-                    visible: hasData,
                     name: "searchPanel",
                     location: "before"
                 },
@@ -561,10 +563,10 @@ async function loadCalls() {
 
 async function showNewCallModal(id = null) {
     if (id === null) {
+        const formatedDate = setCurrentDateTime();
         document.getElementById('modalAddCallLabel').innerHTML = `<i class="bi bi-telephone me-3"></i>Nuova chiamata`;
-        document.getElementById('txtCallDate').value = '';
+        document.getElementById('txtCallDate').value = formatedDate;
         document.getElementById('ddlCallType').value = '';
-        document.getElementById('txtCallWith').value = '';
         document.getElementById('txtCallOutcome').value = '';
         $("#txtCallNote").dxHtmlEditor('instance').option('value', '');
         document.getElementById('btnSaveCall').classList.remove('d-none');
@@ -587,16 +589,14 @@ async function showNewCallModal(id = null) {
 
 async function saveCall(btn) {
     const date = document.getElementById('txtCallDate').value;
-    const person = document.getElementById('txtCallWith').value;
     const type = document.getElementById('ddlCallType').value;
     const outcome = document.getElementById('txtCallOutcome').value;
     const note = $("#txtCallNote").dxHtmlEditor('instance').option('value');
-    if (!date || !outcome || !note || !type) {
+    if (!date || !outcome || !type) {
         if (date === '') { showMessage('Il campo data è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         // if (person === '') { showMessage('Il campo persona è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         if (type === '') { showMessage('Il campo tipo di chiamata è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         if (outcome === '') { showMessage('Il campo esito è obbligatorio', 'crmCallResult', 'text-danger'); return; }
-        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmCallResult', 'text-danger'); return; }
     }
     btn.disabled = true;
     btn.lastElementChild.classList.add('d-none');
@@ -657,7 +657,7 @@ async function updateCall(btn) {
             $("#callsList").empty();
             loadCalls();
         } else {
-            showMessage(res.error ||"Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'crmCallResult', 'text-danger');
+            showMessage(res.error || "Si sono verificati degli errori durante l'aggiornamento dell'chiamata", 'crmCallResult', 'text-danger');
             btn.disabled = false;
             btn.lastElementChild.classList.add('d-none');
         }
@@ -772,9 +772,9 @@ async function loadAppointments() {
         paging: { pageSize: 5 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
+            visible: hasData,
             items: [
                 {
-                    visible: hasData,
                     name: "searchPanel",
                     location: "before"
                 },
@@ -789,6 +789,7 @@ async function loadAppointments() {
 
 async function showNewAppointmentModal(id = null) {
     if (id === null) {
+        const formatedDate = setCurrentDateTime();
         document.getElementById('modalAddAppointmentLabel').innerHTML = `<i class="bi bi-calendar me-3"></i>Nuovo appuntamento`;
         document.getElementById('txtAppointmentDate').value = '';
         document.getElementById('txtAppointmentType').value = '';
@@ -989,9 +990,9 @@ async function loadEmails() {
         paging: { pageSize: 10 },
         pager: { showPageSizeSelector: true, allowedPageSizes: [5, 10, 20], showInfo: true },
         toolbar: {
+            visible: hasData,
             items: [
                 {
-                    visible: hasData,
                     name: "searchPanel",
                     location: "before"
                 },
@@ -1006,6 +1007,7 @@ async function loadEmails() {
 
 async function showNewEmailModal(id = null) {
     if (id === null) {
+        const formatedDate = setCurrentDateTime();
         document.getElementById('modalAddEmailLabel').innerHTML = `<i class="bi bi-envelope me-3"></i>Nuova email`;
         document.getElementById('txtEmailDate').value = '';
         document.getElementById('txtEmailSubject').value = '';
@@ -1452,7 +1454,7 @@ async function loadSharedDocuments() {
                         </div>`;
             }
             div.insertAdjacentHTML("beforeend", str);
-        } else throw new Error(res.error);
+        } else throw new Error(res.message);
     } catch (error) {
         showMessage(error.message, 'errorSharedDocs', 'text-danger')
     }
@@ -1461,11 +1463,9 @@ async function loadSharedDocuments() {
 async function downloadSharedDocument(filename) {
     const spinner = document.getElementById("spinnerSharedDocs");
     spinner.classList.remove('d-none');
-    debugger;
     try {
         const encoded = encodeURIComponent(filename);
         const response = await fetch(`/api/customer/download-document/${customerId}/${encoded}`);
-        debugger;
         if (!response.ok) throw new Error("Download failed");
 
         const blob = await response.blob();
@@ -1506,4 +1506,11 @@ async function deleteSharedDocument(el) {
             }
         }
     });
+}
+
+function setCurrentDateTime() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    const local = new Date(now.getTime() - (offset * 60000));
+    return local.toISOString().slice(0, 16);
 }

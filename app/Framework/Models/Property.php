@@ -201,7 +201,7 @@ final class Property {
     public static function GetPropertyDocuments($request, $response) {
         try {
             $propertyId = (int)$request->getAttribute('id');
-            $destinationDir = __DIR__ . "../../../static/imgs/property_".$propertyId."/";
+            $destinationDir = __DIR__ . "../../../static/properties/".$propertyId."/";
             $files = [];
             if (is_dir($destinationDir)) {
                 foreach (scandir($destinationDir) as $file) {
@@ -229,7 +229,7 @@ final class Property {
     public static function UploadPropertyDocument($request, $response) {
         try {
             $propertyId = $_POST['property_id'];
-            $destinationDir = __DIR__ . "../../../static/imgs/property_".$propertyId."/";
+            $destinationDir = __DIR__ . "../../../static/properties/".$propertyId."/";
             if(!is_dir($destinationDir)) mkdir($destinationDir, 0755, true);
             $files = $_FILES['documents'];
             foreach ($_FILES['documents']['name'] as $i => $name) {
@@ -254,7 +254,7 @@ final class Property {
         try {
             $id = (int)$request->getAttribute('id');
             $fname = $request->getAttribute('name');
-            $destinationDoc = __DIR__ . "../../../static/imgs/property_" . $id . "/" . $fname;
+            $destinationDoc = __DIR__ . "../../../static/properties/" . $id . "/" . $fname;
             if (file_exists($destinationDoc)) unlink($destinationDoc);
             $response->getBody()->write(json_encode(["result" => true]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
@@ -270,10 +270,10 @@ final class Property {
     public static function DownloadPropertyDocument($request, $response) {
         $id = (int) $request->getAttribute('id');
         $fname = urldecode($request->getAttribute('name'));
-        $basePath = __DIR__ . '../../../static/imgs';
+        $basePath = __DIR__ . '../../../static';
         $baseDir  = realpath($basePath);
         if ($baseDir === false || $baseDir === '') throw new Exception('Directory di base non trovata');
-        $filePath = $baseDir . "/property_$id/" . basename($fname);
+        $filePath = $baseDir . "/properties/$id/" . basename($fname);
         if (!file_exists($filePath)) {
             $response->getBody()->write(json_encode([
                 'result' => false,

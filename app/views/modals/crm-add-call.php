@@ -15,12 +15,6 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="txtCallWith" class="col-sm-3 col-form-label">Chiama con</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="txtCallWith" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
                         <label for="ddlCallType" class="col-sm-3 col-form-label">Tipo di chiamata<span class="text-danger ms-2">*</span></label>
                         <div class="col-sm-9">
                             <select id="ddlCallType" class="form-select">
@@ -37,7 +31,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="txtNote" class="col-sm-3 col-form-label">Notes<span class="text-danger ms-2">*</span></label>
+                        <label for="txtNote" class="col-sm-3 col-form-label">Notes</label>
                         <div class="col-sm-9">
                             <div id="txtCallNote"></div>
                         </div>

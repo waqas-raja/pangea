@@ -549,7 +549,7 @@ final class Customer {
                         ];
                     }
                 }
-            } else throw new Exception('Directory non trovata', 400);
+            }
             $response->getBody()->write(json_encode(["result" => true, "payload" => $files]));
             return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
         } catch (Exception $e) {
