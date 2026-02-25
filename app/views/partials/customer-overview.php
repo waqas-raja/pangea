@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="row mb-0 align-items-center">
-                    <label for="txtEmail" class="col-sm-5 col-form-label">E-mail:<span class="text-danger ms-2 editControl d-none">*</span></label>
+                    <label for="txtEmail" class="col-sm-5 col-form-label">Email:<span class="text-danger ms-2 editControl d-none">*</span></label>
                     <div class="col-sm-7">
                         <span id="spEmail" class="valueControl"></span>
                         <input type="text" id="txtEmail" class="form-control editControl d-none mb-1" value="">
@@ -168,7 +168,7 @@
                         <button class="nav-link" id="crm-appointment-tab" data-bs-toggle="tab" data-bs-target="#crm-appointment" type="button" role="tab" aria-controls="crm-appointment" aria-selected="false">Appuntamenti</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="crm-email-tab" data-bs-toggle="tab" data-bs-target="#crm-email" type="button" role="tab" aria-controls="crm-email" aria-selected="false">E-mail</button>
+                        <button class="nav-link" id="crm-email-tab" data-bs-toggle="tab" data-bs-target="#crm-email" type="button" role="tab" aria-controls="crm-email" aria-selected="false">Email</button>
                     </li>
                 </ul>
                 <div class="tab-content" id="crmActivityCardTabsContent">
