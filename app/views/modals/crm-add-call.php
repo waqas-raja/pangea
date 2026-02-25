@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="txtNote" class="col-sm-3 col-form-label">Notes</label>
+                        <label for="txtNote" class="col-sm-3 col-form-label">Note</label>
                         <div class="col-sm-9">
                             <div id="txtCallNote"></div>
                         </div>

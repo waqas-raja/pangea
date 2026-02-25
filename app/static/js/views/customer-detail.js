@@ -630,15 +630,13 @@ async function saveCall(btn) {
 async function updateCall(btn) {
     const id = document.getElementById('hCallId').value;
     const date = document.getElementById('txtCallDate').value;
-    const person = document.getElementById('txtCallWith').value;
     const type = document.getElementById('ddlCallType').value;
     const outcome = document.getElementById('txtCallOutcome').value;
     const note = $("#txtCallNote").dxHtmlEditor('instance').option('value');
-    if (!date || !type || !outcome || !note) {
+    if (!date || !type || !outcome) {
         if (date === '') { showMessage('Il campo data è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         if (type === '') { showMessage('Il campo tipo di chiamata è obbligatorio', 'crmCallResult', 'text-danger'); return; }
         if (outcome === '') { showMessage('Il campo esito è obbligatorio', 'crmCallResult', 'text-danger'); return; }
-        if (note === '') { showMessage('Il campo note è obbligatorio', 'crmCallResult', 'text-danger'); return; }
     }
     btn.disabled = true;
     btn.lastElementChild.classList.remove('d-none');
