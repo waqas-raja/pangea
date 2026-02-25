@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="txtEmail" class="col-sm-4 col-form-label">E-mail<span class="text-danger ms-2">*</span></label>
+                        <label for="txtEmail" class="col-sm-4 col-form-label">Email<span class="text-danger ms-2">*</span></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="txtEmail" required>
                         </div>
